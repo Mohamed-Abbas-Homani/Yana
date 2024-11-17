@@ -1,0 +1,22 @@
+
+.datetimepicker-container {
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 74%;
+  border: 2px solid var(--color);
+  border-radius: 8px;
+  padding: 8px 13px;
+  margin: 8px 0;
+}
+
+/* Styling the input fields */
+input[type="date"],
+input[type="time"] {
+  background-color: var(--background-color);
+  color: var(--color);
+  outline: none;
+  border: none;
+  transition: border 0.3s ease;
+}

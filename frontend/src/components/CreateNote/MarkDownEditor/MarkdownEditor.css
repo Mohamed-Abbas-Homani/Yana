@@ -1,0 +1,51 @@
+.input-container {
+  background-color: var(--current-back);
+  color: var(--current-font);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 13px;
+  box-shadow: inset 7px 7px 13px
+      color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  width: 92%;
+  height: 100%;
+}
+
+.input-container .textarea {
+  color: inherit;
+  background-color: transparent;
+  text-align: left;
+  border: none;
+  outline: none;
+  width: 95%;
+  height: 90%;
+  font-size: 1em;
+  resize: none;
+  overflow: scroll;
+  font-family: cursive;
+}
+.input-container .textarea::placeholder {
+color: var(--current-font);
+opacity: 0.5;
+}
+
+.input-container .textread {
+  text-align: left;
+  border: none;
+  outline: none;
+  width: 95%;
+  height: 90%;
+  font-size: 1em;
+  color: var(--current-font);
+  resize: none;
+  overflow: scroll;
+}
+
+.markdown-editor {
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  font-size: 1em;
+}

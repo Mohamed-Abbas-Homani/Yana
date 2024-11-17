@@ -1,0 +1,336 @@
+.profile-picture {
+  width: 199px;
+  height: 199px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  animation: profile-flash 1s infinite;
+  animation-delay: 0.55s;
+}
+
+.profile-picture-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 2px solid var(--profile-color);
+  border-bottom-left-radius: 13px;
+  border-bottom-right-radius: 13px;
+}
+
+.profile-input-container {
+  width: 89%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+
+.profile-container {
+  position: relative;
+}
+
+.profile-container::after {
+  content: "";
+  position: absolute;
+  top: 21px; /* Start 13px from the top */
+  bottom: 21px; /* End 13px from the bottom */
+  right: 0;
+  width: 2px;
+  border-right: 2px solid var(--profile-color);
+}
+
+.profile-input-container button {
+  border: none;
+  outline: none;
+  background: var(--profile-color);
+  color: var(--background-color);
+  border-radius: 13px;
+  padding: 13px 21px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.34s;
+}
+
+.profile-input-container button:hover {
+  transform: scale(1.055);
+}
+.profile-picture-container::after {
+  content: "";
+  box-shadow: 10px -15px 10px var(--profile-color),
+    -10px -15px 10px var(--profile-color), -10px -40px 40px var(--profile-color),
+    10px -20px 40px var(--profile-color), -20px -50px 40px var(--profile-color);
+  background-color: var(--profile-color);
+  filter: blur(5px) brightness(1.1);
+  position: absolute;
+  border-radius: 13px;
+  width: 3px;
+  height: 89px;
+  transform: rotate(42deg);
+  left: 22px;
+  bottom: 24px;
+  transform-origin: bottom;
+  animation: flash-left-light 0.55s;
+}
+
+.profile-picture-container::before {
+  content: "";
+  box-shadow: 10px -15px 10px var(--profile-color),
+    -10px -15px 10px var(--profile-color), -10px -40px 40px var(--profile-color),
+    10px -20px 40px var(--profile-color), 20px -50px 40px var(--profile-color);
+  background-color: var(--profile-color);
+  filter: blur(5px) brightness(1.1);
+  position: absolute;
+  border-radius: 13px;
+  width: 3px;
+  height: 89px;
+  transform: rotate(-42deg);
+  right: 22px;
+  bottom: 24px;
+  transform-origin: bottom;
+  animation: flash-right-light 0.55s;
+}
+
+.language-tabs {
+  display: flex;
+  position: relative;
+  background-color: var(--profile-color);
+  padding: 13px 8px;
+  border-radius: 13px;
+}
+
+.language-container {
+  width: 89%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+
+.hint-container label {
+  color: var(--background-color);
+  font-weight: bold;
+  margin: 0 8px;
+}
+.hint-input {
+  border: none;
+  height: 21px;
+  width: 21px;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+}
+
+.hint-container {
+  display: flex;
+  position: relative;
+  background-color: var(--profile-color);
+  padding: 13px 8px;
+  border-radius: 13px;
+}
+.language-tabs .lang-label * {
+  color: var(--background-color);
+  font-weight: bold;
+  font-size: 1.21em;
+  margin: 0 8px;
+}
+.language-tabs * {
+  z-index: 2;
+}
+
+.language-container input[type="radio"] {
+  display: none;
+}
+
+.language-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 21px;
+  width: 34px;
+  font-size: 1rem;
+  color: var(--background-color);
+  opacity: 0.7;
+  font-weight: bold;
+  border-radius: 13px;
+  cursor: pointer;
+  transition: color 0.15s ease-in;
+}
+
+.language-container input[type="radio"]:checked + label {
+  opacity: 1;
+}
+
+.language-container input[id="radio-1"]:checked ~ .glider {
+  transform: translateX(105%);
+}
+
+.language-container input[id="radio-2"]:checked ~ .glider {
+  transform: translateX(205%);
+}
+
+.language-container input[id="radio-3"]:checked ~ .glider {
+  transform: translateX(305%);
+}
+
+.language-container input[id="radio-4"]:checked ~ .glider {
+  transform: translateX(405%);
+}
+
+.glider {
+  position: absolute;
+  display: flex;
+  height: 21px;
+  width: 34px;
+  background-color: var(--background-color);
+  opacity: 0.34;
+  z-index: 1;
+  border-radius: 13px;
+  transition: 0.25s ease-out;
+}
+
+@media (max-width: 700px) {
+  .language-tabs {
+    transform: scale(0.6);
+  }
+}
+
+/* From Uiverse.io by Maximinodotpy */
+.inputGroup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 89%;
+  margin: 8px 0;
+  position: relative;
+}
+
+.inputGroup input {
+  width: 89%;
+  font-size: 1em;
+  padding: 13px 21px;
+  outline: none;
+  border: 2px solid var(--profile-color);
+  background-color: transparent;
+  border-radius: 13px;
+  color: var(--profile-color);
+}
+
+.inputGroup input::placeholder {
+  opacity: 0.5;
+  color: var(--profile-color);
+}
+
+.inputGroup label {
+  background-color: transparent;
+  font-size: 0.89em;
+  position: absolute;
+  left: 0;
+  padding: 0.8em;
+  margin-left: 0.5em;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+  opacity: 0.5;
+  color: var(--profile-color);
+}
+
+.inputGroup :is(input:focus, input:valid) ~ label {
+  transform: translateY(-89%) scale(0.9);
+  margin: 0em;
+  margin-left: 1.3em;
+  padding: 3px;
+  opacity: 1;
+  color: var(--profile-color);
+  background-color: var(--background-color);
+}
+
+.profile-light {
+  position: absolute;
+}
+
+.profile-light * {
+  font-size: 1.34em;
+  color: var(--profile-color);
+}
+
+.profile-light-left {
+  left: 0;
+  bottom: -5px;
+  animation: flash-left 0.55s;
+}
+
+.profile-light-right {
+  transform: rotate(270deg);
+  right: -1px;
+  bottom: -3px;
+  animation: flash-right 0.55s;
+}
+
+.profile-header {
+  color: var(--profile-color);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+@keyframes flash-left {
+  0% {
+    transform: rotate(60deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes flash-left-light {
+  0% {
+    opacity: 0;
+    transform: rotate(90deg) translateY(-13px) translateX(13px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotate(42deg);
+  }
+}
+
+@keyframes flash-right {
+  0% {
+    transform: rotate(220deg);
+  }
+
+  100% {
+    transform: rotate(270deg);
+  }
+}
+
+@keyframes flash-right-light {
+  0% {
+    opacity: 0;
+    transform: rotate(-90deg) translateY(13px) translateX(-13px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotate(-42deg);
+  }
+}
+
+@keyframes profile-flash {
+  0% {
+    box-shadow: -5px 0px 13px var(--profile-color),
+      5px 0px 13px var(--profile-color);
+  }
+
+  100% {
+    box-shadow: -5px 0px 13px var(--profile-color),
+      5px 0px 13px var(--profile-color);
+  }
+}

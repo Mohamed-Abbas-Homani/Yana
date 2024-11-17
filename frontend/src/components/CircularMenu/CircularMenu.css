@@ -1,0 +1,91 @@
+/* CircularMenu.css */
+.menu {
+  position: absolute;
+  bottom: -34px; /* Adjust as necessary */
+  left: -34px; /* Adjust as necessary */
+  max-width: 200px;
+  max-height: 200px;
+  min-width: 200px;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.54s;
+}
+
+.menu li {
+  left: 0;
+  opacity: 0;
+  width: 34px;
+  height: 34px;
+  background: var(--menu-item-background);
+  border-radius: 50%;
+  position: absolute;
+  list-style: none;
+  transform-origin: 100px;
+  transition: 0.34s;
+  transition-delay: calc(0.1s * var(--i));
+  transform: rotate(0deg) translateX(100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.menu.active li {
+  transform: rotate(calc(120deg/ 4 * var(--i) + 60deg));
+  opacity: 1;
+}
+
+.menu li div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transform: rotate(calc(120deg/ -4 * var(--i) - 60deg));
+}
+
+.menu li div * {
+  fill: var(--background-color);
+  transition: all 0.34s;
+}
+
+.menu li div:hover * {
+  transform: scale(1.034);
+}
+.toggle {
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  background:var(--menu-toggle-background);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.55s;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.menu.active .toggle {
+  transform: rotate(315deg);
+  opacity: 1;
+}
+
+.menu.hold .toggle {
+  opacity: 0.3;
+}
+
+.menu.hold .toggle:hover {
+  opacity: 0.7;
+}
+
+.menu.inactive .toggle {
+  opacity: 0.3;
+}
+
+.menu.hide {
+  opacity: 0;
+  transform: translateX(-34px) translateY(34px);
+}

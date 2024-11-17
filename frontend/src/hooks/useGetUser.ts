@@ -1,0 +1,44 @@
+import { useState, useEffect } from "react";
+import useStore from "../services/store";
+
+const useGetUser = () => {
+  const { user, setUser } = useStore();
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(`http://localhost:8080/user/${user?.id}`);
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("we get this", data);
+        setUser(data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (user?.id) {
+      console.log("we will fetch the user");
+
+      fetchUser();
+    }
+    console.log(
+    "no user id"
+    );
+
+  }, [user]); // Dependency on userId to refetch if it changes
+
+  return { user, loading, error };
+};
+
+export default useGetUser;

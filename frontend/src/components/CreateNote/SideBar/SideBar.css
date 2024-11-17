@@ -1,0 +1,79 @@
+.side-bar-menu {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 13px;
+  background: var(--background-color);
+  box-shadow: inset 7px 7px 13px
+      color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  width: 7.5%;
+  height: 100%;
+}
+
+.color-input {
+  border: none;
+  height: 21px;
+  width: 21px;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  margin: 13px 0;
+  transition: all 0.34s;
+}
+
+.color-input-back {
+  border: 2px solid var(--color);
+}
+.emojie-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 13px 0;
+  cursor: pointer;
+  transition: all 0.34s;
+}
+
+.img-back-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 13px 0;
+  cursor: pointer;
+  transition: all 0.34s;
+  cursor: pointer;
+}
+
+.copy-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 13px 0;
+  cursor: pointer;
+  transition: all 0.34s;
+  cursor: pointer;
+}
+
+.paste-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 13px 0;
+  cursor: pointer;
+  transition: all 0.34s;
+  cursor: pointer;
+}
+
+.emojie-button-container:hover,
+.color-input:hover,
+.img-back-container:hover,
+.copy-container:hover,
+.paste-container:hover {
+  transform: scale(1.034);
+}

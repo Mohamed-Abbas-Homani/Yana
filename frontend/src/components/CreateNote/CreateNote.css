@@ -1,0 +1,130 @@
+.create-note-container {
+  color: var(--color);
+  margin: 0;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 610px;
+  padding: 5px;
+}
+
+.create-note-container-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 79%;
+  background: var(--background-color);
+  box-shadow: inset 7px 7px 13px
+      color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  border-radius: 13px;
+}
+
+.create-note-container-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 21%;
+  background: var(--background-color);
+  box-shadow: inset 7px 7px 13px
+      color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+}
+
+.create-note-container-internal {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  width: 79%;
+  height: 100%;
+  background-color: var(--background-color);
+  box-shadow: inset 7px 7px 13px
+      color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  border-radius: 13px;
+}
+
+.create-note-container-detail {
+  width: 21%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 13px;
+  background: var(--background-color);
+  box-shadow: inset 7px 7px 13px
+      color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+}
+
+.bottom-body {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--background-color);
+  width: 100%;
+  height: 90%;
+  box-shadow: inset 7px 7px 13px
+      color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+}
+
+
+
+.detail-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 89%;
+  margin: 8px 0;
+  position: relative;
+}
+
+.detail-input input {
+  width: 89%;
+  font-size: 1em;
+  padding: 13px 21px;
+  outline: none;
+  border: 2px solid var(--color);
+  background-color: transparent;
+  border-radius: 8px;
+  color: var(--color);
+}
+
+.detail-input input::placeholder {
+  opacity: 0.5;
+  color: var(--profile-color);
+}
+
+.detail-input label {
+  background-color: transparent;
+  font-size: 0.89em;
+  position: absolute;
+  left: 0;
+  padding: 0.8em;
+  margin-left: 0.5em;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+  opacity: 0.5;
+  color: var(--color);
+}
+
+.detail-input :is(input:focus, input:valid) ~ label {
+  transform: translateY(-89%) scale(0.9);
+  margin: 0em;
+  margin-left: 1.3em;
+  padding: 3px;
+  opacity: 1;
+  color: var(--color);
+  background-color: var(--background-color);
+}

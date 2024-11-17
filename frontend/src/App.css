@@ -1,0 +1,71 @@
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color: #e9e9e9;
+  background-color: rgb(34, 34, 34);
+  --background-color: #222;
+  --current-font: #e9e9e9;
+  --current-back: #222;
+  --menu-item-background: #e9e9e9;
+  --menu-toggle-background: rgb(199, 199, 233);
+  --profile-color: #e9e9e9;
+  --width: 100%;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body,
+html,
+#root {
+  padding: 0;
+  margin: 0;
+  width: 987px;
+  height: 610px;
+  position: fixed;
+}
+
+/* ::-webkit-scrollbar {
+  display: none;
+} */
+
+.container {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 987px;
+  height: 610px;
+  background: var(--background-color);
+}
+
+/* background: linear-gradient(135deg, #1c1c1c, #2e2e2e); */
+.null-div {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  background: var(--background-color);
+}
+
+.menu-blur {
+  animation: menu-blur-ani 0.34s forwards;
+}
+
+@keyframes menu-blur-ani {
+  100% {
+    opacity: 0.3;
+    filter: blur(5px);
+  }
+}
