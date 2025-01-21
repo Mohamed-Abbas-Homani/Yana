@@ -77,3 +77,9 @@
 .paste-container:hover {
   transform: scale(1.034);
 }
+
+.emoji-picker-container {
+position: absolute;
+z-index: 1000;
+left: 50px;
+}

@@ -1,4 +1,3 @@
-import { FaFire } from "react-icons/fa6";
 import { GoBold, GoItalic, GoStrikethrough } from "react-icons/go";
 import { FiUnderline } from "react-icons/fi";
 import {

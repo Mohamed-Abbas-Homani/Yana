@@ -25,6 +25,7 @@
 }
 
 .create-note-container-bottom {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -86,7 +87,7 @@
   justify-content: center;
   align-items: center;
   width: 89%;
-  margin: 8px 0;
+  margin: 10px 0;
   position: relative;
 }
 
@@ -127,4 +128,61 @@
   opacity: 1;
   color: var(--color);
   background-color: var(--background-color);
+}
+
+.calendar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 89%;
+}
+
+.calendar .calendar-input {
+  width: 13px;
+  height: 13px;
+  border-radius: 5px ;
+  border: 2px solid var(--color);
+  outline: none;
+  cursor: pointer;
+  transition: all .34s;
+}
+
+.calendar-input:hover {
+  transform: scale(1.034);
+  background-color: var(--color);
+  opacity: 0.5;
+}
+
+.file-upload-button {
+  cursor: pointer;
+  font-size: 2rem;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.file-list-horizontal {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.file-item {
+  margin: 10px;
+  text-align: center;
+}
+
+.file-icon {
+  font-size: 3rem;
+}
+
+.file-name {
+  margin-top: 20px;
+  font-size: 0.8rem;
+}
+
+.image-file {
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
 }

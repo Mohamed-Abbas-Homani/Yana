@@ -2,7 +2,6 @@ import { MdEmojiEmotions, MdContentCopy, MdContentPaste } from "react-icons/md";
 import { FaImage } from "react-icons/fa6";
 import EmojiPicker from "emoji-picker-react";
 import { writeText, readText } from "@tauri-apps/plugin-clipboard-manager";
-import { useEffect } from "react";
 import "./SideBar.css"
 
 interface SideBarProps {

@@ -31,7 +31,7 @@ const DateTimePicker = ({ dateTime, setDateTime }: any) => {
 
   return (
 
-      <div className="datetimepicker-container">
+      <div className="datetimepicker-container fade-in">
         <input type="date" onChange={handleDateChange} className="date-input" />
         <input type="time" onChange={handleTimeChange} className="time-input" />
       </div>

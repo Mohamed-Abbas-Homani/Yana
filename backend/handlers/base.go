@@ -54,7 +54,7 @@ func MashUpHandler(c echo.Context) error {
 	}
 
 	// Auto-migrate the User model
-	err = DB.AutoMigrate(&models.User{})
+	err = DB.AutoMigrate(&models.User{}, &models.Note{})
 	if err != nil {
 		log.Printf("Failed to migrate database: %v", err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{
@@ -71,14 +71,14 @@ func MashUpHandler(c echo.Context) error {
 // ExitServerHandler gracefully shuts down the server
 func MashDownHandler(c echo.Context) error {
 	go func() {
-			// Perform any necessary cleanup here
-			log.Println("Shutting down the server...")
-			// Exit the application
-			os.Exit(0)
+		// Perform any necessary cleanup here
+		log.Println("Shutting down the server...")
+		// Exit the application
+		os.Exit(0)
 	}()
 
 	// Return a success message immediately
 	return c.JSON(http.StatusOK, map[string]string{
-			"message": "Server is shutting down",
+		"message": "Server is shutting down",
 	})
 }
