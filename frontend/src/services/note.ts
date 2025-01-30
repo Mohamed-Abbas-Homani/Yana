@@ -1,0 +1,99 @@
+import { create } from "zustand";
+import { devtools, persist } from "zustand/middleware";
+import { getCSSVariable, updateCSSVariable } from "../utils/style";
+
+type NoteStore = {
+    mode: "read" | "write";
+    setMode: (mode: "read" | "write") => void;
+    content: string;
+    setContent: (content: string) => void;
+    auto: boolean;
+    setAuto: (auto: boolean) => void;
+    showEmojie: boolean;
+    setShowEmojie: (showEmojie: boolean) => void;
+    currentFont: string;
+    setCurrentFont: (font: string) => void;
+    currentBack: string;
+    setCurrentBack: (back: string) => void;
+    withReminder: boolean;
+    setWithReminder: (withReminder: boolean) => void;
+    reminderDate: Date | null;
+    setReminderDate: (reminderDate: Date | null) => void;
+    deletingDate: Date | null;
+    setDeletingDate: (deletingDate: Date | null) => void;
+    withDeleter: boolean;
+    setWithDeleter: (withDeleter: boolean) => void;
+    title: string;
+    setTitle: (title: string) => void;
+    password: string;
+    setPassword: (password: string) => void;
+    tag: string;
+    setTag: (tag: string) => void;
+    mood: string;
+    setMood: (mood: string) => void;
+    toggleMood: () => void;
+};
+
+const useNoteStore = create<NoteStore>()(
+    devtools(
+        persist(
+            (set) => ({
+                mode: "read",
+                setMode: (mode: "read" | "write") => set({ mode }),
+
+                content: "",
+                setContent: (content: string) => set({ content }),
+
+                auto: false,
+                setAuto: (auto: boolean) => set({ auto }),
+
+                showEmojie: false,
+                setShowEmojie: (showEmojie: boolean) => set({ showEmojie }),
+
+                currentFont: getCSSVariable("--current-font") || "#e9e9e9",
+                setCurrentFont: (font: string) => {
+                    set({ currentFont: font });
+                    updateCSSVariable("--current-font", font);
+                },
+
+                currentBack: getCSSVariable("--current-back") || "#222",
+                setCurrentBack: (back: string) => {
+                    set({ currentBack: back });
+                    updateCSSVariable("--current-back", back);
+                },
+
+                withReminder: false,
+                setWithReminder: (withReminder: boolean) => set({ withReminder }),
+
+                reminderDate: null,
+                setReminderDate: (reminderDate: Date | null) => set({ reminderDate }),
+
+                deletingDate: null,
+                setDeletingDate: (deletingDate: Date | null) => set({ deletingDate }),
+
+                withDeleter: false,
+                setWithDeleter: (withDeleter: boolean) => set({ withDeleter }),
+
+                title: "",
+                setTitle: (title: string) => set({ title }),
+
+                password: "",
+                setPassword: (password: string) => set({ password }),
+
+                tag: "",
+                setTag: (tag: string) => set({ tag }),
+
+                mood: "",
+                setMood: (mood: string) => set({ mood }),
+                // Implement toggleMood to switch between two example moods
+                toggleMood: () =>
+                    set((state) => ({
+                        mode: state.mode === "read" ? "write" : "read",
+                    })),
+            }),
+            { name: "mash-note-store" }
+        )
+    )
+);
+
+export default useNoteStore;

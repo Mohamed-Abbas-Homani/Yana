@@ -12,20 +12,21 @@ import { TbQuote } from "react-icons/tb";
 import { FaCode } from "react-icons/fa6";
 import "./TopBar.css";
 import { useState, useEffect } from "react";
+import useNoteStore from "../../../services/note.ts";
+import useStore from "../../../services/store.ts";
 
 const TopBar = ({
-  auto,
-  setAuto,
   inputRef,
-  mode,
-  setMode,
   content,
   setContent,
 }: any) => {
+  const { setUserAction } = useStore();
+  const {
+    auto,
+    setAuto,  mode, toggleMood} = useNoteStore()
   const [isBulletListActive, setIsBulletListActive] = useState(false);
   const [isNumberedListActive, setIsNumberedListActive] = useState(false);
   const [showFS, setShowFS] = useState<boolean>(false);
-  const [logoImg, setLogoImg] = useState<any>(null);
   // Function to insert text at the cursor position in the textarea
   const insertAtCursor = (text: string) => {
     const inputElement = inputRef.current;
@@ -126,63 +127,34 @@ const TopBar = ({
     };
   }, [content, isBulletListActive, isNumberedListActive]);
 
-  // Handle the image upload
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setLogoImg(e.target?.result); // Set the logo image using FileReader
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   return (
     <div className="top-bar">
-      <div
-        className="logo"
-        style={{
-          backgroundImage: logoImg ? `url(${logoImg})` : "none",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <input
-          id="image-upload"
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          onChange={handleImageUpload}
-        />
-        <label className="logo-filter" htmlFor="image-upload"></label>
-      </div>
       <div className="top-bar-menu">
         <div className="sub s1">
-          <GoBold size={"1.5em"} onClick={handleBold} title="Bold" />
-          <GoItalic size={"1.5em"} onClick={handleItalic} title="Italic" />
+          <GoBold size={"1.4em"} onClick={handleBold} title="Bold" />
+          <GoItalic size={"1.4em"} onClick={handleItalic} title="Italic" />
           <FiUnderline
-            size={"1.5em"}
+            size={"1.4em"}
             onClick={handleUnderline}
             title="Underline"
           />
           <GoStrikethrough
-            size={"1.5em"}
+            size={"1.4em"}
             onClick={handleStrikethrough}
             title="Strike Through"
           />
           <MdFormatListBulleted
-            size={"1.5em"}
+            size={"1.4em"}
             onClick={handleBulletList}
             title="Bulleted List"
           />
           <MdFormatListNumbered
-            size={"1.5em"}
+            size={"1.4em"}
             onClick={handleNumberedList}
             title="Numbered List"
           />
           <PiHighlighter
-            size={"1.5em"}
+            size={"1.4em"}
             onClick={handleHighlight}
             title="Marked"
           />
@@ -190,7 +162,7 @@ const TopBar = ({
           {/* Font size dropdown */}
           <RiFontSize
             title="Heading"
-            size={"1.5em"}
+            size={"1.4em"}
             onClick={() => {
               setShowFS(!showFS);
             }}
@@ -207,16 +179,16 @@ const TopBar = ({
             </div>
           )}
 
-          <TbQuote size={"1.5em"} onClick={handleQuote} title="Quote" />
-          <MdLink size={"1.5em"} onClick={handleLink} title="Link" />
-          <FaCode size={"1.5em"} onClick={handleCode} title="Code" />
+          <TbQuote size={"1.4em"} onClick={handleQuote} title="Quote" />
+          <MdLink size={"1.4em"} onClick={handleLink} title="Link" />
+          <FaCode size={"1.4em"} onClick={handleCode} title="Code" />
         </div>
         <div className="sub s2">
           <button
             title="switch mode"
             className="mode-button"
             onClick={() => {
-              setMode((prev: any) => (prev === "write" ? "read" : "write"));
+              toggleMood()
               setTimeout(() => {
                 const inputElement = inputRef.current;
                 if (
@@ -245,6 +217,12 @@ const TopBar = ({
           </button>
           {auto && <sup>auto</sup>}
         </div>
+      </div>
+
+      <div className="create-note-submit-buttons">
+        <button onClick={() => setUserAction("neutral")}>cancel</button>
+        <button onClick={() => setUserAction("neutral")}>draft</button>
+        <button onClick={() => setUserAction("neutral")}>save</button>
       </div>
     </div>
   );

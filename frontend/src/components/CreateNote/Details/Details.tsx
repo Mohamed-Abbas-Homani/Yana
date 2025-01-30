@@ -1,43 +1,26 @@
-import React from "react";
 import DateTimePicker from "../DateTimePicker/DateTimePicker";
+import useNoteStore from "../../../services/note.ts";
 
-interface DetailsProps {
-    title: string;
-    setTitle: React.Dispatch<React.SetStateAction<string>>;
-    password: string;
-    setPassword: React.Dispatch<React.SetStateAction<string>>;
-    tag: string;
-    setTag: React.Dispatch<React.SetStateAction<string>>;
-    mood: string;
-    setMood: React.Dispatch<React.SetStateAction<string>>;
-    withReminder: boolean;
-    setWithReminder: React.Dispatch<React.SetStateAction<boolean>>;
-    reminderDate: Date | null;
-    setReminderDate: React.Dispatch<React.SetStateAction<Date | null>>;
-    withDeleter: boolean;
-    setWithDeleter: React.Dispatch<React.SetStateAction<boolean>>;
-    deletingDate: Date | null;
-    setDeletingDate: React.Dispatch<React.SetStateAction<Date | null>>;
-}
 
-const Details: React.FC<DetailsProps> = ({
-                                             title,
-                                             setTitle,
-                                             password,
-                                             setPassword,
-                                             tag,
-                                             setTag,
-                                             mood,
-                                             setMood,
-                                             withReminder,
-                                             setWithReminder,
-                                             reminderDate,
-                                             setReminderDate,
-                                             withDeleter,
-                                             setWithDeleter,
-                                             deletingDate,
-                                             setDeletingDate,
-                                         }) => {
+const Details = () => {
+    const {
+        withReminder,
+        setWithReminder,
+        reminderDate,
+        setReminderDate,
+        deletingDate,
+        setDeletingDate,
+        withDeleter,
+        setWithDeleter,
+        title,
+        setTitle,
+        password,
+        setPassword,
+        tag,
+        setTag,
+        mood,
+        setMood,
+    } = useNoteStore();
     return (
         <div className="create-note-container-detail">
             Details

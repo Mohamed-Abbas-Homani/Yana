@@ -45,7 +45,7 @@
   box-shadow: inset 7px 7px 13px
       color-mix(in srgb, var(--background-color) 89%, #000000),
     inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
-  width: 92%;
+  width: 79%;
   height: 100%;
 }
 

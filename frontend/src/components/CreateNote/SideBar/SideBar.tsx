@@ -3,15 +3,10 @@ import { FaImage } from "react-icons/fa6";
 import EmojiPicker from "emoji-picker-react";
 import { writeText, readText } from "@tauri-apps/plugin-clipboard-manager";
 import "./SideBar.css"
+import useNoteStore from "../../../services/note.ts";
 
 interface SideBarProps {
-  currentFont: string;
-  setCurrentFont: (color: string) => void;
-  currentBack: string;
-  setCurrentBack: (color: string) => void;
   setImageURL: (url: string | null) => void;
-  showEmojie: boolean;
-  setShowEmojie: (show: boolean) => void;
   content: string;
   setContent: (content: string) => void;
   inputRef: React.RefObject<HTMLTextAreaElement>;
@@ -21,13 +16,7 @@ interface SideBarProps {
 }
 
 const SideBar: React.FC<SideBarProps> = ({
-  currentFont,
-  setCurrentFont,
-  currentBack,
-  setCurrentBack,
   setImageURL,
-  showEmojie,
-  setShowEmojie,
   content,
   setContent,
   inputRef,
@@ -35,6 +24,14 @@ const SideBar: React.FC<SideBarProps> = ({
   handleImageUpload,
   handleEmojiSelect,
 }) => {
+  const {
+    showEmojie,
+    setShowEmojie,
+    currentFont,
+    currentBack,
+    setCurrentFont,
+    setCurrentBack,
+  } = useNoteStore();
   return (
     <div className="side-bar-menu">
     <input
