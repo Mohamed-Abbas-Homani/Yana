@@ -1,6 +1,5 @@
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import remarkBreaks from "remark-breaks";
@@ -46,7 +45,6 @@ const MarkdownEditor = ({
                 const match = /language-(\w+)/.exec(className || "");
                 return !inline && match ? (
                   <SyntaxHighlighter
-                    style={nightOwl}
                     language={match[1]}
                     PreTag="div"
                     {...props}

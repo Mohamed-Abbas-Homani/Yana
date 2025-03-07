@@ -8,14 +8,14 @@ import TopBar from "../components/CreateNote/TopBar/TopBar";
 import SideBar from "../components/CreateNote/SideBar/SideBar";
 import Details from "../components/CreateNote/Details/Details.tsx";
 import BottomBar from "../components/CreateNote/BottomBar/BottomBar.tsx";
-import useNoteStore from "../services/note.ts";
+import useNoteStore, { useFileNoteStore } from "../services/note.ts";
 import useStore from "../services/store.ts";
 
 const CreateNotePage = () => {
 const { setUserAction } = useStore();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const [imageURL, setImageURL] = useState<string | null>(null);
-  const [files, setFiles] = useState<File[]>([]);
+  const {backImage, setBackImage} = useFileNoteStore()
   const emojiPickerRef = useRef<any>(null);
   const {
     auto,
@@ -71,13 +71,21 @@ const { setUserAction } = useStore();
     };
   }, []);
   // Image upload handler
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBackImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const imageURL = URL.createObjectURL(file); // Generate URL for uploaded image
-      setImageURL(imageURL); // Store image URL to pass to MarkdownEditor
+      setBackImage(file);
     }
   };
+
+  useEffect(() => {
+    if (backImage) {
+
+    const imageUrl = URL.createObjectURL(backImage);
+    setImageURL(imageUrl);
+  }
+  }, [backImage]);
+
   // Insert emoji at the cursor position in the content
   const handleEmojiSelect = (emojiData: any) => {
     const inputElement = inputRef.current;
@@ -116,12 +124,13 @@ const { setUserAction } = useStore();
               <div className="bottom-body">
                 <SideBar
                     setImageURL={setImageURL}
+                    setBackImage={setBackImage}
                     content={content}
                     setContent={setContent}
                     inputRef={inputRef}
                     emojiPickerRef={emojiPickerRef}
                     handleEmojiSelect={handleEmojiSelect}
-                    handleImageUpload={handleImageUpload}
+                    handleImageUpload={handleBackImageUpload}
                 />
                 <MarkdownEditor
                     mode={mode}
@@ -135,10 +144,7 @@ const { setUserAction } = useStore();
             <Details
             />
           </div>
-          <BottomBar
-              files={files}
-              setFiles={setFiles}
-          />
+          <BottomBar />
 
         </div>
       </Page>

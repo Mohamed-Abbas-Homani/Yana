@@ -96,4 +96,22 @@ const useNoteStore = create<NoteStore>()(
     )
 );
 
+type FileNoteStore = {
+    files: File[];
+    setFiles: (files: File[]) => void;
+    backImage: File | null;
+    setBackImage: (backImage: File | null) => void;
+};
+
+export const useFileNoteStore = create<FileNoteStore>()(
+    devtools(
+        (set) => ({
+            files: [],
+            setFiles: (files: File[]) => set({ files }),
+            backImage: null,
+            setBackImage: (backImage: File | null) => set({ backImage }),
+        })
+    )
+);
+
 export default useNoteStore;

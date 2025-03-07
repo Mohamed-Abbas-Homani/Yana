@@ -165,7 +165,7 @@ position:absolute;  top: 10px;
 }
 
 .file-list-horizontal {
-  width: 77%;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-wrap: nowrap;
@@ -195,35 +195,6 @@ position:absolute;  top: 10px;
   cursor: pointer;
   font-size: 1.1rem;
   font-weight: 600;
-}
-
-.file-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin: 5px 10px;
-  text-align: center;
-}
-
-.file-icon {
-  font-size: 3rem;
-}
-
-.file-name {
-  margin: 0px;
-  font-size: 0.7rem;
-}
-
-.image-file {
-  width: 89px;
-  height: 55px;
-  border-radius: 8px;
-}
-
-.file-remove-button {
-  cursor: pointer;
 }
 
 .create-note-submit-buttons {

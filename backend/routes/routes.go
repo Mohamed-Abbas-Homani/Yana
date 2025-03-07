@@ -24,6 +24,7 @@ func InitEcho() {
 	e.GET("/user/:id", handlers.GetUserByIDHandler)
 	e.GET("/user/:id/profile-picture", handlers.GetUserProfilePictureHandler)
 	e.POST("/mash-down", handlers.MashDownHandler)
+	e.PUT("/note", handlers.SaveNoteHandler)
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
 }

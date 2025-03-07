@@ -7,6 +7,7 @@ import useNoteStore from "../../../services/note.ts";
 
 interface SideBarProps {
   setImageURL: (url: string | null) => void;
+  setBackImage: (image: any) => void;
   content: string;
   setContent: (content: string) => void;
   inputRef: React.RefObject<HTMLTextAreaElement>;
@@ -17,6 +18,7 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({
   setImageURL,
+    setBackImage,
   content,
   setContent,
   inputRef,
@@ -51,6 +53,7 @@ const SideBar: React.FC<SideBarProps> = ({
       onChange={(e: any) => {
         setCurrentBack(e.target.value);
         setImageURL(null);
+        setBackImage(null);
       }}
       className="color-input color-input-back"
       style={{

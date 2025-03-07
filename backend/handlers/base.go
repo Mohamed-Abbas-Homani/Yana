@@ -54,7 +54,7 @@ func MashUpHandler(c echo.Context) error {
 	}
 
 	// Auto-migrate the User model
-	err = DB.AutoMigrate(&models.User{}, &models.Note{})
+	err = DB.AutoMigrate(&models.User{}, &models.Note{}, &models.Document{})
 	if err != nil {
 		log.Printf("Failed to migrate database: %v", err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{
