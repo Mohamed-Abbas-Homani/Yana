@@ -3,6 +3,8 @@ import { devtools, persist } from "zustand/middleware";
 import { getCSSVariable, updateCSSVariable } from "../utils/style";
 
 type NoteStore = {
+    id: string;
+    setId: (id: string) => void;
     mode: "read" | "write";
     setMode: (mode: "read" | "write") => void;
     content: string;
@@ -15,14 +17,6 @@ type NoteStore = {
     setCurrentFont: (font: string) => void;
     currentBack: string;
     setCurrentBack: (back: string) => void;
-    withReminder: boolean;
-    setWithReminder: (withReminder: boolean) => void;
-    reminderDate: Date | null;
-    setReminderDate: (reminderDate: Date | null) => void;
-    deletingDate: Date | null;
-    setDeletingDate: (deletingDate: Date | null) => void;
-    withDeleter: boolean;
-    setWithDeleter: (withDeleter: boolean) => void;
     title: string;
     setTitle: (title: string) => void;
     password: string;
@@ -44,6 +38,9 @@ const useNoteStore = create<NoteStore>()(
                 content: "",
                 setContent: (content: string) => set({ content }),
 
+                id: "",
+                setId: (id: string) => set({ id }),
+
                 auto: false,
                 setAuto: (auto: boolean) => set({ auto }),
 
@@ -61,18 +58,6 @@ const useNoteStore = create<NoteStore>()(
                     set({ currentBack: back });
                     updateCSSVariable("--current-back", back);
                 },
-
-                withReminder: false,
-                setWithReminder: (withReminder: boolean) => set({ withReminder }),
-
-                reminderDate: null,
-                setReminderDate: (reminderDate: Date | null) => set({ reminderDate }),
-
-                deletingDate: null,
-                setDeletingDate: (deletingDate: Date | null) => set({ deletingDate }),
-
-                withDeleter: false,
-                setWithDeleter: (withDeleter: boolean) => set({ withDeleter }),
 
                 title: "",
                 setTitle: (title: string) => set({ title }),

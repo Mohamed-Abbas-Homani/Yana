@@ -14,16 +14,18 @@ import "./TopBar.css";
 import { useState, useEffect } from "react";
 import useNoteStore from "../../../services/note.ts";
 import useStore from "../../../services/store.ts";
+import useNoteHandler from "../../../hooks/useNoteHandler.ts";
 
 const TopBar = ({
   inputRef,
   content,
   setContent,
 }: any) => {
+  const { loading, handleNoteSubmission } = useNoteHandler()
   const { setUserAction } = useStore();
   const {
     auto,
-    setAuto,  mode, toggleMood} = useNoteStore()
+    setAuto, mode, toggleMood } = useNoteStore()
   const [isBulletListActive, setIsBulletListActive] = useState(false);
   const [isNumberedListActive, setIsNumberedListActive] = useState(false);
   const [showFS, setShowFS] = useState<boolean>(false);
@@ -220,9 +222,13 @@ const TopBar = ({
       </div>
 
       <div className="create-note-submit-buttons">
-        <button onClick={() => setUserAction("neutral")}>cancel</button>
-        <button onClick={() => setUserAction("neutral")}>draft</button>
-        <button onClick={() => setUserAction("neutral")}>save</button>
+        <button onClick={() => setUserAction("neutral")} disabled={loading}>cancel</button>
+        <button 
+        disabled={loading}
+          onClick={async () => {
+          await handleNoteSubmission()
+          setUserAction("neutral")
+        }} >{loading ? "saving...":"save"}</button>
       </div>
     </div>
   );

@@ -10,24 +10,28 @@ import Details from "../components/CreateNote/Details/Details.tsx";
 import BottomBar from "../components/CreateNote/BottomBar/BottomBar.tsx";
 import useNoteStore, { useFileNoteStore } from "../services/note.ts";
 import useStore from "../services/store.ts";
+import { useParams } from "react-router-dom";
+import useGetNote from "../hooks/useGetNote.ts";
 
 const CreateNotePage = () => {
-const { setUserAction } = useStore();
+  useGetNote()
+  const { id } = useParams();
+  const { setUserAction } = useStore();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const [imageURL, setImageURL] = useState<string | null>(null);
-  const {backImage, setBackImage} = useFileNoteStore()
+  const { backImage, setBackImage } = useFileNoteStore()
   const emojiPickerRef = useRef<any>(null);
   const {
     auto,
     setShowEmojie,
-      content,
-      setContent,
-      mode, setMode, toggleMood,
+    content,
+    setContent,
+    mode, setMode, toggleMood,
   } = useNoteStore();
 
   const debouncedSetMode = useCallback(
-      debounce(() => setMode("read"), 3000),
-      []
+    debounce(() => setMode("read"), 3000),
+    []
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -43,8 +47,8 @@ const { setUserAction } = useStore();
         if (inputElement && inputElement instanceof HTMLTextAreaElement) {
           inputElement.focus();
           inputElement.setSelectionRange(
-              inputElement.value.length,
-              inputElement.value.length
+            inputElement.value.length,
+            inputElement.value.length
           );
         }
       }, 0);
@@ -52,6 +56,7 @@ const { setUserAction } = useStore();
   };
 
   useEffect(() => {
+    console.log(id)
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
@@ -81,9 +86,9 @@ const { setUserAction } = useStore();
   useEffect(() => {
     if (backImage) {
 
-    const imageUrl = URL.createObjectURL(backImage);
-    setImageURL(imageUrl);
-  }
+      const imageUrl = URL.createObjectURL(backImage);
+      setImageURL(imageUrl);
+    }
   }, [backImage]);
 
   // Insert emoji at the cursor position in the content
@@ -93,61 +98,62 @@ const { setUserAction } = useStore();
       const start = inputElement.selectionStart;
       const end = inputElement.selectionEnd;
       const updatedText =
-          content.slice(0, start) + emojiData.emoji + content.slice(end);
+        content.slice(0, start) + emojiData.emoji + content.slice(end);
       setContent(updatedText);
-    }}
+    }
+  }
   return (
-      <Page>
-        <div className="create-note-container">
-          <div className="create-note-container-top">
-            <div
-                className="create-note-container-internal"
-                onDoubleClick={() => {
-                  toggleMood()
-                  setTimeout(() => {
-                    const inputElement = inputRef.current;
-                    if (inputElement && inputElement instanceof HTMLTextAreaElement) {
-                      inputElement.focus();
-                      inputElement.setSelectionRange(
-                          inputElement.value.length,
-                          inputElement.value.length
-                      );
-                    }
-                  }, 0);
-                }}
-            >
-              <TopBar
-                  inputRef={inputRef}
-                  content={content}
-                  setContent={setContent}
-              />
-              <div className="bottom-body">
-                <SideBar
-                    setImageURL={setImageURL}
-                    setBackImage={setBackImage}
-                    content={content}
-                    setContent={setContent}
-                    inputRef={inputRef}
-                    emojiPickerRef={emojiPickerRef}
-                    handleEmojiSelect={handleEmojiSelect}
-                    handleImageUpload={handleBackImageUpload}
-                />
-                <MarkdownEditor
-                    mode={mode}
-                    content={content}
-                    inputRef={inputRef}
-                    handleChange={handleChange}
-                    imageURL={imageURL}
-                />
-              </div>
-            </div>
-            <Details
+    <Page>
+      <div className="create-note-container">
+        <div className="create-note-container-top">
+          <div
+            className="create-note-container-internal"
+            onDoubleClick={() => {
+              toggleMood()
+              setTimeout(() => {
+                const inputElement = inputRef.current;
+                if (inputElement && inputElement instanceof HTMLTextAreaElement) {
+                  inputElement.focus();
+                  inputElement.setSelectionRange(
+                    inputElement.value.length,
+                    inputElement.value.length
+                  );
+                }
+              }, 0);
+            }}
+          >
+            <TopBar
+              inputRef={inputRef}
+              content={content}
+              setContent={setContent}
             />
+            <div className="bottom-body">
+              <SideBar
+                setImageURL={setImageURL}
+                setBackImage={setBackImage}
+                content={content}
+                setContent={setContent}
+                inputRef={inputRef}
+                emojiPickerRef={emojiPickerRef}
+                handleEmojiSelect={handleEmojiSelect}
+                handleImageUpload={handleBackImageUpload}
+              />
+              <MarkdownEditor
+                mode={mode}
+                content={content}
+                inputRef={inputRef}
+                handleChange={handleChange}
+                imageURL={imageURL}
+              />
+            </div>
           </div>
-          <BottomBar />
-
+          <Details
+          />
         </div>
-      </Page>
+        <BottomBar />
+
+      </div>
+    </Page>
   )
 }
 

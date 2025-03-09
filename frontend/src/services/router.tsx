@@ -13,7 +13,11 @@ const router = createBrowserRouter([
     element: <ProfilePage />,
   },
   {
-    path: "/create-note",
+    path: "/note",
+    element: <CreateNotePage />,
+  },
+  {
+    path: "/note/:id",
     element: <CreateNotePage />,
   },
 ]);

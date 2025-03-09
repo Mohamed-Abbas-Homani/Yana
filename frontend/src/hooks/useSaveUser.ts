@@ -33,6 +33,7 @@ const useSaveUser = () => {
     if (userData.id !== undefined) {
       formData.append("id", userData.id.toString());
     }
+    console.log(userData)
 
     try {
       const response = await fetch("http://localhost:8080/save-user", {

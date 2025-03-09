@@ -41,6 +41,7 @@ const BottomBar = () => {
 
     const filePreviews = useMemo(() => {
         return files.map((file) => {
+            console.log(files)
             const objectUrl = URL.createObjectURL(file);
             return { file, objectUrl };
         });
@@ -77,7 +78,7 @@ const BottomBar = () => {
                         const isVideo = fileType.startsWith("video/");
 
                         return (
-                            <div className="file-item fade-in" key={index}>
+                            <div className="file-item fade-in" key={`${index} ${file.name}`}>
                                 {isImage && (
                                     <div
                                         className="image-file"

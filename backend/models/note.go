@@ -17,12 +17,11 @@ type Note struct {
 	Mood       string    `gorm:"type:text" form:"mood"`
 	FColor     string    `gorm:"type:text" form:"fColor"`
 	BColor     string    `gorm:"type:text" form:"bColor"`
-	BPicture   []byte    `gorm:"type:blob" form:"bPicture"`
+	BPicture   *Document `gorm:"foreignKey:BPictureId"`
+	BPictureId *uint     `form:"bpicture_id"`
 	Documents  []Document
 	CreatedAt  time.Time `gorm:"autoCreateTime" form:"createdAt"`
 	UpdatedAt  time.Time `gorm:"autoUpdateTime" form:"updatedAt"`
-	ReminderAt time.Time `form:"reminderAt"`
-	DeletedAt time.Time  `form:"deleteAt"`
 }
 
 func (n *Note) BeforeUpdate(tx *gorm.DB) (err error) {

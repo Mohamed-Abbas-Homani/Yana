@@ -5,9 +5,10 @@ import (
 	"io"
 	"log"
 	"mash-notes-back/models"
+	"mime"
 	"net/http"
+	"path/filepath"
 	"strconv"
-	"time"
 
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -25,8 +26,6 @@ func SaveNoteHandler(c echo.Context) error {
 	mood := c.FormValue("mood")
 	fColor := c.FormValue("fColor")
 	bColor := c.FormValue("bColor")
-	reminderAtStr := c.FormValue("reminderAt")
-
 	// Convert user_id and reminderAt
 	userID, err := strconv.Atoi(userIDStr)
 	if err != nil {
@@ -34,18 +33,6 @@ func SaveNoteHandler(c echo.Context) error {
 			"error": "Invalid user ID",
 		})
 	}
-
-	// Parse reminderAt if provided
-	var reminderAt time.Time
-	if reminderAtStr != "" {
-		reminderAt, err = time.Parse(time.RFC3339, reminderAtStr)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]string{
-				"error": "Invalid reminder date format",
-			})
-		}
-	}
-
 	// Check if we are updating an existing note
 	noteIDStr := c.FormValue("id")
 	var note models.Note
@@ -82,8 +69,6 @@ func SaveNoteHandler(c echo.Context) error {
 	note.Mood = mood
 	note.FColor = fColor
 	note.BColor = bColor
-	note.ReminderAt = reminderAt
-
 	// Hash the password if it's provided
 	if password != "" {
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -121,16 +106,27 @@ func SaveNoteHandler(c echo.Context) error {
 				"error": "Failed to read document file",
 			})
 		}
-
+		contentType := fileHeader.Header.Get("Content-Type")
+		if contentType == "" {
+			// If Content-Type is not provided, infer it from the file extension or content
+			contentType = mime.TypeByExtension(filepath.Ext(fileHeader.Filename))
+			if contentType == "" {
+				// If still unknown, use http.DetectContentType
+				contentType = http.DetectContentType(fileData)
+			}
+		}
 		// Create a document model for each file
 		document := models.Document{
 			UserId: uint(userID),
 			NoteId: note.ID,
+			Name: fileHeader.Filename,
 			Data:   fileData,
+			Type: &contentType,
 		}
 		documents = append(documents, document)
+		
 	}
-
+	DB.Where("note_id = ?", note.ID).Delete(&models.Document{})
 	// Handle the bPicture (background picture) if provided
 	bPictureHeader, err := c.FormFile("bPicture")
 	if err == nil {
@@ -148,9 +144,31 @@ func SaveNoteHandler(c echo.Context) error {
 				"error": "Failed to read bPicture file",
 			})
 		}
-
-		// Set the bPicture data in the note model
-		note.BPicture = bPictureData
+		contentType := bPictureHeader.Header.Get("Content-Type")
+		if contentType == "" {
+			// If Content-Type is not provided, infer it from the file extension or content
+			contentType = mime.TypeByExtension(filepath.Ext(bPictureHeader.Filename))
+			if contentType == "" {
+				// If still unknown, use http.DetectContentType
+				contentType = http.DetectContentType(bPictureData)
+			}
+		}
+		document := models.Document{
+			UserId: uint(userID),
+			Name: bPictureHeader.Filename,
+			Data:   bPictureData,
+			Type: &contentType,
+		}
+		if err := DB.Save(&document).Error; err != nil {
+			log.Printf("Failed to save bpicture: %v", err)
+			return c.JSON(http.StatusInternalServerError, map[string]string{
+				"error": "Failed to save bpicture",
+			})
+		}
+		if note.BPictureId != nil {
+			DB.Delete(&models.Document{}, note.BPictureId)
+		}
+		note.BPicture = &document
 	}
 
 	// Assign the documents to the note
@@ -164,7 +182,6 @@ func SaveNoteHandler(c echo.Context) error {
 		})
 	}
 
-	// Save the documents (batch insert)
 	for _, doc := range documents {
 		doc.NoteId = note.ID
 		if err := DB.Save(&doc).Error; err != nil {
@@ -180,4 +197,56 @@ func SaveNoteHandler(c echo.Context) error {
 		"message": fmt.Sprintf("Note '%s' saved successfully", note.Title),
 		"note":    note,
 	})
+}
+
+// GetNoteHandler handles fetching a note by ID
+func GetNoteHandler(c echo.Context) error {
+    // Parse the note ID from the URL parameter
+    noteIDStr := c.Param("id")
+    noteID, err := strconv.Atoi(noteIDStr)
+    if err != nil {
+        return c.JSON(http.StatusBadRequest, map[string]string{
+            "error": "Invalid note ID",
+        })
+    }
+
+    // Find the note by ID
+    var note models.Note
+    err = DB.Preload("Documents").First(&note, noteID).Error
+    if err != nil {
+        if err == gorm.ErrRecordNotFound {
+            return c.JSON(http.StatusNotFound, map[string]string{
+                "error": "Note not found",
+            })
+        }
+        return c.JSON(http.StatusInternalServerError, map[string]string{
+            "error": "Failed to fetch note",
+        })
+    }
+
+    // Prepare the note response
+    noteResponse := map[string]interface{}{
+        "id":         note.ID,
+        "title":      note.Title,
+        "content":    note.Content,
+        "tag":        note.Tag,
+        "mood":       note.Mood,
+        "fColor":     note.FColor,
+        "bColor":     note.BColor,
+        "password":   note.Password,
+    }
+
+    // Collect the IDs of the documents
+    var documentIDs []uint
+    for _, doc := range note.Documents {
+        documentIDs = append(documentIDs, doc.ID)
+    }
+    noteResponse["documents"] = documentIDs
+
+    if note.BPictureId != nil {
+        noteResponse["bPicture"] = *note.BPictureId
+    }
+
+    // Return the note data as JSON
+    return c.JSON(http.StatusOK, noteResponse)
 }

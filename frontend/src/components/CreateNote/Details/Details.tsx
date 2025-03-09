@@ -1,17 +1,8 @@
-import DateTimePicker from "../DateTimePicker/DateTimePicker";
 import useNoteStore from "../../../services/note.ts";
 
 
 const Details = () => {
     const {
-        withReminder,
-        setWithReminder,
-        reminderDate,
-        setReminderDate,
-        deletingDate,
-        setDeletingDate,
-        withDeleter,
-        setWithDeleter,
         title,
         setTitle,
         password,
@@ -67,34 +58,7 @@ const Details = () => {
                     onChange={(e) => setMood(e.target.value)}
                 />
                 <label htmlFor="Mood">Mood</label>
-            </div>
-            <div className="calendar">
-                <label htmlFor="reminder">Remind at</label>
-                <div
-                    className="calendar-input"
-                    style={{
-                        background: withReminder ? "var(--color)" : "transparent",
-                    }}
-                    onClick={() => setWithReminder(!withReminder)}
-                ></div>
-            </div>
-            {withReminder && (
-                <DateTimePicker datetime={reminderDate} setDateTime={setReminderDate} />
-            )}
-            <div className="calendar">
-                <label htmlFor="deleter">Delete at</label>
-                <div
-                    className="calendar-input"
-                    style={{
-                        background: withDeleter ? "var(--color)" : "transparent",
-                    }}
-                    onClick={() => setWithDeleter(!withDeleter)}
-                ></div>
-            </div>
-            {withDeleter && (
-                <DateTimePicker datetime={deletingDate} setDateTime={setDeletingDate} />
-            )}
-        </div>
+            </div></div>
     );
 };
 
