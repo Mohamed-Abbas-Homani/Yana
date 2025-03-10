@@ -51,7 +51,7 @@ const useNoteHandler = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:8080/note`, {
+      const response = await fetch(`http://localhost:8090/note`, {
         method: "PUT",
         body: formData,
       });

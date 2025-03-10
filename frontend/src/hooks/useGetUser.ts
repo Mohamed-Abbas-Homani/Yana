@@ -12,7 +12,7 @@ const useGetUser = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`http://localhost:8080/user/${user?.id}`);
+        const response = await fetch(`http://localhost:8090/user/${user?.id}`);
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);

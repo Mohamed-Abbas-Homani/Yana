@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./CircularMenu.css"; // Ensure this file is properly set up for styling
-import { GoSearch } from "react-icons/go";
-import { FaPencilAlt, FaUser } from "react-icons/fa";
+import { GoHome, GoSearch } from "react-icons/go";
+import { FaHome, FaPencilAlt, FaUser } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { debounce } from "../../utils/functions";
 import { useNavigate } from "react-router-dom";
 import useStore from "../../services/store";
+import { GiDogHouse } from "react-icons/gi";
 
 const CircularMenu: React.FC = () => {
   const { setCMenuStatus } = useStore();
@@ -62,10 +63,10 @@ const CircularMenu: React.FC = () => {
       <li
         style={{ "--i": 2 } as React.CSSProperties}
         title="Search for Anything!"
-        onClick={() => onItemClick("/search")}
+        onClick={() => onItemClick("/")}
       >
         <div>
-          <GoSearch />
+          <FaHome />
         </div>
       </li>
       <li

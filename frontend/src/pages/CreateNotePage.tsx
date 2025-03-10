@@ -10,13 +10,13 @@ import Details from "../components/CreateNote/Details/Details.tsx";
 import BottomBar from "../components/CreateNote/BottomBar/BottomBar.tsx";
 import useNoteStore, { useFileNoteStore } from "../services/note.ts";
 import useStore from "../services/store.ts";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import useGetNote from "../hooks/useGetNote.ts";
 
 const CreateNotePage = () => {
   useGetNote()
-  const { id } = useParams();
-  const { setUserAction } = useStore();
+  const location = useLocation()
+  const { setUserAction, setLastPage } = useStore();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const [imageURL, setImageURL] = useState<string | null>(null);
   const { backImage, setBackImage } = useFileNoteStore()
@@ -56,7 +56,6 @@ const CreateNotePage = () => {
   };
 
   useEffect(() => {
-    console.log(id)
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
@@ -64,6 +63,7 @@ const CreateNotePage = () => {
   }, [mode]);
 
   useEffect(() => {
+    setLastPage(location.pathname)
     setUserAction("editingNote")
     const handleClickOutside = (event: MouseEvent) => {
       if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {

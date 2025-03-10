@@ -30,5 +30,5 @@ func InitEcho() {
 	e.GET("/note/:id", handlers.GetNoteHandler)
 	e.GET("/documents/:id", handlers.GetDocument)
 	// Start server
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":8090"))
 }

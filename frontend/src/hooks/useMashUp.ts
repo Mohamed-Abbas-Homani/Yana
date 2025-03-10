@@ -5,7 +5,7 @@ import { appDataDir } from '@tauri-apps/api/path';
 
 const exitServer = async () => {
   try {
-    const response = await fetch("http://localhost:8080/mash-down", {
+    const response = await fetch("http://localhost:8090/mash-down", {
       method: "POST",
     });
 
@@ -30,7 +30,7 @@ const useMashUp = (): void => {
           return;
         }
 
-        const response = await fetch('http://localhost:8080/mash-up', {
+        const response = await fetch('http://localhost:8090/mash-up', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
