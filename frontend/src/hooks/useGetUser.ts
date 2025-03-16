@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import useStore from "../services/store";
+import { CONSTANTS } from "../const";
 
 const useGetUser = () => {
   const { user, setUser } = useStore();
@@ -12,7 +13,7 @@ const useGetUser = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`http://localhost:8090/user/${user?.id}`);
+        const response = await fetch(`${CONSTANTS.BackURL}/user/${user?.id}`);
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);

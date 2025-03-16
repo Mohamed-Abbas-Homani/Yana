@@ -122,7 +122,7 @@ const CreateNotePage = () => {
               }, 0);
             }}
           >
-            <TopBar
+            <TopBar 
               inputRef={inputRef}
               content={content}
               setContent={setContent}

@@ -71,9 +71,7 @@ func MashUpHandler(c echo.Context) error {
 // ExitServerHandler gracefully shuts down the server
 func MashDownHandler(c echo.Context) error {
 	go func() {
-		// Perform any necessary cleanup here
 		log.Println("Shutting down the server...")
-		// Exit the application
 		os.Exit(0)
 	}()
 

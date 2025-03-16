@@ -26,6 +26,7 @@ type NoteStore = {
     mood: string;
     setMood: (mood: string) => void;
     toggleMood: () => void;
+    reset: () => void;
 };
 
 const useNoteStore = create<NoteStore>()(
@@ -75,6 +76,21 @@ const useNoteStore = create<NoteStore>()(
                     set((state) => ({
                         mode: state.mode === "read" ? "write" : "read",
                     })),
+
+                reset: () =>
+                    set({
+                        mode: "read",
+                        content: "",
+                        id: "",
+                        auto: false,
+                        showEmojie: false,
+                        currentFont: getCSSVariable("--current-font") || "#e9e9e9",
+                        currentBack: getCSSVariable("--current-back") || "#222",
+                        title: "",
+                        password: "",
+                        tag: "",
+                        mood: "",
+                    }),
             }),
             { name: "mash-note-store" }
         )
@@ -86,6 +102,7 @@ type FileNoteStore = {
     setFiles: (files: File[]) => void;
     backImage: File | null;
     setBackImage: (backImage: File | null) => void;
+    reset: () => void;
 };
 
 export const useFileNoteStore = create<FileNoteStore>()(
@@ -95,8 +112,63 @@ export const useFileNoteStore = create<FileNoteStore>()(
             setFiles: (files: File[]) => set({ files }),
             backImage: null,
             setBackImage: (backImage: File | null) => set({ backImage }),
+            reset: ()=> set({files:[], backImage:null})
         })
     )
 );
+
+type DisplayNote = {
+    id: string;
+    title: string;
+    password: string;
+    content: string;
+    tag: string;
+    mood: string;
+    fcolor: string;
+    bcolor: string;
+    bpicture: File;
+    createdAt: string;
+}
+
+type NotesDisplayStore = {
+    notes: DisplayNote[];
+    setNotes: (notes: DisplayNote[]) => void;
+    page: number;
+    setPage: (page: number) => void;
+    total: number;
+    setTotal: (total: number) => void;
+    filters: string[];
+    setFilters: (filters: string[]) => void;
+    toggleFilter: (filter: string) => void;
+    keyword: string;
+    setKeyword: (keyword: string) => void;
+};
+
+export const useNotesDisplayStore = create<NotesDisplayStore>()(
+    devtools(
+        (set) => ({
+            notes: [],
+            setNotes: (notes: DisplayNote[]) => set({ notes }),
+
+            page: 1,
+            setPage: (page: number) => set({ page }),
+            total: 1,
+            setTotal: (total: number) => set({ total }),
+            keyword: "",
+            setKeyword: (keyword: string) => set({ keyword }),
+
+            filters: [],
+            setFilters: (filters: string[]) => set({ filters }),
+
+            toggleFilter: (filter: string) =>
+                set((state) => ({
+                    filters: state.filters.includes(filter)
+                        ? state.filters.filter((f) => f !== filter)
+                        : [...state.filters, filter],
+                })),
+        })
+    )
+);
+
 
 export default useNoteStore;

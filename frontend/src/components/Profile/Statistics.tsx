@@ -4,6 +4,7 @@ import { Line } from "react-chartjs-2"; // Importing the Line chart from react-c
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js"; // Importing required chart.js components
 import "./Statistics.css";
 import { getCSSVariable } from "../../utils/style";
+import { useNoteStats } from "../../hooks/useNoteStats"; // Import the custom hook
 
 // Register Chart.js components
 ChartJS.register(
@@ -20,19 +21,29 @@ const Statistics = () => {
   const [profileColor, setProfileColor] = useState<string>("");
   const [backgroundColor, setBackgroundColor] = useState<string>("");
 
+  const { createdNotes, moodNotes, loading, error } = useNoteStats(); // Call the custom hook
+
   useEffect(() => {
     // Get CSS variables on component mount
     setProfileColor(getCSSVariable("--profile-color"));
     setBackgroundColor(getCSSVariable("--background-color"));
   }, []);
 
-  // Data for the chart (Created notes per day of the week)
-  const data = {
-    labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], // X-axis labels (days of the week)
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  // Data for the creation chart (Created notes per day of the week)
+  const creationData = {
+    labels: Object.keys(createdNotes), // X-axis labels (days of the week)
     datasets: [
       {
         label: "Created Notes", // Dataset label
-        data: [5, 12, 8, 10, 20, 15, 7], // Sample data for each day (replace with actual data)
+        data: Object.values(createdNotes),
         fill: false, // Don't fill the area under the line
         borderColor: profileColor,
         tension: 0.1, // Line smoothness
@@ -40,14 +51,28 @@ const Statistics = () => {
     ],
   };
 
-  // Options for the chart with dynamic colors and no grid lines
-  const options = {
+  // Data for the mood chart (Notes per mood)
+  const moodData = {
+    labels: Object.keys(moodNotes), // X-axis labels (moods)
+    datasets: [
+      {
+        label: "Notes by Mood", // Dataset label
+        data: Object.values(moodNotes),
+        fill: false, // Don't fill the area under the line
+        borderColor: profileColor,
+        tension: 0.1, // Line smoothness
+      },
+    ],
+  };
+
+  // Chart options
+  const chartOptions = {
     responsive: true,
     plugins: {
       title: {
         display: true,
-        text: "Created Notes Per Weekday", // Title of the chart
-        color: profileColor, // Title color (using dynamic profile color)
+        text: "Notes Stats",
+        color: profileColor,
         font: {
           size: 18,
         },
@@ -89,9 +114,8 @@ const Statistics = () => {
     >
       <h3 className="stats-header" style={{ color: profileColor }}>Stats</h3> {/* Set header text color */}
       <div style={{ width: "89%", height: "300px", backgroundColor: backgroundColor, padding: "10px", borderRadius: "8px" }}>
-        <Line data={data} options={options} />
-        <Line data={data} options={options} />
-
+        <Line data={creationData} options={chartOptions} /> {/* Chart for created notes per weekday */}
+        <Line data={moodData} options={chartOptions} /> {/* Chart for notes by mood */}
       </div>
     </FlexBetween>
   );

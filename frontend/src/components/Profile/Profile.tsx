@@ -5,6 +5,7 @@ import "./Profile.css";
 import defaultProfilePicture from "../../assets/defaultProfile.jpg";
 import { IoLanguage, IoFlashlight } from "react-icons/io5";
 import useStore from "../../services/store";
+import { CONSTANTS } from "../../const";
 
 export interface FormData {
   id?: number; // Optional number or undefined
@@ -24,7 +25,7 @@ const Profile = () => {
   const getUserProfilePicture = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8090/user/${user?.id}/profile-picture`
+        `${CONSTANTS.BackURL}/user/${user?.id}/profile-picture`
       );
       if (response.ok) {
         const blob = await response.blob();

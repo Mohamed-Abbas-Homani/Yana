@@ -2,10 +2,11 @@ import { useEffect } from 'react';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { listen } from '@tauri-apps/api/event';
 import { appDataDir } from '@tauri-apps/api/path';
+import { CONSTANTS } from '../const';
 
 const exitServer = async () => {
   try {
-    const response = await fetch("http://localhost:8090/mash-down", {
+    const response = await fetch(`${CONSTANTS.BackURL}/mash-down`, {
       method: "POST",
     });
 
@@ -30,7 +31,7 @@ const useMashUp = (): void => {
           return;
         }
 
-        const response = await fetch('http://localhost:8090/mash-up', {
+        const response = await fetch(`${CONSTANTS.BackURL}/mash-up`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

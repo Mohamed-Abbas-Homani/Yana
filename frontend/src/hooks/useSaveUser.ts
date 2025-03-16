@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useStore from "../services/store";
+import { CONSTANTS } from "../const";
 
 const useSaveUser = () => {
   const { setUser } = useStore();
@@ -36,7 +37,7 @@ const useSaveUser = () => {
     console.log(userData)
 
     try {
-      const response = await fetch("http://localhost:8090/save-user", {
+      const response = await fetch(`${CONSTANTS.BackURL}/save-user`, {
         method: "POST",
         body: formData,
       });

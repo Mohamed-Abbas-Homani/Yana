@@ -3,8 +3,10 @@ import { useLayoutEffect } from "react";
 
 const useMashNotesBack = () => {
   const runBack = async () => {
+    console.log("hi")
     await invoke("run_mash_notes_back_sidecar");
   };
+
   useLayoutEffect(() => {
     runBack();
   }, []);

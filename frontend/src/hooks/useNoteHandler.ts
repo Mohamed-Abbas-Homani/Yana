@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useNoteStore, { useFileNoteStore } from "../services/note";
 import useStore from "../services/store";
+import { CONSTANTS } from "../const";
 const useNoteHandler = () => {
   const { user, addNotification } = useStore();
   const {
@@ -51,7 +52,7 @@ const useNoteHandler = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:8090/note`, {
+      const response = await fetch(`${CONSTANTS.BackURL}/note`, {
         method: "PUT",
         body: formData,
       });

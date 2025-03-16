@@ -7,7 +7,7 @@ import (
 )
 
 type Note struct {
-	ID         uint      `gorm:"primaryKey" form:"id"`
+	ID         int      `gorm:"primaryKey" form:"id"`
 	UserId     uint      `gorm:"not null" form:"user_id"`
 	User       User      `gorm:"foreignKey:UserId;references:ID"`
 	Content    string    `gorm:"type:text" form:"content"`

@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/labstack/echo/v4"
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -69,16 +69,7 @@ func SaveNoteHandler(c echo.Context) error {
 	note.Mood = mood
 	note.FColor = fColor
 	note.BColor = bColor
-	// Hash the password if it's provided
-	if password != "" {
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, map[string]string{
-				"error": "Failed to hash password",
-			})
-		}
-		note.Password = string(hashedPassword)
-	}
+	note.Password = password
 
 	// Handle multiple documents (files)
 	form, err := c.MultipartForm()
@@ -119,12 +110,12 @@ func SaveNoteHandler(c echo.Context) error {
 		document := models.Document{
 			UserId: uint(userID),
 			NoteId: note.ID,
-			Name: fileHeader.Filename,
+			Name:   fileHeader.Filename,
 			Data:   fileData,
-			Type: &contentType,
+			Type:   &contentType,
 		}
 		documents = append(documents, document)
-		
+
 	}
 	DB.Where("note_id = ?", note.ID).Delete(&models.Document{})
 	// Handle the bPicture (background picture) if provided
@@ -154,10 +145,11 @@ func SaveNoteHandler(c echo.Context) error {
 			}
 		}
 		document := models.Document{
+			NoteId: -1,
 			UserId: uint(userID),
-			Name: bPictureHeader.Filename,
+			Name:   bPictureHeader.Filename,
 			Data:   bPictureData,
-			Type: &contentType,
+			Type:   &contentType,
 		}
 		if err := DB.Save(&document).Error; err != nil {
 			log.Printf("Failed to save bpicture: %v", err)
@@ -201,52 +193,288 @@ func SaveNoteHandler(c echo.Context) error {
 
 // GetNoteHandler handles fetching a note by ID
 func GetNoteHandler(c echo.Context) error {
-    // Parse the note ID from the URL parameter
-    noteIDStr := c.Param("id")
-    noteID, err := strconv.Atoi(noteIDStr)
-    if err != nil {
-        return c.JSON(http.StatusBadRequest, map[string]string{
-            "error": "Invalid note ID",
-        })
-    }
+	// Parse the note ID from the URL parameter
+	noteIDStr := c.Param("id")
+	noteID, err := strconv.Atoi(noteIDStr)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "Invalid note ID",
+		})
+	}
 
-    // Find the note by ID
-    var note models.Note
-    err = DB.Preload("Documents").First(&note, noteID).Error
-    if err != nil {
-        if err == gorm.ErrRecordNotFound {
-            return c.JSON(http.StatusNotFound, map[string]string{
-                "error": "Note not found",
-            })
-        }
-        return c.JSON(http.StatusInternalServerError, map[string]string{
-            "error": "Failed to fetch note",
-        })
-    }
+	// Find the note by ID
+	var note models.Note
+	err = DB.Preload("Documents").First(&note, noteID).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return c.JSON(http.StatusNotFound, map[string]string{
+				"error": "Note not found",
+			})
+		}
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to fetch note",
+		})
+	}
 
-    // Prepare the note response
-    noteResponse := map[string]interface{}{
-        "id":         note.ID,
-        "title":      note.Title,
-        "content":    note.Content,
-        "tag":        note.Tag,
-        "mood":       note.Mood,
-        "fColor":     note.FColor,
-        "bColor":     note.BColor,
-        "password":   note.Password,
-    }
+	// Prepare the note response
+	noteResponse := map[string]interface{}{
+		"id":       note.ID,
+		"title":    note.Title,
+		"content":  note.Content,
+		"tag":      note.Tag,
+		"mood":     note.Mood,
+		"fColor":   note.FColor,
+		"bColor":   note.BColor,
+		"password": note.Password,
+	}
 
-    // Collect the IDs of the documents
-    var documentIDs []uint
-    for _, doc := range note.Documents {
-        documentIDs = append(documentIDs, doc.ID)
-    }
-    noteResponse["documents"] = documentIDs
+	// Collect the IDs of the documents
+	var documentIDs []uint
+	for _, doc := range note.Documents {
+		documentIDs = append(documentIDs, doc.ID)
+	}
+	noteResponse["documents"] = documentIDs
 
-    if note.BPictureId != nil {
-        noteResponse["bPicture"] = *note.BPictureId
-    }
+	if note.BPictureId != nil {
+		noteResponse["bPicture"] = *note.BPictureId
+	}
 
-    // Return the note data as JSON
-    return c.JSON(http.StatusOK, noteResponse)
+	// Return the note data as JSON
+	return c.JSON(http.StatusOK, noteResponse)
+}
+
+// GetFilteredNotesHandler handles fetching notes based on a keyword, filter, and pagination
+func GetFilteredNotesHandler(c echo.Context) error {
+	// Get query parameters
+	keyword := c.QueryParam("keyword")
+	filter := c.QueryParam("filter")
+	pageParam := c.QueryParam("page")
+	sizeParam := c.QueryParam("size")
+
+	// Default pagination values (page 1, size 6)
+	page, err := strconv.Atoi(pageParam)
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	size, err := strconv.Atoi(sizeParam)
+	if err != nil || size < 1 {
+		size = 6
+	}
+
+	// Base query
+	var notes []models.Note
+	query := DB.Preload("Documents")
+
+	// Apply filters or search in all fields if no filter is provided
+	if keyword != "" {
+		var conditions []string
+		var args []interface{}
+
+		if filter != "" {
+			// Split filter into fields
+			fields := strings.Split(filter, ",")
+			// Build the WHERE clause dynamically for the specified fields
+			for _, field := range fields {
+				field = strings.TrimSpace(field)
+				if field == "title" || field == "mood" || field == "tag" || field == "content" {
+					conditions = append(conditions, field+" LIKE ?")
+					args = append(args, "%"+keyword+"%")
+				}
+			}
+		} else {
+			// Search in all relevant fields if no filter is provided
+			conditions = append(conditions, "title LIKE ?", "mood LIKE ?", "tag LIKE ?", "content LIKE ?")
+			args = append(args, "%"+keyword+"%", "%"+keyword+"%", "%"+keyword+"%", "%"+keyword+"%")
+		}
+
+		// Combine conditions with OR for the search fields
+		if len(conditions) > 0 {
+			query = query.Where(strings.Join(conditions, " OR "), args...)
+		}
+	}
+
+	// Count total records matching the filters for pagination metadata
+	var totalRecords int64
+	query.Model(&models.Note{}).Count(&totalRecords)
+
+	// Apply pagination and order by created_at (latest first)
+	offset := (page - 1) * size
+	query = query.Offset(offset).Limit(size).Order("created_at DESC")
+
+	// Execute query
+	err = query.Find(&notes).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return c.JSON(http.StatusOK, map[string]interface{}{
+				"page":         page,
+				"size":         size,
+				"totalRecords": totalRecords,
+				"notes":        []any{},
+			})
+		}
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to fetch notes",
+		})
+	}
+
+	// Build the response for each note
+	var noteResponses []map[string]interface{}
+	for _, note := range notes {
+		noteResponse := map[string]interface{}{
+			"id":         note.ID,
+			"title":      note.Title,
+			"content":    note.Content,
+			"tag":        note.Tag,
+			"mood":       note.Mood,
+			"fcolor":     note.FColor,
+			"bcolor":     note.BColor,
+			"password":   note.Password,
+			"bPictureId": note.BPictureId,
+			"createdAt":  note.CreatedAt,
+		}
+		noteResponses = append(noteResponses, noteResponse)
+	}
+
+	// Return the paginated response with total records for metadata
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"page":         page,
+		"size":         size,
+		"totalRecords": totalRecords,
+		"notes":        noteResponses,
+	})
+}
+
+// GetNotesCountByWeekdayHandler returns a JSON with the count of notes created for each weekday
+func GetNotesCountByWeekdayHandler(c echo.Context) error {
+	// Define a struct to hold the result
+	type WeekdayNoteCount struct {
+		Weekday string `json:"weekday"`
+		Count   int    `json:"count"`
+	}
+
+	var results []WeekdayNoteCount
+
+	// Execute the SQL query using GORM to get the count of notes for each weekday
+	err := DB.Raw(`
+		SELECT strftime('%w', created_at) AS weekday, COUNT(*) AS count
+		FROM notes
+		WHERE date(created_at) >= date('now', 'weekday 0', '-6 days')
+		AND date(created_at) <= date('now', 'weekday 0')
+		GROUP BY weekday
+	`).Scan(&results).Error
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to fetch notes count by weekday",
+		})
+	}
+
+	// Create a map to convert the weekday number (0-6) to actual weekday names
+	weekdayNames := map[string]string{
+		"0": "Sunday",
+		"1": "Monday",
+		"2": "Tuesday",
+		"3": "Wednesday",
+		"4": "Thursday",
+		"5": "Friday",
+		"6": "Saturday",
+	}
+
+	// Build the final response, mapping weekday names to counts
+	response := make(map[string]int)
+	for _, result := range results {
+		weekdayName := weekdayNames[result.Weekday]
+		response[weekdayName] = result.Count
+	}
+
+	// Return the response as JSON
+	return c.JSON(http.StatusOK, response)
+}
+
+// GetNotesCountByMoodHandler returns a JSON with the count of notes grouped by mood, limited to the top 7 most used moods
+func GetNotesCountByMoodHandler(c echo.Context) error {
+	// Define a struct to hold the result
+	type MoodNoteCount struct {
+		Mood  string `json:"mood"`
+		Count int    `json:"count"`
+	}
+
+	var results []MoodNoteCount
+
+	// Execute the SQL query using GORM to get the count of notes for each mood, ordered by count descending, limited to top 7
+	err := DB.Raw(`
+		SELECT mood, COUNT(*) AS count
+		FROM notes
+		GROUP BY mood
+		ORDER BY count DESC
+		LIMIT 7
+	`).Scan(&results).Error
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to fetch notes count by mood",
+		})
+	}
+
+	// Build the response
+	response := make(map[string]int)
+	for _, result := range results {
+		response[result.Mood] = result.Count
+	}
+
+	// Return the response as JSON
+	return c.JSON(http.StatusOK, response)
+}
+
+
+// DeleteNoteHandler handles the deletion of a note by ID, including all its documents
+func DeleteNoteHandler(c echo.Context) error {
+	// Parse the note ID from the URL parameter
+	noteIDStr := c.Param("id")
+	noteID, err := strconv.Atoi(noteIDStr)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "Invalid note ID",
+		})
+	}
+
+	// Find the note by ID
+	var note models.Note
+	err = DB.Preload("Documents").First(&note, noteID).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return c.JSON(http.StatusNotFound, map[string]string{
+				"error": "Note not found",
+			})
+		}
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to fetch note",
+		})
+	}
+
+	// Delete all associated documents
+	if len(note.Documents) > 0 {
+		for _, doc := range note.Documents {
+			if err := DB.Delete(&doc).Error; err != nil {
+				log.Printf("Failed to delete document: %v", err)
+				return c.JSON(http.StatusInternalServerError, map[string]string{
+					"error": "Failed to delete documents",
+				})
+			}
+		}
+	}
+
+	// Delete the note itself
+	if err := DB.Delete(&note).Error; err != nil {
+		log.Printf("Failed to delete note: %v", err)
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to delete note",
+		})
+	}
+
+	// Return a success message
+	return c.JSON(http.StatusOK, map[string]string{
+		"message": fmt.Sprintf("Note with ID %d and all its documents deleted successfully", noteID),
+	})
 }

@@ -12,23 +12,28 @@ import { TbQuote } from "react-icons/tb";
 import { FaCode } from "react-icons/fa6";
 import "./TopBar.css";
 import { useState, useEffect } from "react";
-import useNoteStore from "../../../services/note.ts";
+import useNoteStore, { useFileNoteStore } from "../../../services/note.ts";
 import useStore from "../../../services/store.ts";
 import useNoteHandler from "../../../hooks/useNoteHandler.ts";
+import { useNavigate } from "react-router-dom";
+import useDeleteNote from "../../../hooks/useDeleteNote.tsx";
 
 const TopBar = ({
   inputRef,
   content,
   setContent,
 }: any) => {
+  const navigate = useNavigate();
   const { loading, handleNoteSubmission } = useNoteHandler()
   const { setUserAction } = useStore();
   const {
     auto,
-    setAuto, mode, toggleMood } = useNoteStore()
+    setAuto, mode, toggleMood ,reset, id} = useNoteStore()
+    const {reset: resetFiles} = useFileNoteStore()
   const [isBulletListActive, setIsBulletListActive] = useState(false);
   const [isNumberedListActive, setIsNumberedListActive] = useState(false);
   const [showFS, setShowFS] = useState<boolean>(false);
+  const {loading: deleting, handleDeleteNote} = useDeleteNote()
   // Function to insert text at the cursor position in the textarea
   const insertAtCursor = (text: string) => {
     const inputElement = inputRef.current;
@@ -222,13 +227,30 @@ const TopBar = ({
       </div>
 
       <div className="create-note-submit-buttons">
-        <button onClick={() => setUserAction("neutral")} disabled={loading}>cancel</button>
+{   id&&         <button 
+        disabled={deleting}
+          onClick={async () => {
+          await handleDeleteNote(id)
+          reset()
+          resetFiles()
+          navigate("/home")
+          setUserAction("neutral")
+
+        }} >{deleting ? "deleting...":"delete"}</button>}
+                <button onClick={() => {setUserAction("neutral"); reset();resetFiles();
+          navigate("/home")
+          }} disabled={loading}>cancel</button>
         <button 
         disabled={loading}
           onClick={async () => {
           await handleNoteSubmission()
+          reset()
+          resetFiles()
+          navigate("/home")
           setUserAction("neutral")
+
         }} >{loading ? "saving...":"save"}</button>
+
       </div>
     </div>
   );

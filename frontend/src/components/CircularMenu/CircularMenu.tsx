@@ -54,7 +54,7 @@ const CircularMenu: React.FC = () => {
       <li
         style={{ "--i": 1 } as React.CSSProperties}
         title="Add a Note!"
-        onClick={() => onItemClick("/note/1")}
+        onClick={() => onItemClick("/note")}
       >
         <div>
           <FaPencilAlt />

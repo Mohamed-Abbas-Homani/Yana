@@ -29,6 +29,10 @@ func InitEcho() {
 	e.PUT("/note", handlers.SaveNoteHandler)
 	e.GET("/note/:id", handlers.GetNoteHandler)
 	e.GET("/documents/:id", handlers.GetDocument)
+	e.GET("/notes", handlers.GetFilteredNotesHandler)
+	e.GET("/notes/creation-stat", handlers.GetNotesCountByWeekdayHandler)
+	e.GET("/notes/mood-stat", handlers.GetNotesCountByMoodHandler)
+	e.DELETE("/notes/:id", handlers.DeleteNoteHandler)
 	// Start server
 	e.Logger.Fatal(e.Start(":8090"))
 }

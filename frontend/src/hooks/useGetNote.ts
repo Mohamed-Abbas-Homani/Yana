@@ -22,7 +22,7 @@ const useGetNote = () => {
 
   const fetchDocument = async (documentId: string): Promise<File> => {
     try {
-      const response = await fetch(`http://localhost:8090/documents/${documentId}`);
+      const response = await fetch(`${CONSTANTS.BackURL}/documents/${documentId}`);
       
       // Check if the response is OK
       if (!response.ok) {
@@ -59,7 +59,7 @@ const useGetNote = () => {
       setLoading(true);
 
       try {
-        const response = await fetch(`http://localhost:8090/note/${id}`, {
+        const response = await fetch(`${CONSTANTS.BackURL}/note/${id}`, {
           method: "GET",
         });
 
