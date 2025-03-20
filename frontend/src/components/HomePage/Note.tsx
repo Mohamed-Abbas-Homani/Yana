@@ -2,7 +2,7 @@ import { FaTag, FaSmile, FaClock } from "react-icons/fa";
 import "../HomePage/HomePage.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { summarizeText } from "../../utils/functions";
 // Function to format timestamp
 const formatDate = (timestamp: string) => {
   const date = new Date(timestamp);
@@ -74,7 +74,7 @@ const Note = ({ content, title, tag, mood, password, fcolor, bcolor, bpicture, i
             onLoad={handleImageLoad} // Trigger once the image is loaded
           />
         )}
-        {content}
+        {summarizeText(content)}
       </div>
 
       {/* Password input field (only shown if the note is locked) */}

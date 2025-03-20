@@ -31,6 +31,7 @@
 }
 
 .profile-container {
+  background-color: var(--profile-background-color);
   position: relative;
 }
 
@@ -48,7 +49,7 @@
   border: none;
   outline: none;
   background: var(--profile-color);
-  color: var(--background-color);
+  color: var(--profile-background-color);
   border-radius: 13px;
   padding: 13px 21px;
   font-size: 1em;
@@ -105,6 +106,7 @@
 }
 
 .language-container {
+  margin-left: 35%;
   width: 89%;
   display: flex;
   justify-content: space-between;
@@ -113,7 +115,7 @@
 }
 
 .hint-container label {
-  color: var(--background-color);
+  color: var(--profile-background-color);
   font-weight: bold;
   margin: 0 8px;
 }
@@ -135,7 +137,7 @@
   border-radius: 13px;
 }
 .language-tabs .lang-label * {
-  color: var(--background-color);
+  color: var(--profile-background-color);
   font-weight: bold;
   font-size: 1.21em;
   margin: 0 8px;
@@ -155,7 +157,7 @@
   height: 21px;
   width: 34px;
   font-size: 1rem;
-  color: var(--background-color);
+  color: var(--profile-background-color);
   opacity: 0.7;
   font-weight: bold;
   border-radius: 13px;
@@ -188,7 +190,7 @@
   display: flex;
   height: 21px;
   width: 34px;
-  background-color: var(--background-color);
+  background-color: var(--profile-background-color);
   opacity: 0.34;
   z-index: 1;
   border-radius: 13px;
@@ -207,7 +209,7 @@
   justify-content: center;
   align-items: center;
   width: 89%;
-  margin: 8px 0;
+  margin: 21px 0;
   position: relative;
 }
 
@@ -247,7 +249,7 @@
   padding: 3px;
   opacity: 1;
   color: var(--profile-color);
-  background-color: var(--background-color);
+  background-color: var(--profile-background-color);
 }
 
 .profile-light {

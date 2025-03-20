@@ -11,7 +11,8 @@
   --current-back: #222;
   --menu-item-background: #e9e9e9;
   --menu-toggle-background: rgb(199, 199, 233);
-  --profile-color: #e9e9e9;
+  --profile-color: #07ac46;
+  --profile-background-color: rgb(65, 3, 3);
   --width: 100%;
   font-synthesis: none;
   text-rendering: optimizeLegibility;

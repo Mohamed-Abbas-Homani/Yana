@@ -26,7 +26,7 @@ const Statistics = () => {
   useEffect(() => {
     // Get CSS variables on component mount
     setProfileColor(getCSSVariable("--profile-color"));
-    setBackgroundColor(getCSSVariable("--background-color"));
+    setBackgroundColor(getCSSVariable("--background-profile-color"));
   }, []);
 
   if (loading) {

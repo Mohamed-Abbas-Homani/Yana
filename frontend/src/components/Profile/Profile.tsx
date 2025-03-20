@@ -48,7 +48,6 @@ const Profile = () => {
   const [formData, setFormData] = useState<FormData>({
     name: "", // Required but can be empty
     nickName: "", // Optional but initially an empty string
-    password: "", // Optional but initially an empty string
     language: "en", // Required with "en" as default
     hint: "#000", // Optional but set to a default
     id: undefined, // Optional and undefined initially
@@ -58,7 +57,6 @@ const Profile = () => {
       setFormData({
         name: user.name || "",
         nickName: user.nickName || "",
-        password: "",
         language: user.language || "en",
         hint: user.hint || "#000",
         id: user.id,
@@ -195,21 +193,6 @@ const Profile = () => {
           <label htmlFor="nickName">NickName</label>
         </div>
 
-        {/* Password Input */}
-        <div className="inputGroup">
-          <input
-            type="password"
-            required
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          <label htmlFor="password">
-            {user?.password ? "Change " : ""}Password
-          </label>
-        </div>
-
         {/* Language Selection and Hint Input */}
         <div className="language-container">
           <div className="language-tabs">
@@ -260,18 +243,6 @@ const Profile = () => {
               Jp
             </label>
             <span className="glider"></span>
-          </div>
-
-          {/* Hint Color Input */}
-          <div className="hint-container">
-            <label className="hint-label">Hint</label>
-            <input
-              type="color"
-              className="hint-input"
-              value={formData.hint}
-              onChange={handleHintChange}
-              style={{ backgroundColor: formData.hint }}
-            />
           </div>
         </div>
 

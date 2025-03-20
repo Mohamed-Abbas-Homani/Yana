@@ -3,6 +3,7 @@ import ProfilePage from "../pages/ProfilePage";
 import CreateNotePage from "../pages/CreateNotePage";
 import MainPage from "../pages/MainPage";
 import HomePage from "../pages/HomePage";
+import SettingsPage from "../pages/SettingsPage";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <ProfilePage />,
+  },
+  {
+    path: "/settings",
+    element: <SettingsPage />,
   },
   {
     path: "/note",

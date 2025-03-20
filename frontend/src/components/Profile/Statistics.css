@@ -1,5 +1,6 @@
 .stats-container {
   position: relative;
+  background-color: var(--profile-background-color);
 }
 
 .stats-header {

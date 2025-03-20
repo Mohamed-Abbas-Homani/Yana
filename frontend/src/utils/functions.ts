@@ -36,3 +36,39 @@ export const throttle = (func: (...args: any[]) => void, limit: number): (...arg
     }
   };
 };
+
+export function summarizeText(
+  text: string,
+  maxSize: number = 233
+): string {
+  // Split the text into words
+  const words = text.split(/\s+/);
+
+  // If the entire text is already short enough, return it as-is
+  if (text.length <= maxSize) {
+    return text;
+  }
+
+  // Calculate how many words to take from the start, middle, and end
+  const firstPartSize = Math.floor(maxSize * 0.3);
+  const middlePartSize = Math.floor(maxSize * 0.2);
+  const endPartSize = Math.floor(maxSize * 0.3);
+
+  // Get the first words
+  const firstWords = words.slice(0, firstPartSize).join(' ');
+
+  // Get the middle words
+  const middleIndex = Math.floor(words.length / 2);
+  const middleWords = words.slice(middleIndex, middleIndex + middlePartSize).join(' ');
+
+  // Get the last words
+  const lastWords = words.slice(-endPartSize).join(' ');
+
+  // Concatenate with ellipses
+  const summary = `${firstWords} ... ${middleWords} ... ${lastWords}`;
+
+  // Ensure that the summary does not exceed the maxSize
+  return summary.length > maxSize
+    ? summary.slice(0, maxSize - 3) + '...' // Truncate if necessary
+    : summary;
+}
