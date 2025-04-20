@@ -14,7 +14,11 @@ const SettingsPage = () => {
     profileFontColor,
     setProfileFontColor,
     profileBackgroundColor,
-    setProfileBackgroundColor
+    setProfileBackgroundColor,
+    menuItemBackground,
+    setMenuItemBackground,
+    menuToggleBackground,
+    setMenuToggleBackground,
   } = useConfig();
 
   useEffect(() => {
@@ -61,6 +65,25 @@ const SettingsPage = () => {
             id="pfg"
             value={profileFontColor}
             onChange={(e) => setProfileFontColor(e.target.value)}
+          />
+        </div>
+        <div className="set-color">
+          <label htmlFor="mbg">Menu Item Background Color</label>
+          <input
+            type="color"
+            id="mbg"
+            value={menuItemBackground}
+            onChange={(e) => setMenuItemBackground(e.target.value)}
+          />
+        </div>
+
+        <div className="set-color">
+          <label htmlFor="mtg">Menu Toggle Background Color</label>
+          <input
+            type="color"
+            id="mtg"
+            value={menuToggleBackground}
+            onChange={(e) => setMenuToggleBackground(e.target.value)}
           />
         </div>
       </div>

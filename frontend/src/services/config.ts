@@ -11,6 +11,10 @@ type Store = {
   setProfileFontColor: (color: string) => void;
   profileBackgroundColor: string;
   setProfileBackgroundColor: (color: string) => void;
+  menuItemBackground: string;
+  setMenuItemBackground: (color: string) => void;
+  menuToggleBackground: string;
+  setMenuToggleBackground: (color: string) => void;
 };
 
 const useConfig = create<Store>()(
@@ -22,6 +26,8 @@ const useConfig = create<Store>()(
         backgroundColor: getCSSVariable("--background-color") || "#222", // Default to a fallback background color
         profileFontColor: getCSSVariable("--profile-color") || "#ffffff", // Default profile font color
         profileBackgroundColor: getCSSVariable("--profile-background-color") || "#333333", // Default profile background color
+        menuItemBackground: getCSSVariable("--menu-item-background") || "#444", // Default menu item background color
+        menuToggleBackground: getCSSVariable("--menu-toggle-background") || "#555", // Default menu toggle background color
 
         // Functions to update CSS variables and store state
         setFontColor: (color: string) => {
@@ -39,6 +45,14 @@ const useConfig = create<Store>()(
         setProfileBackgroundColor: (color: string) => {
           set({ profileBackgroundColor: color });
           updateCSSVariable("--profile-background-color", color); // Update CSS variable for profile background color
+        },
+        setMenuItemBackground: (color: string) => {
+          set({ menuItemBackground: color });
+          updateCSSVariable("--menu-item-background", color); // Update CSS variable for menu item background
+        },
+        setMenuToggleBackground: (color: string) => {
+          set({ menuToggleBackground: color });
+          updateCSSVariable("--menu-toggle-background", color); // Update CSS variable for menu toggle background
         }
       }),
       { name: "mash-config-store" }

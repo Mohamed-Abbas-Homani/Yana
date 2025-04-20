@@ -85,12 +85,6 @@ const Profile = () => {
     setUserAction("editing profile");
   };
 
-  // Handle hint color change
-  const handleHintChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, hint: e.target.value }));
-    setUserAction("editing profile");
-  };
-
   // Handle profile picture selection
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
