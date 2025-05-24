@@ -32,10 +32,7 @@ const useGetUser = () => {
 
       fetchUser();
     }
-    console.log(
-    "no user id"
-    );
-
+    console.log("no user id");
   }, [user]); // Dependency on userId to refetch if it changes
 
   return { user, loading, error };

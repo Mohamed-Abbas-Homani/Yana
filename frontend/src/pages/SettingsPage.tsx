@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import Page from "../components/UI/Page";
 import useStore from "../services/store";
-import useConfig from "../services/config"; // Import your config store
+import useConfig from "../services/config";
 import "../components/SettingsPage/settings.css";
+import { useTranslation } from "react-i18next";
 
 const SettingsPage = () => {
+  const { t } = useTranslation();
   const { setLastPage } = useStore();
   const {
     fontColor,
@@ -29,7 +31,7 @@ const SettingsPage = () => {
     <Page>
       <div className="set-container">
         <div className="set-color">
-          <label htmlFor="gbg">Global Background Color</label>
+          <label htmlFor="gbg">{t("globalBackgroundColor")}</label>
           <input
             type="color"
             id="gbg"
@@ -39,7 +41,7 @@ const SettingsPage = () => {
         </div>
 
         <div className="set-color">
-          <label htmlFor="gfg">Global Foreground Color</label>
+          <label htmlFor="gfg">{t("globalForegroundColor")}</label>
           <input
             type="color"
             id="gfg"
@@ -49,7 +51,7 @@ const SettingsPage = () => {
         </div>
 
         <div className="set-color">
-          <label htmlFor="pbg">Profile Background Color</label>
+          <label htmlFor="pbg">{t("profileBackgroundColor")}</label>
           <input
             type="color"
             id="pbg"
@@ -59,7 +61,7 @@ const SettingsPage = () => {
         </div>
 
         <div className="set-color">
-          <label htmlFor="pfg">Profile Foreground Color</label>
+          <label htmlFor="pfg">{t("profileForegroundColor")}</label>
           <input
             type="color"
             id="pfg"
@@ -67,8 +69,9 @@ const SettingsPage = () => {
             onChange={(e) => setProfileFontColor(e.target.value)}
           />
         </div>
+
         <div className="set-color">
-          <label htmlFor="mbg">Menu Item Background Color</label>
+          <label htmlFor="mbg">{t("menuItemBackgroundColor")}</label>
           <input
             type="color"
             id="mbg"
@@ -78,7 +81,7 @@ const SettingsPage = () => {
         </div>
 
         <div className="set-color">
-          <label htmlFor="mtg">Menu Toggle Background Color</label>
+          <label htmlFor="mtg">{t("menuToggleBackgroundColor")}</label>
           <input
             type="color"
             id="mtg"

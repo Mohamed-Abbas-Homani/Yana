@@ -5,8 +5,8 @@
   flex-direction: column;
   border-radius: 13px;
   background: var(--background-color);
-  box-shadow: inset 7px 7px 13px
-      color-mix(in srgb, var(--background-color) 89%, #000000),
+  box-shadow:
+    inset 7px 7px 13px color-mix(in srgb, var(--background-color) 89%, #000000),
     inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
   width: 7.5%;
   height: 100%;
@@ -79,7 +79,7 @@
 }
 
 .emoji-picker-container {
-position: absolute;
-z-index: 1000;
-left: 50px;
+  position: absolute;
+  z-index: 1000;
+  left: 50px;
 }

@@ -1,4 +1,3 @@
-// HomePage.js
 import Page from "../components/UI/Page";
 import "../components/HomePage/HomePage.css";
 import { FaArrowLeft, FaArrowRight, FaSearch } from "react-icons/fa";
@@ -8,15 +7,18 @@ import useFetchNotes from "../hooks/useFetchNotes";
 import { useState } from "react";
 import { useNotesDisplayStore } from "../services/note";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const HomePage = () => {
+  const { t } = useTranslation();
   const { notes, loading, setPage, error, setKeyword } = useFetchNotes();
   const { keyword, page, total } = useNotesDisplayStore();
   const [inputKeyword, setInputKeyword] = useState(keyword);
   const navigate = useNavigate();
+
   const handleSearch = () => {
     setKeyword(inputKeyword);
-    setPage(1); // Reset to the first page when searching
+    setPage(1);
   };
 
   const handleNextPage = () => {
@@ -31,55 +33,58 @@ const HomePage = () => {
     }
   };
 
-  const totalPages = Math.ceil(total / 6); // Calculate total number of pages
+  const totalPages = Math.ceil(total / 6);
 
   return (
     <Page>
       <div className="home-container">
         <div className="search-container">
           <div className="flags-container">
-            <Flag label="Tag" handleSearch={handleSearch} />
-            <Flag label="Mood" handleSearch={handleSearch} />
-            <Flag label="Content" handleSearch={handleSearch} />
-            <Flag label="Title" handleSearch={handleSearch} />
+            <Flag label={t("Tag")} handleSearch={handleSearch} />
+            <Flag label={t("Mood")} handleSearch={handleSearch} />
+            <Flag label={t("Content")} handleSearch={handleSearch} />
+            <Flag label={t("Title")} handleSearch={handleSearch} />
           </div>
           <div className="search-box">
             {totalPages > 1 && (
               <div className="pagination">
                 {page > 1 && (
                   <FaArrowLeft
-                    onClick={() => handlePrevPage()}
+                    onClick={handlePrevPage}
                     className="pagination-arrow"
                   />
                 )}
                 <span>
-                  page {page} of {totalPages}
+                  {t("page")} {page} {t("of")} {totalPages}
                 </span>
                 {page < totalPages && (
                   <FaArrowRight
-                    onClick={() => handleNextPage()}
+                    onClick={handleNextPage}
                     className="pagination-arrow"
                   />
                 )}
               </div>
             )}
-            <div className="search-btn" onClick={() => handleSearch()}>
+            <div className="search-btn" onClick={handleSearch}>
               <FaSearch />
             </div>
             <input
               type="text"
               className="search-text"
-              placeholder="Search for anything..."
+              placeholder={t("searchPlaceholder", "Search for anything...")}
               onChange={(e) => setInputKeyword(e.target.value)}
               value={inputKeyword}
             />
           </div>
         </div>
+
         <div className="notes-container">
           {loading ? (
-            <p>Loading notes...</p>
+            <p>{t("loadingNotes", "Loading notes...")}</p>
           ) : error ? (
-            <p>Error fetching notes: {error}</p>
+            <p>
+              {t("errorFetchingNotes", "Error fetching notes")}: {error}
+            </p>
           ) : notes.length > 0 ? (
             notes.map((note) => (
               <Note
@@ -96,12 +101,11 @@ const HomePage = () => {
                 createdAt={note.createdAt}
               />
             ))
-          ) : (<>
-            <div className="add-one-btn" onClick={() => {
-              navigate("/note")
-            }}>
-              No notes found <p>Add one!</p>
-            </div></>
+          ) : (
+            <div className="add-one-btn" onClick={() => navigate("/note")}>
+              {t("noNotesFound", "No notes found")}{" "}
+              <p>{t("addOne", "Add one!")}</p>
+            </div>
           )}
         </div>
       </div>

@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { getCurrentWindow } from '@tauri-apps/api/window';
-import { listen } from '@tauri-apps/api/event';
-import { CONSTANTS } from '../const';
+import { useEffect } from "react";
+import { getCurrentWindow } from "@tauri-apps/api/window";
+import { listen } from "@tauri-apps/api/event";
+import { CONSTANTS } from "../const";
 
 const exitServer = async () => {
   try {
@@ -16,15 +16,15 @@ const exitServer = async () => {
     const data = await response.json();
     console.log(data.message); // "Server is shutting down"
   } catch (err: any) {
-    console.error('Error exiting the server:', err.message);
+    console.error("Error exiting the server:", err.message);
   }
 };
 
 const useMashUp = (): void => {
   useEffect(() => {
     // Listen for the close event to shut down the server
-    const unlisten = listen('tauri://close-requested', async () => {
-      console.log('Window is closing, shutting down the server...');
+    const unlisten = listen("tauri://close-requested", async () => {
+      console.log("Window is closing, shutting down the server...");
       await exitServer();
       // Close the window only after the server shuts down
       await getCurrentWindow().close();

@@ -34,7 +34,7 @@
 }
 
 .menu.active li {
-  transform: rotate(calc(120deg/ 4 * var(--i) + 60deg));
+  transform: rotate(calc(120deg / 4 * var(--i) + 60deg));
   opacity: 1;
 }
 
@@ -43,7 +43,7 @@
   align-items: center;
   justify-content: center;
   z-index: 100;
-  transform: rotate(calc(120deg/ -4 * var(--i) - 60deg));
+  transform: rotate(calc(120deg / -4 * var(--i) - 60deg));
 }
 
 .menu li div * {
@@ -58,7 +58,7 @@
   position: absolute;
   width: 55px;
   height: 55px;
-  background:var(--menu-toggle-background);
+  background: var(--menu-toggle-background);
   border-radius: 50%;
   display: flex;
   align-items: center;

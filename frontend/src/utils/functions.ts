@@ -4,7 +4,10 @@
  * @param delay - The delay in milliseconds.
  * @returns The debounced function.
  */
-export const debounce = (func: (...args: any[]) => void, delay: number): (...args: any[]) => void => {
+export const debounce = (
+  func: (...args: any[]) => void,
+  delay: number,
+): ((...args: any[]) => void) => {
   let timeoutId: number;
   return (...args: any[]) => {
     clearTimeout(timeoutId);
@@ -18,7 +21,10 @@ export const debounce = (func: (...args: any[]) => void, delay: number): (...arg
  * @param limit - The time frame in milliseconds.
  * @returns The throttled function.
  */
-export const throttle = (func: (...args: any[]) => void, limit: number): (...args: any[]) => void => {
+export const throttle = (
+  func: (...args: any[]) => void,
+  limit: number,
+): ((...args: any[]) => void) => {
   let lastFunc: number;
   let lastRan: number;
   return (...args: any[]) => {
@@ -27,20 +33,20 @@ export const throttle = (func: (...args: any[]) => void, limit: number): (...arg
       lastRan = Date.now();
     } else {
       clearTimeout(lastFunc);
-      lastFunc = setTimeout(() => {
-        if (Date.now() - lastRan >= limit) {
-          func(...args);
-          lastRan = Date.now();
-        }
-      }, limit - (Date.now() - lastRan));
+      lastFunc = setTimeout(
+        () => {
+          if (Date.now() - lastRan >= limit) {
+            func(...args);
+            lastRan = Date.now();
+          }
+        },
+        limit - (Date.now() - lastRan),
+      );
     }
   };
 };
 
-export function summarizeText(
-  text: string,
-  maxSize: number = 233
-): string {
+export function summarizeText(text: string, maxSize: number = 233): string {
   // Split the text into words
   const words = text.split(/\s+/);
 
@@ -55,20 +61,22 @@ export function summarizeText(
   const endPartSize = Math.floor(maxSize * 0.3);
 
   // Get the first words
-  const firstWords = words.slice(0, firstPartSize).join(' ');
+  const firstWords = words.slice(0, firstPartSize).join(" ");
 
   // Get the middle words
   const middleIndex = Math.floor(words.length / 2);
-  const middleWords = words.slice(middleIndex, middleIndex + middlePartSize).join(' ');
+  const middleWords = words
+    .slice(middleIndex, middleIndex + middlePartSize)
+    .join(" ");
 
   // Get the last words
-  const lastWords = words.slice(-endPartSize).join(' ');
+  const lastWords = words.slice(-endPartSize).join(" ");
 
   // Concatenate with ellipses
   const summary = `${firstWords} ... ${middleWords} ... ${lastWords}`;
 
   // Ensure that the summary does not exceed the maxSize
   return summary.length > maxSize
-    ? summary.slice(0, maxSize - 3) + '...' // Truncate if necessary
+    ? summary.slice(0, maxSize - 3) + "..." // Truncate if necessary
     : summary;
 }

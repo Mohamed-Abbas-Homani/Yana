@@ -63,9 +63,12 @@
 }
 .profile-picture-container::after {
   content: "";
-  box-shadow: 10px -15px 10px var(--profile-color),
-    -10px -15px 10px var(--profile-color), -10px -40px 40px var(--profile-color),
-    10px -20px 40px var(--profile-color), -20px -50px 40px var(--profile-color);
+  box-shadow:
+    10px -15px 10px var(--profile-color),
+    -10px -15px 10px var(--profile-color),
+    -10px -40px 40px var(--profile-color),
+    10px -20px 40px var(--profile-color),
+    -20px -50px 40px var(--profile-color);
   background-color: var(--profile-color);
   filter: blur(5px) brightness(1.1);
   position: absolute;
@@ -81,9 +84,12 @@
 
 .profile-picture-container::before {
   content: "";
-  box-shadow: 10px -15px 10px var(--profile-color),
-    -10px -15px 10px var(--profile-color), -10px -40px 40px var(--profile-color),
-    10px -20px 40px var(--profile-color), 20px -50px 40px var(--profile-color);
+  box-shadow:
+    10px -15px 10px var(--profile-color),
+    -10px -15px 10px var(--profile-color),
+    -10px -40px 40px var(--profile-color),
+    10px -20px 40px var(--profile-color),
+    20px -50px 40px var(--profile-color);
   background-color: var(--profile-color);
   filter: blur(5px) brightness(1.1);
   position: absolute;
@@ -184,7 +190,9 @@
 .language-container input[id="radio-4"]:checked ~ .glider {
   transform: translateX(405%);
 }
-
+.language-container input[id="radio-5"]:checked ~ .glider {
+  transform: translateX(505%);
+}
 .glider {
   position: absolute;
   display: flex;
@@ -327,12 +335,14 @@
 
 @keyframes profile-flash {
   0% {
-    box-shadow: -5px 0px 13px var(--profile-color),
+    box-shadow:
+      -5px 0px 13px var(--profile-color),
       5px 0px 13px var(--profile-color);
   }
 
   100% {
-    box-shadow: -5px 0px 13px var(--profile-color),
+    box-shadow:
+      -5px 0px 13px var(--profile-color),
       5px 0px 13px var(--profile-color);
   }
 }

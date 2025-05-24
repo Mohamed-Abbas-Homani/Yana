@@ -8,7 +8,7 @@ type Store = {
   notifications: Notification[];
   addNotification: (
     message: string,
-    type: "success" | "error" | "info"
+    type: "success" | "error" | "info",
   ) => void;
   removeNotification: (id: number) => void;
   user: User | null;
@@ -40,7 +40,7 @@ const useStore = create<Store>()(
           setTimeout(() => {
             set((state) => ({
               notifications: state.notifications.filter(
-                (note) => note.id !== id
+                (note) => note.id !== id,
               ),
             }));
           }, 3400);
@@ -63,9 +63,9 @@ const useStore = create<Store>()(
           set({ lastPage });
         },
       }),
-      { name: "mash-store" }
-    )
-  )
+      { name: "mash-store" },
+    ),
+  ),
 );
 
 export default useStore;

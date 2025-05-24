@@ -3,172 +3,167 @@ import { devtools, persist } from "zustand/middleware";
 import { getCSSVariable, updateCSSVariable } from "../utils/style";
 
 type NoteStore = {
-    id: string;
-    setId: (id: string) => void;
-    mode: "read" | "write";
-    setMode: (mode: "read" | "write") => void;
-    content: string;
-    setContent: (content: string) => void;
-    auto: boolean;
-    setAuto: (auto: boolean) => void;
-    showEmojie: boolean;
-    setShowEmojie: (showEmojie: boolean) => void;
-    currentFont: string;
-    setCurrentFont: (font: string) => void;
-    currentBack: string;
-    setCurrentBack: (back: string) => void;
-    title: string;
-    setTitle: (title: string) => void;
-    password: string;
-    setPassword: (password: string) => void;
-    tag: string;
-    setTag: (tag: string) => void;
-    mood: string;
-    setMood: (mood: string) => void;
-    toggleMood: () => void;
-    reset: () => void;
+  id: string;
+  setId: (id: string) => void;
+  mode: "read" | "write";
+  setMode: (mode: "read" | "write") => void;
+  content: string;
+  setContent: (content: string) => void;
+  auto: boolean;
+  setAuto: (auto: boolean) => void;
+  showEmojie: boolean;
+  setShowEmojie: (showEmojie: boolean) => void;
+  currentFont: string;
+  setCurrentFont: (font: string) => void;
+  currentBack: string;
+  setCurrentBack: (back: string) => void;
+  title: string;
+  setTitle: (title: string) => void;
+  password: string;
+  setPassword: (password: string) => void;
+  tag: string;
+  setTag: (tag: string) => void;
+  mood: string;
+  setMood: (mood: string) => void;
+  toggleMood: () => void;
+  reset: () => void;
 };
 
 const useNoteStore = create<NoteStore>()(
-    devtools(
-        persist(
-            (set) => ({
-                mode: "read",
-                setMode: (mode: "read" | "write") => set({ mode }),
+  devtools(
+    persist(
+      (set) => ({
+        mode: "read",
+        setMode: (mode: "read" | "write") => set({ mode }),
 
-                content: "",
-                setContent: (content: string) => set({ content }),
+        content: "",
+        setContent: (content: string) => set({ content }),
 
-                id: "",
-                setId: (id: string) => set({ id }),
+        id: "",
+        setId: (id: string) => set({ id }),
 
-                auto: false,
-                setAuto: (auto: boolean) => set({ auto }),
+        auto: false,
+        setAuto: (auto: boolean) => set({ auto }),
 
-                showEmojie: false,
-                setShowEmojie: (showEmojie: boolean) => set({ showEmojie }),
+        showEmojie: false,
+        setShowEmojie: (showEmojie: boolean) => set({ showEmojie }),
 
-                currentFont: getCSSVariable("--current-font") || "#e9e9e9",
-                setCurrentFont: (font: string) => {
-                    set({ currentFont: font });
-                    updateCSSVariable("--current-font", font);
-                },
+        currentFont: getCSSVariable("--current-font") || "#e9e9e9",
+        setCurrentFont: (font: string) => {
+          set({ currentFont: font });
+          updateCSSVariable("--current-font", font);
+        },
 
-                currentBack: getCSSVariable("--current-back") || "#222",
-                setCurrentBack: (back: string) => {
-                    set({ currentBack: back });
-                    updateCSSVariable("--current-back", back);
-                },
+        currentBack: getCSSVariable("--current-back") || "#222",
+        setCurrentBack: (back: string) => {
+          set({ currentBack: back });
+          updateCSSVariable("--current-back", back);
+        },
 
-                title: "",
-                setTitle: (title: string) => set({ title }),
+        title: "",
+        setTitle: (title: string) => set({ title }),
 
-                password: "",
-                setPassword: (password: string) => set({ password }),
+        password: "",
+        setPassword: (password: string) => set({ password }),
 
-                tag: "",
-                setTag: (tag: string) => set({ tag }),
+        tag: "",
+        setTag: (tag: string) => set({ tag }),
 
-                mood: "",
-                setMood: (mood: string) => set({ mood }),
-                // Implement toggleMood to switch between two example moods
-                toggleMood: () =>
-                    set((state) => ({
-                        mode: state.mode === "read" ? "write" : "read",
-                    })),
+        mood: "",
+        setMood: (mood: string) => set({ mood }),
+        // Implement toggleMood to switch between two example moods
+        toggleMood: () =>
+          set((state) => ({
+            mode: state.mode === "read" ? "write" : "read",
+          })),
 
-                reset: () =>
-                    set({
-                        mode: "read",
-                        content: "",
-                        id: "",
-                        auto: false,
-                        showEmojie: false,
-                        currentFont: getCSSVariable("--current-font") || "#e9e9e9",
-                        currentBack: getCSSVariable("--current-back") || "#222",
-                        title: "",
-                        password: "",
-                        tag: "",
-                        mood: "",
-                    }),
-            }),
-            { name: "mash-note-store" }
-        )
-    )
+        reset: () =>
+          set({
+            mode: "read",
+            content: "",
+            id: "",
+            auto: false,
+            showEmojie: false,
+            currentFont: getCSSVariable("--current-font") || "#e9e9e9",
+            currentBack: getCSSVariable("--current-back") || "#222",
+            title: "",
+            password: "",
+            tag: "",
+            mood: "",
+          }),
+      }),
+      { name: "mash-note-store" },
+    ),
+  ),
 );
 
 type FileNoteStore = {
-    files: File[];
-    setFiles: (files: File[]) => void;
-    backImage: File | null;
-    setBackImage: (backImage: File | null) => void;
-    reset: () => void;
+  files: File[];
+  setFiles: (files: File[]) => void;
+  backImage: File | null;
+  setBackImage: (backImage: File | null) => void;
+  reset: () => void;
 };
 
 export const useFileNoteStore = create<FileNoteStore>()(
-    devtools(
-        (set) => ({
-            files: [],
-            setFiles: (files: File[]) => set({ files }),
-            backImage: null,
-            setBackImage: (backImage: File | null) => set({ backImage }),
-            reset: ()=> set({files:[], backImage:null})
-        })
-    )
+  devtools((set) => ({
+    files: [],
+    setFiles: (files: File[]) => set({ files }),
+    backImage: null,
+    setBackImage: (backImage: File | null) => set({ backImage }),
+    reset: () => set({ files: [], backImage: null }),
+  })),
 );
 
 type DisplayNote = {
-    id: string;
-    title: string;
-    password: string;
-    content: string;
-    tag: string;
-    mood: string;
-    fcolor: string;
-    bcolor: string;
-    bpicture: File;
-    createdAt: string;
-}
+  id: string;
+  title: string;
+  password: string;
+  content: string;
+  tag: string;
+  mood: string;
+  fcolor: string;
+  bcolor: string;
+  bpicture: File;
+  createdAt: string;
+};
 
 type NotesDisplayStore = {
-    notes: DisplayNote[];
-    setNotes: (notes: DisplayNote[]) => void;
-    page: number;
-    setPage: (page: number) => void;
-    total: number;
-    setTotal: (total: number) => void;
-    filters: string[];
-    setFilters: (filters: string[]) => void;
-    toggleFilter: (filter: string) => void;
-    keyword: string;
-    setKeyword: (keyword: string) => void;
+  notes: DisplayNote[];
+  setNotes: (notes: DisplayNote[]) => void;
+  page: number;
+  setPage: (page: number) => void;
+  total: number;
+  setTotal: (total: number) => void;
+  filters: string[];
+  setFilters: (filters: string[]) => void;
+  toggleFilter: (filter: string) => void;
+  keyword: string;
+  setKeyword: (keyword: string) => void;
 };
 
 export const useNotesDisplayStore = create<NotesDisplayStore>()(
-    devtools(
-        (set) => ({
-            notes: [],
-            setNotes: (notes: DisplayNote[]) => set({ notes }),
+  devtools((set) => ({
+    notes: [],
+    setNotes: (notes: DisplayNote[]) => set({ notes }),
 
-            page: 1,
-            setPage: (page: number) => set({ page }),
-            total: 1,
-            setTotal: (total: number) => set({ total }),
-            keyword: "",
-            setKeyword: (keyword: string) => set({ keyword }),
+    page: 1,
+    setPage: (page: number) => set({ page }),
+    total: 1,
+    setTotal: (total: number) => set({ total }),
+    keyword: "",
+    setKeyword: (keyword: string) => set({ keyword }),
 
-            filters: [],
-            setFilters: (filters: string[]) => set({ filters }),
+    filters: [],
+    setFilters: (filters: string[]) => set({ filters }),
 
-            toggleFilter: (filter: string) =>
-                set((state) => ({
-                    filters: state.filters.includes(filter)
-                        ? state.filters.filter((f) => f !== filter)
-                        : [...state.filters, filter],
-                })),
-        })
-    )
+    toggleFilter: (filter: string) =>
+      set((state) => ({
+        filters: state.filters.includes(filter)
+          ? state.filters.filter((f) => f !== filter)
+          : [...state.filters, filter],
+      })),
+  })),
 );
-
 
 export default useNoteStore;

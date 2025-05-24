@@ -7,7 +7,7 @@
  */
 export const updateCSSVariable = (
   variableName: string,
-  value: string
+  value: string,
 ): void => {
   // Update the CSS variable in the root element
   document.documentElement.style.setProperty(variableName, value);
@@ -20,7 +20,7 @@ export const updateCSSVariable = (
  */
 export const adjustCSSVariable = (
   variableName: string,
-  amount: number
+  amount: number,
 ): void => {
   // Get the current value of the CSS variable
   const currentValue = getComputedStyle(document.documentElement)
@@ -45,7 +45,7 @@ export const adjustCSSVariable = (
   // Update the CSS variable in the root element
   document.documentElement.style.setProperty(
     variableName,
-    `${newValue}${unit}`
+    `${newValue}${unit}`,
   );
 };
 

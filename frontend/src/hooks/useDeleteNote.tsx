@@ -1,12 +1,14 @@
 import { useState } from "react";
 import useStore from "../services/store";
 import { CONSTANTS } from "../const";
+import { useTranslation } from "react-i18next";
 
 const useDeleteNote = () => {
+  const { t } = useTranslation();
   const { addNotification } = useStore();
   const [loading, setLoading] = useState(false);
 
-  const handleDeleteNote = async (noteId:any) => {
+  const handleDeleteNote = async (noteId: any) => {
     if (!noteId) {
       addNotification("Note ID is required for deletion.", "error");
       return;
@@ -24,10 +26,10 @@ const useDeleteNote = () => {
       }
 
       const result = await response.json();
-      addNotification("Note deleted successfully!", "success");
+      addNotification(t("noteDeleted"), "success");
       return result;
     } catch (error) {
-      addNotification("An error occurred while deleting the note :(", "error");
+      addNotification(t("deleteError"), "error");
     } finally {
       setLoading(false);
     }

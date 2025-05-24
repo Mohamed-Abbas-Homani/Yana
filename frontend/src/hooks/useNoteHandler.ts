@@ -2,20 +2,13 @@ import { useState } from "react";
 import useNoteStore, { useFileNoteStore } from "../services/note";
 import useStore from "../services/store";
 import { CONSTANTS } from "../const";
+import { useTranslation } from "react-i18next";
 const useNoteHandler = () => {
+  const { t } = useTranslation();
   const { user, addNotification } = useStore();
-  const {
-    id,
-    content,
-    title,
-    tag,
-    mood,
-    password,
-    currentFont,
-    currentBack,
-
-  } = useNoteStore();
-  const { files, backImage } = useFileNoteStore()
+  const { id, content, title, tag, mood, password, currentFont, currentBack } =
+    useNoteStore();
+  const { files, backImage } = useFileNoteStore();
   const [loading, setLoading] = useState(false);
 
   const handleNoteSubmission = async () => {
@@ -26,7 +19,6 @@ const useNoteHandler = () => {
     const formData = new FormData();
     if (id) {
       formData.append("id", id);
-
     }
     formData.append("user_id", String(user.id));
     formData.append("content", content);
@@ -62,10 +54,10 @@ const useNoteHandler = () => {
       }
 
       const result = await response.json();
-      addNotification("Note saved successfully!", "success");
+      addNotification(t("noteSaved"), "success");
       return result;
     } catch (error) {
-      addNotification("An error occurred while saving the note :(", "error");
+      addNotification(t("saveError"), "error");
     } finally {
       setLoading(false);
     }

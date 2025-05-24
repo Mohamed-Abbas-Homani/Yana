@@ -5,6 +5,7 @@ import rehypeRaw from "rehype-raw";
 import remarkBreaks from "remark-breaks";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import { useTranslation } from "react-i18next";
 import "katex/dist/katex.min.css";
 import "./MarkdownEditor.css";
 
@@ -15,11 +16,13 @@ const MarkdownEditor = ({
   handleChange,
   imageURL,
 }: any) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className="input-container"
       style={{
-        backgroundImage: imageURL ? `url(${imageURL})` : "none", // Apply the uploaded image as background
+        backgroundImage: imageURL ? `url(${imageURL})` : "none",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -31,7 +34,10 @@ const MarkdownEditor = ({
           value={content}
           onChange={handleChange}
           className="textarea"
-          placeholder="Write down your note..."
+          placeholder={t(
+            "markdownEditorPlaceholder",
+            "Write down your note...",
+          )}
         />
       ) : (
         <div ref={inputRef} className="textread">
@@ -39,7 +45,6 @@ const MarkdownEditor = ({
             className="markdown-editor"
             rehypePlugins={[rehypeKatex, rehypeRaw]}
             remarkPlugins={[remarkGfm, remarkMath, remarkBreaks]}
-            children={content}
             components={{
               code({ node, inline, className, children, ...props }: any) {
                 const match = /language-(\w+)/.exec(className || "");
@@ -58,7 +63,9 @@ const MarkdownEditor = ({
                 );
               },
             }}
-          />
+          >
+            {content}
+          </ReactMarkdown>
         </div>
       )}
     </div>

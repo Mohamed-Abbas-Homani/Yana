@@ -1,19 +1,19 @@
-.set-color{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--color);
-    color: var(--background-color);
-    font-weight: bold;
-    width: 34%;
-    padding: 13px 21px;
-    border-radius: 13px;
+.set-color {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color);
+  color: var(--background-color);
+  font-weight: bold;
+  width: 34%;
+  padding: 13px 21px;
+  border-radius: 13px;
 }
 
-.set-container{
-    display: flex;
-    width: 89%;
-    height: 89%;
-    justify-content: space-around;
-    flex-direction: column;
+.set-container {
+  display: flex;
+  width: 89%;
+  height: 89%;
+  justify-content: space-around;
+  flex-direction: column;
 }

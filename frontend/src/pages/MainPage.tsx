@@ -11,7 +11,7 @@ const MainPage = () => {
   }, []);
   return (
     <Page>
-        <p>empty</p>
+      <p>empty</p>
     </Page>
   );
 };

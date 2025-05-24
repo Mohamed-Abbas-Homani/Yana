@@ -15,7 +15,7 @@ const CircularMenu: React.FC = () => {
   }, 3400);
 
   useEffect(() => {
-    console.log(status)
+    console.log(status);
     setCMenuStatus(status);
   }, [status]);
 

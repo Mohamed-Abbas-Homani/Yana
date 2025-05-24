@@ -27,7 +27,7 @@ const Profile = () => {
   const getUserProfilePicture = async () => {
     try {
       const response = await fetch(
-        `${CONSTANTS.BackURL}/user/${user?.id}/profile-picture`
+        `${CONSTANTS.BackURL}/user/${user?.id}/profile-picture`,
       );
       if (response.ok) {
         const blob = await response.blob();
@@ -80,7 +80,7 @@ const Profile = () => {
 
   // Handle input changes
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -238,6 +238,16 @@ const Profile = () => {
             />
             <label className="language-tab" htmlFor="radio-4">
               Jp
+            </label>
+            <input
+              type="radio"
+              id="radio-5"
+              name="language"
+              checked={formData.language === "ar"}
+              onChange={() => handleLanguageChange("ar")}
+            />
+            <label className="language-tab" htmlFor="radio-5">
+              Ar
             </label>
             <span className="glider"></span>
           </div>

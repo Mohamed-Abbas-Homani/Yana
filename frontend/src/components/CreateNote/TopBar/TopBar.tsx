@@ -17,8 +17,10 @@ import useStore from "../../../services/store.ts";
 import useNoteHandler from "../../../hooks/useNoteHandler.ts";
 import { useNavigate } from "react-router-dom";
 import useDeleteNote from "../../../hooks/useDeleteNote.tsx";
-
+import { useTranslation } from "react-i18next";
+import { FaSave, FaTimes, FaTrash } from "react-icons/fa";
 const TopBar = ({ inputRef, content, setContent }: any) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { loading, handleNoteSubmission } = useNoteHandler();
   const { setUserAction } = useStore();
@@ -28,7 +30,7 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
   const [isNumberedListActive, setIsNumberedListActive] = useState(false);
   const [showFS, setShowFS] = useState<boolean>(false);
   const { loading: deleting, handleDeleteNote } = useDeleteNote();
-  // Function to insert text at the cursor position in the textarea
+
   const insertAtCursor = (text: string) => {
     const inputElement = inputRef.current;
     if (inputElement && inputElement instanceof HTMLTextAreaElement) {
@@ -40,13 +42,12 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
         inputElement.focus();
         inputElement.setSelectionRange(
           start + text.length,
-          start + text.length
+          start + text.length,
         );
       }, 0);
     }
   };
 
-  // Handlers for different formatting options
   const handleBold = () => insertAtCursor("****");
   const handleItalic = () => insertAtCursor("**");
   const handleUnderline = () => insertAtCursor("<u></u>");
@@ -64,13 +65,11 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
   const handleLink = () => insertAtCursor("[]()");
   const handleHighlight = () => insertAtCursor("<mark></mark>");
 
-  // Font size selection dropdown
   const handleFontSize = (fs: string) => {
     insertAtCursor("\n" + fs + " ");
     setShowFS(false);
   };
 
-  // Handle "Enter" key for list items
   const handleEnter = (event: KeyboardEvent) => {
     const inputElement = inputRef.current;
     if (inputElement && inputElement instanceof HTMLTextAreaElement) {
@@ -132,41 +131,37 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
     <div className="top-bar">
       <div className="top-bar-menu">
         <div className="sub s1">
-          <GoBold size={"1.4em"} onClick={handleBold} title="Bold" />
-          <GoItalic size={"1.4em"} onClick={handleItalic} title="Italic" />
+          <GoBold size="1.4em" onClick={handleBold} title={t("bold")} />
+          <GoItalic size="1.4em" onClick={handleItalic} title={t("italic")} />
           <FiUnderline
-            size={"1.4em"}
+            size="1.4em"
             onClick={handleUnderline}
-            title="Underline"
+            title={t("underline")}
           />
           <GoStrikethrough
-            size={"1.4em"}
+            size="1.4em"
             onClick={handleStrikethrough}
-            title="Strike Through"
+            title={t("strikethrough")}
           />
           <MdFormatListBulleted
-            size={"1.4em"}
+            size="1.4em"
             onClick={handleBulletList}
-            title="Bulleted List"
+            title={t("bulletedList")}
           />
           <MdFormatListNumbered
-            size={"1.4em"}
+            size="1.4em"
             onClick={handleNumberedList}
-            title="Numbered List"
+            title={t("numberedList")}
           />
           <PiHighlighter
-            size={"1.4em"}
+            size="1.4em"
             onClick={handleHighlight}
-            title="Marked"
+            title={t("highlight")}
           />
-
-          {/* Font size dropdown */}
           <RiFontSize
-            title="Heading"
-            size={"1.4em"}
-            onClick={() => {
-              setShowFS(!showFS);
-            }}
+            title={t("heading")}
+            size="1.4em"
+            onClick={() => setShowFS(!showFS)}
           />
 
           {showFS && (
@@ -180,13 +175,13 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
             </div>
           )}
 
-          <TbQuote size={"1.4em"} onClick={handleQuote} title="Quote" />
-          <MdLink size={"1.4em"} onClick={handleLink} title="Link" />
-          <FaCode size={"1.4em"} onClick={handleCode} title="Code" />
+          <TbQuote size="1.4em" onClick={handleQuote} title={t("quote")} />
+          <MdLink size="1.4em" onClick={handleLink} title={t("link")} />
+          <FaCode size="1.4em" onClick={handleCode} title={t("code")} />
         </div>
         <div className="sub s2">
           <button
-            title="switch mode"
+            title={t("toggleMode")}
             className="mode-button"
             onClick={() => {
               toggleMood();
@@ -199,24 +194,22 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
                   inputElement.focus();
                   inputElement.setSelectionRange(
                     inputElement.value.length,
-                    inputElement.value.length
+                    inputElement.value.length,
                   );
                 }
               }, 0);
             }}
           >
-            {mode === "read" ? "read mode" : "write mode"}
+            {mode === "read" ? t("readMode") : t("writeMode")}
           </button>
           <button
-            title="auto mode switching"
+            title={t("toggleAutoMode")}
             className="auto-button"
-            onClick={() => {
-              setAuto(!auto);
-            }}
+            onClick={() => setAuto(!auto)}
           >
             <MdAutoAwesome />
           </button>
-          {auto && <sup>auto</sup>}
+          {auto && <sup>{t("auto")}</sup>}
         </div>
       </div>
 
@@ -232,8 +225,13 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
               navigate("/home");
               setUserAction("neutral");
             }}
+            title={t("delete")}
           >
-            {deleting ? "deleting..." : "delete"}
+            {deleting ? (
+              <span title={t("deleting...")}>{t("deleting...")}</span>
+            ) : (
+              <FaTrash fontSize={"1.5em"} />
+            )}
           </button>
         )}
         <button
@@ -245,8 +243,9 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
             navigate("/home");
           }}
           disabled={loading}
+          title={t("cancel")}
         >
-          cancel
+          <FaTimes fontSize={"1.5em"} />
         </button>
         <button
           className="control-btn"
@@ -258,8 +257,13 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
             navigate("/home");
             setUserAction("neutral");
           }}
+          title={t("Save")}
         >
-          {loading ? "saving..." : "save"}
+          {loading ? (
+            <span title={t("Saving...")}>{t("Saving...")}</span>
+          ) : (
+            <FaSave fontSize={"1.5em"} />
+          )}
         </button>
       </div>
     </div>

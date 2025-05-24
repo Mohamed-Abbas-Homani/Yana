@@ -34,7 +34,7 @@ const useSaveUser = () => {
     if (userData.id !== undefined) {
       formData.append("id", userData.id.toString());
     }
-    console.log(userData)
+    console.log(userData);
 
     try {
       const response = await fetch(`${CONSTANTS.BackURL}/save-user`, {

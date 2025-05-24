@@ -3,8 +3,8 @@ import axios from "axios";
 import { CONSTANTS } from "../const";
 
 interface NoteStats {
-  createdNotes: { [key: string]: number };  // Creation stats by weekday
-  moodNotes: { [key: string]: number };     // Notes stats by mood
+  createdNotes: { [key: string]: number }; // Creation stats by weekday
+  moodNotes: { [key: string]: number }; // Notes stats by mood
   loading: boolean;
   error: string | null;
 }
@@ -27,7 +27,7 @@ export const useNoteStats = () => {
 
         setNoteStats({
           createdNotes: creationRes.data, // Data for created notes per weekday
-          moodNotes: moodRes.data,        // Data for mood-based notes
+          moodNotes: moodRes.data, // Data for mood-based notes
           loading: false,
           error: null,
         });

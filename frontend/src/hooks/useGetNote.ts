@@ -3,8 +3,10 @@ import useNoteStore, { useFileNoteStore } from "../services/note";
 import useStore from "../services/store";
 import { useParams } from "react-router-dom";
 import { CONSTANTS } from "../const";
+import { useTranslation } from "react-i18next";
 
 const useGetNote = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const { user, addNotification } = useStore();
   const {
@@ -22,27 +24,29 @@ const useGetNote = () => {
 
   const fetchDocument = async (documentId: string): Promise<File> => {
     try {
-      const response = await fetch(`${CONSTANTS.BackURL}/documents/${documentId}`);
-      
+      const response = await fetch(
+        `${CONSTANTS.BackURL}/documents/${documentId}`,
+      );
+
       // Check if the response is OK
       if (!response.ok) {
         throw new Error(`Failed to fetch document with ID ${documentId}`);
       }
-  
+
       // Get the blob from the response
       const blob = await response.blob();
-  
+
       // Extract the filename from the Content-Disposition header
       const contentDisposition = response.headers.get("Content-Disposition");
       let filename = "default_filename"; // Fallback filename
-  
+
       if (contentDisposition && contentDisposition.includes("filename=")) {
         filename = contentDisposition
           .split("filename=")[1]
           .replace(/"/g, "")
           .trim();
       }
-  
+
       // Create and return the File object
       const file = new File([blob], filename, { type: blob.type });
       return file;
@@ -82,10 +86,10 @@ const useGetNote = () => {
         // Fetch documents by IDs
         if (noteData.documents && noteData.documents.length > 0) {
           const files = await Promise.all(
-            noteData.documents.map(async (documentId:any) => {
+            noteData.documents.map(async (documentId: any) => {
               const file = await fetchDocument(documentId);
               return file;
-            })
+            }),
           );
           setFiles(files); // Set files in the store
         }
@@ -96,9 +100,9 @@ const useGetNote = () => {
           setBackImage(bPictureFile); // Set the background image in the store
         }
 
-        addNotification("Note loaded successfully!", "success");
+        addNotification(t("noteLoaded"), "success");
       } catch (error) {
-        addNotification("An error occurred while fetching the note :(", "error");
+        addNotification(t("fetcherror"), "error");
       } finally {
         setLoading(false);
       }

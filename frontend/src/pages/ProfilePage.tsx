@@ -6,11 +6,11 @@ import Page from "../components/UI/Page";
 import useStore from "../services/store";
 
 const ProfilePage = () => {
-  const {setLastPage} = useStore()
+  const { setLastPage } = useStore();
 
   useEffect(() => {
-    setLastPage("/profile")
-  }, [])
+    setLastPage("/profile");
+  }, []);
   return (
     <Page>
       <FlexBetween width="100%" height="100%">

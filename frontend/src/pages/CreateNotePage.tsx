@@ -14,24 +14,26 @@ import { useLocation } from "react-router-dom";
 import useGetNote from "../hooks/useGetNote.ts";
 
 const CreateNotePage = () => {
-  useGetNote()
-  const location = useLocation()
+  useGetNote();
+  const location = useLocation();
   const { setUserAction, setLastPage } = useStore();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const [imageURL, setImageURL] = useState<string | null>(null);
-  const { backImage, setBackImage } = useFileNoteStore()
+  const { backImage, setBackImage } = useFileNoteStore();
   const emojiPickerRef = useRef<any>(null);
   const {
     auto,
     setShowEmojie,
     content,
     setContent,
-    mode, setMode, toggleMood,
+    mode,
+    setMode,
+    toggleMood,
   } = useNoteStore();
 
   const debouncedSetMode = useCallback(
     debounce(() => setMode("read"), 3000),
-    []
+    [],
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -48,7 +50,7 @@ const CreateNotePage = () => {
           inputElement.focus();
           inputElement.setSelectionRange(
             inputElement.value.length,
-            inputElement.value.length
+            inputElement.value.length,
           );
         }
       }, 0);
@@ -63,10 +65,13 @@ const CreateNotePage = () => {
   }, [mode]);
 
   useEffect(() => {
-    setLastPage(location.pathname)
-    setUserAction("editingNote")
+    setLastPage(location.pathname);
+    setUserAction("editingNote");
     const handleClickOutside = (event: MouseEvent) => {
-      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target)
+      ) {
         setShowEmojie(false);
       }
     };
@@ -76,7 +81,9 @@ const CreateNotePage = () => {
     };
   }, []);
   // Image upload handler
-  const handleBackImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBackImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       setBackImage(file);
@@ -85,7 +92,6 @@ const CreateNotePage = () => {
 
   useEffect(() => {
     if (backImage) {
-
       const imageUrl = URL.createObjectURL(backImage);
       setImageURL(imageUrl);
     }
@@ -101,7 +107,7 @@ const CreateNotePage = () => {
         content.slice(0, start) + emojiData.emoji + content.slice(end);
       setContent(updatedText);
     }
-  }
+  };
   return (
     <Page>
       <div className="create-note-container">
@@ -109,20 +115,23 @@ const CreateNotePage = () => {
           <div
             className="create-note-container-internal"
             onDoubleClick={() => {
-              toggleMood()
+              toggleMood();
               setTimeout(() => {
                 const inputElement = inputRef.current;
-                if (inputElement && inputElement instanceof HTMLTextAreaElement) {
+                if (
+                  inputElement &&
+                  inputElement instanceof HTMLTextAreaElement
+                ) {
                   inputElement.focus();
                   inputElement.setSelectionRange(
                     inputElement.value.length,
-                    inputElement.value.length
+                    inputElement.value.length,
                   );
                 }
               }, 0);
             }}
           >
-            <TopBar 
+            <TopBar
               inputRef={inputRef}
               content={content}
               setContent={setContent}
@@ -147,14 +156,12 @@ const CreateNotePage = () => {
               />
             </div>
           </div>
-          <Details
-          />
+          <Details />
         </div>
         <BottomBar />
-
       </div>
     </Page>
-  )
-}
+  );
+};
 
 export default CreateNotePage;
