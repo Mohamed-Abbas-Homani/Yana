@@ -14,13 +14,17 @@ const useStartUp = () => {
 
     }
   }, []);
-  const { fontColor, backgroundColor} = useConfig();
+  const { fontColor, backgroundColor, profileBackgroundColor, profileFontColor, menuItemBackground, menuToggleBackground} = useConfig();
   const {currentBack, currentFont } = useNoteStore()
   useEffect(() => {
     updateCSSVariable("--color", fontColor);
     updateCSSVariable("--background-color", backgroundColor);
     updateCSSVariable("--current-font", currentFont);
     updateCSSVariable("--current-back", currentBack);
+    updateCSSVariable("--profile-background-color", profileBackgroundColor);
+    updateCSSVariable("--profile-color", profileFontColor);
+    updateCSSVariable("--menu-toggle-background", menuToggleBackground);
+    updateCSSVariable("--menu-item-background", menuItemBackground);
   }, []);
   useMashNotesBack();
   useMashUp();

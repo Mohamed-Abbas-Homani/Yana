@@ -62,7 +62,7 @@ const useFetchNotes = () => {
         setNotes(fetchedNotes ?? []);}
 
       } catch (err) {
-        setError('An error occurred while fetching notes.');
+        setError(`An error occurred while fetching notes. ${err}`);
       } finally {
         setLoading(false);
       }
@@ -71,7 +71,7 @@ const useFetchNotes = () => {
     fetchNotes();
   }, [page, filters, keyword]);
 
-  return { notes, loading, error, setPage, setKeyword };
+  return { notes, loading, error, setPage, setError, setKeyword };
 };
 
 export default useFetchNotes

@@ -6,6 +6,7 @@ import defaultProfilePicture from "../../assets/defaultProfile.jpg";
 import { IoLanguage, IoFlashlight } from "react-icons/io5";
 import useStore from "../../services/store";
 import { CONSTANTS } from "../../const";
+import { useTranslation } from "react-i18next";
 
 export interface FormData {
   id?: number; // Optional number or undefined
@@ -18,6 +19,7 @@ export interface FormData {
 }
 
 const Profile = () => {
+  const { t, i18n } = useTranslation();
   const { user } = useStore();
   const { saveUser, loading } = useSaveUser();
   const { userAction, setUserAction } = useStore();
@@ -101,6 +103,7 @@ const Profile = () => {
 
   // Handle language change
   const handleLanguageChange = (language: string) => {
+    i18n.changeLanguage(language);
     setFormData((prev) => ({ ...prev, language }));
     setUserAction("editing profile");
   };
@@ -134,7 +137,7 @@ const Profile = () => {
           <div className="profile-light profile-light-right">
             <IoFlashlight />
           </div>
-          <h3 className="profile-header">Profile</h3>
+          <h3 className="profile-header">{t("Profile")}</h3>
           <div
             className="profile-picture"
             style={{
@@ -171,7 +174,7 @@ const Profile = () => {
             value={formData.name}
             onChange={handleChange}
           />
-          <label htmlFor="name">Name</label>
+          <label htmlFor="name">{t("Name")}</label>
         </div>
 
         {/* Nickname Input */}
@@ -184,7 +187,7 @@ const Profile = () => {
             value={formData.nickName}
             onChange={handleChange}
           />
-          <label htmlFor="nickName">NickName</label>
+          <label htmlFor="nickName">{t("NickName")}</label>
         </div>
 
         {/* Language Selection and Hint Input */}
@@ -244,10 +247,10 @@ const Profile = () => {
         {userAction === "editing profile" && (
           <div className="profile-input-container">
             <button onClick={handleCancel} disabled={loading}>
-              Cancel
+              {t("Cancel")}
             </button>
             <button onClick={handleSubmit} disabled={loading}>
-              Save
+              {t("Save")}
             </button>
           </div>
         )}

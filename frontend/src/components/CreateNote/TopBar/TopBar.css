@@ -94,7 +94,7 @@
 
 .mode-button {
   padding: 5px 8px;
-  width: 89px;
+  width: 80px;
   color: var(--color);
   background-color: transparent;
   border: none;
@@ -118,4 +118,8 @@
     inset 1px 1px 2px color-mix(in srgb, var(--background-color) 97.5%, #fff),
     inset -1px -1px 2px color-mix(in srgb, var(--background-color) 89%, #000000);
   cursor: pointer;
+}
+
+.control-btn {
+  font-size: 0.8em;
 }

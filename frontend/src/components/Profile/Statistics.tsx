@@ -5,6 +5,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import "./Statistics.css";
 import { getCSSVariable } from "../../utils/style";
 import { useNoteStats } from "../../hooks/useNoteStats"; // Import the custom hook
+import { useTranslation } from "react-i18next";
 
 // Register Chart.js components
 ChartJS.register(
@@ -18,6 +19,8 @@ ChartJS.register(
 );
 
 const Statistics = () => {
+    const { t } = useTranslation();
+  
   const [profileColor, setProfileColor] = useState<string>("");
   const [backgroundColor, setBackgroundColor] = useState<string>("");
 
@@ -30,7 +33,7 @@ const Statistics = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p>{t('Loading')}...</p>;
   }
 
   if (error) {
@@ -42,7 +45,7 @@ const Statistics = () => {
     labels: Object.keys(createdNotes), // X-axis labels (days of the week)
     datasets: [
       {
-        label: "Created Notes", // Dataset label
+        label: t("Created Notes"), // Dataset label
         data: Object.values(createdNotes),
         fill: false, // Don't fill the area under the line
         borderColor: profileColor,
@@ -56,7 +59,7 @@ const Statistics = () => {
     labels: Object.keys(moodNotes), // X-axis labels (moods)
     datasets: [
       {
-        label: "Notes by Mood", // Dataset label
+        label: t('Notes by Mood'), // Dataset label
         data: Object.values(moodNotes),
         fill: false, // Don't fill the area under the line
         borderColor: profileColor,
@@ -71,7 +74,7 @@ const Statistics = () => {
     plugins: {
       title: {
         display: true,
-        text: "Notes Stats",
+        text: t("Notes Stats"),
         color: profileColor,
         font: {
           size: 18,
@@ -112,7 +115,7 @@ const Statistics = () => {
       padding="13px"
       className="stats-container"
     >
-      <h3 className="stats-header" style={{ color: profileColor }}>Stats</h3> {/* Set header text color */}
+      <h3 className="stats-header" style={{ color: profileColor }}>{t('Stats')}</h3> {/* Set header text color */}
       <div style={{ width: "89%", height: "300px", backgroundColor: backgroundColor, padding: "10px", borderRadius: "8px" }}>
         <Line data={creationData} options={chartOptions} /> {/* Chart for created notes per weekday */}
         <Line data={moodData} options={chartOptions} /> {/* Chart for notes by mood */}

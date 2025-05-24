@@ -18,22 +18,16 @@ import useNoteHandler from "../../../hooks/useNoteHandler.ts";
 import { useNavigate } from "react-router-dom";
 import useDeleteNote from "../../../hooks/useDeleteNote.tsx";
 
-const TopBar = ({
-  inputRef,
-  content,
-  setContent,
-}: any) => {
+const TopBar = ({ inputRef, content, setContent }: any) => {
   const navigate = useNavigate();
-  const { loading, handleNoteSubmission } = useNoteHandler()
+  const { loading, handleNoteSubmission } = useNoteHandler();
   const { setUserAction } = useStore();
-  const {
-    auto,
-    setAuto, mode, toggleMood ,reset, id} = useNoteStore()
-    const {reset: resetFiles} = useFileNoteStore()
+  const { auto, setAuto, mode, toggleMood, reset, id } = useNoteStore();
+  const { reset: resetFiles } = useFileNoteStore();
   const [isBulletListActive, setIsBulletListActive] = useState(false);
   const [isNumberedListActive, setIsNumberedListActive] = useState(false);
   const [showFS, setShowFS] = useState<boolean>(false);
-  const {loading: deleting, handleDeleteNote} = useDeleteNote()
+  const { loading: deleting, handleDeleteNote } = useDeleteNote();
   // Function to insert text at the cursor position in the textarea
   const insertAtCursor = (text: string) => {
     const inputElement = inputRef.current;
@@ -195,7 +189,7 @@ const TopBar = ({
             title="switch mode"
             className="mode-button"
             onClick={() => {
-              toggleMood()
+              toggleMood();
               setTimeout(() => {
                 const inputElement = inputRef.current;
                 if (
@@ -227,30 +221,46 @@ const TopBar = ({
       </div>
 
       <div className="create-note-submit-buttons">
-{   id&&         <button 
-        disabled={deleting}
+        {id && (
+          <button
+            className="control-btn"
+            disabled={deleting}
+            onClick={async () => {
+              await handleDeleteNote(id);
+              reset();
+              resetFiles();
+              navigate("/home");
+              setUserAction("neutral");
+            }}
+          >
+            {deleting ? "deleting..." : "delete"}
+          </button>
+        )}
+        <button
+          className="control-btn"
+          onClick={() => {
+            setUserAction("neutral");
+            reset();
+            resetFiles();
+            navigate("/home");
+          }}
+          disabled={loading}
+        >
+          cancel
+        </button>
+        <button
+          className="control-btn"
+          disabled={loading}
           onClick={async () => {
-          await handleDeleteNote(id)
-          reset()
-          resetFiles()
-          navigate("/home")
-          setUserAction("neutral")
-
-        }} >{deleting ? "deleting...":"delete"}</button>}
-                <button onClick={() => {setUserAction("neutral"); reset();resetFiles();
-          navigate("/home")
-          }} disabled={loading}>cancel</button>
-        <button 
-        disabled={loading}
-          onClick={async () => {
-          await handleNoteSubmission()
-          reset()
-          resetFiles()
-          navigate("/home")
-          setUserAction("neutral")
-
-        }} >{loading ? "saving...":"save"}</button>
-
+            await handleNoteSubmission();
+            reset();
+            resetFiles();
+            navigate("/home");
+            setUserAction("neutral");
+          }}
+        >
+          {loading ? "saving..." : "save"}
+        </button>
       </div>
     </div>
   );

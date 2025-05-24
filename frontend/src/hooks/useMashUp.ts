@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { listen } from '@tauri-apps/api/event';
-import { appDataDir } from '@tauri-apps/api/path';
 import { CONSTANTS } from '../const';
 
 const exitServer = async () => {
@@ -23,36 +22,6 @@ const exitServer = async () => {
 
 const useMashUp = (): void => {
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const dataPath = await appDataDir();
-        if (!dataPath) {
-          console.error('Data path is undefined.');
-          return;
-        }
-
-        const response = await fetch(`${CONSTANTS.BackURL}/mash-up`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            path: dataPath,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
-
-        console.log('API call was successful');
-      } catch (err: any) {
-        console.error('API call failed:', err.message);
-      }
-    };
-
-    fetchData();
-
     // Listen for the close event to shut down the server
     const unlisten = listen('tauri://close-requested', async () => {
       console.log('Window is closing, shutting down the server...');

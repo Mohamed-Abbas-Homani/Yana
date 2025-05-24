@@ -13,7 +13,7 @@ const HomePage = () => {
   const { notes, loading, setPage, error, setKeyword } = useFetchNotes();
   const { keyword, page, total } = useNotesDisplayStore();
   const [inputKeyword, setInputKeyword] = useState(keyword);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleSearch = () => {
     setKeyword(inputKeyword);
     setPage(1); // Reset to the first page when searching
@@ -69,7 +69,7 @@ const HomePage = () => {
             <input
               type="text"
               className="search-text"
-              placeholder="Enter a keyword..."
+              placeholder="Search for anything..."
               onChange={(e) => setInputKeyword(e.target.value)}
               value={inputKeyword}
             />
