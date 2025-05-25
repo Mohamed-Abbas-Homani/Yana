@@ -24,9 +24,9 @@ const useConfig = create<Store>()(
         // Initialize the state with the current values of the CSS variables
         fontColor: getCSSVariable("--color") || "#e9e9e9", // Default to a fallback color
         backgroundColor: getCSSVariable("--background-color") || "#222", // Default to a fallback background color
-        profileFontColor: getCSSVariable("--profile-color") || "#ffffff", // Default profile font color
+        profileFontColor: getCSSVariable("--profile-color") || "#e9e9e9", // Default profile font color
         profileBackgroundColor:
-          getCSSVariable("--profile-background-color") || "#333333", // Default profile background color
+          getCSSVariable("--profile-background-color") || "#222", // Default profile background color
         menuItemBackground: getCSSVariable("--menu-item-background") || "#444", // Default menu item background color
         menuToggleBackground:
           getCSSVariable("--menu-toggle-background") || "#555", // Default menu toggle background color
