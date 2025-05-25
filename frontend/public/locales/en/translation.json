@@ -83,5 +83,12 @@
   "noteSaved": "Note saved successfully!",
   "saveError": "An error occurred while saving the note :(",
   "noteDeleted": "Note deleted successfully!",
-  "deleteError": "An error occurred while deleting the note :("
+  "deleteError": "An error occurred while deleting the note :(",
+
+  "circularMenu": {
+    "addNote": "Add a Note!",
+    "search": "Search for Anything!",
+    "settings": "Configure Everything!",
+    "profile": "My Profile"
+  }
 }

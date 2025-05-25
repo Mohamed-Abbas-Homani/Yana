@@ -83,5 +83,11 @@
   "noteSaved": "¡Nota guardada con éxito!",
   "saveError": "Ocurrió un error al guardar la nota :(",
   "noteDeleted": "¡Nota eliminada con éxito!",
-  "deleteError": "Ocurrió un error al eliminar la nota :("
+  "deleteError": "Ocurrió un error al eliminar la nota :(",
+  "circularMenu": {
+    "addNote": "¡Agregar una nota!",
+    "search": "¡Buscar cualquier cosa!",
+    "settings": "¡Configura todo!",
+    "profile": "Mi perfil"
+  }
 }

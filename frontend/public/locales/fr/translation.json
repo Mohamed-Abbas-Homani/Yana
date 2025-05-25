@@ -83,5 +83,11 @@
   "noteSaved": "Note enregistrée avec succès !",
   "saveError": "Une erreur s'est produite lors de l'enregistrement de la note :(",
   "noteDeleted": "Note supprimée avec succès !",
-  "deleteError": "Une erreur s'est produite lors de la suppression de la note :("
+  "deleteError": "Une erreur s'est produite lors de la suppression de la note :(",
+  "circularMenu": {
+    "addNote": "Ajouter une note !",
+    "search": "Rechercher quelque chose !",
+    "settings": "Configurer tout !",
+    "profile": "Mon profil"
+  }
 }

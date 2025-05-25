@@ -3,10 +3,12 @@ import useStore from "../services/store";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 const MainPage = () => {
-  const { lastPage, userAction } = useStore();
+  const { lastPage, userAction, user } = useStore();
   const navigate = useNavigate();
   useEffect(() => {
-    if (userAction === "neutral") navigate("/home");
+    if (!user?.id) {
+      navigate("/profile");
+    } else if (userAction === "neutral") navigate("/home");
     else navigate(lastPage);
   }, []);
   return (

@@ -1,8 +1,9 @@
 {
-  "name": "notes-by-mash",
+  "name": "yana",
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "author": "Mash",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

@@ -1,28 +1,30 @@
 import React, { useState, useEffect } from "react";
-import "./CircularMenu.css"; // Ensure this file is properly set up for styling
+import "./CircularMenu.css";
 import { FaHome, FaPencilAlt, FaUser } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { debounce } from "../../utils/functions";
 import { useNavigate } from "react-router-dom";
 import useStore from "../../services/store";
+import { useTranslation } from "react-i18next";
 
 const CircularMenu: React.FC = () => {
   const { setCMenuStatus } = useStore();
   const [status, setStatus] = useState("hide");
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const debouncedHide = debounce(() => {
     setStatus("hide");
   }, 3400);
 
   useEffect(() => {
-    console.log(status);
     setCMenuStatus(status);
   }, [status]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      const bottomThreshold = window.innerHeight - 144; // 144px from bottom
-      const leftThreshold = 144; // 144px from left
+      const bottomThreshold = window.innerHeight - 144;
+      const leftThreshold = 144;
       if (e.clientY > bottomThreshold && e.clientX < leftThreshold) {
         setStatus((prev) => (prev === "active" ? "active" : "hold"));
         debouncedHide();
@@ -32,7 +34,6 @@ const CircularMenu: React.FC = () => {
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
@@ -46,12 +47,13 @@ const CircularMenu: React.FC = () => {
     setStatus("hide");
     navigate(route);
   };
+
   return (
     <div className={`menu ${status}`}>
       <div className="toggle" onClick={activate} title="Click!"></div>
       <li
         style={{ "--i": 1 } as React.CSSProperties}
-        title="Add a Note!"
+        title={t("circularMenu.addNote")}
         onClick={() => onItemClick("/note")}
       >
         <div>
@@ -60,7 +62,7 @@ const CircularMenu: React.FC = () => {
       </li>
       <li
         style={{ "--i": 2 } as React.CSSProperties}
-        title="Search for Anything!"
+        title={t("circularMenu.search")}
         onClick={() => onItemClick("/")}
       >
         <div>
@@ -69,7 +71,7 @@ const CircularMenu: React.FC = () => {
       </li>
       <li
         style={{ "--i": 3 } as React.CSSProperties}
-        title="Configure Everything!"
+        title={t("circularMenu.settings")}
         onClick={() => onItemClick("/settings")}
       >
         <div>
@@ -78,7 +80,7 @@ const CircularMenu: React.FC = () => {
       </li>
       <li
         style={{ "--i": 4 } as React.CSSProperties}
-        title="My Profile"
+        title={t("circularMenu.profile")}
         onClick={() => onItemClick("/profile")}
       >
         <div>

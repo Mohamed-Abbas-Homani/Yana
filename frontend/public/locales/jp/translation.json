@@ -83,5 +83,11 @@
   "noteSaved": "ノートが正常に保存されました！",
   "saveError": "ノートの保存中にエラーが発生しました :(",
   "noteDeleted": "ノートが正常に削除されました！",
-  "deleteError": "ノートの削除中にエラーが発生しました :("
+  "deleteError": "ノートの削除中にエラーが発生しました :(",
+  "circularMenu": {
+    "addNote": "ノートを追加！",
+    "search": "何でも検索！",
+    "settings": "すべてを設定！",
+    "profile": "マイプロフィール"
+  }
 }
