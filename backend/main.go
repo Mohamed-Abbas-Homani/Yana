@@ -26,7 +26,7 @@ func main() {
 	}
 
 	// Construct full DB path
-	dbPath := filepath.Join(dataDir, "mash-notes-db-dev.sqlite")
+	dbPath := filepath.Join(dataDir, "mash-notes-db.sqlite")
 
 	// Initialize SQLite database
 	var err error
