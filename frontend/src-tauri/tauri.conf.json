@@ -15,7 +15,7 @@
         "title": "y a n a",
         "width": 987,
         "height": 610,
-        "resizable": false
+        "resizable": true
       }
     ],
     "security": {
@@ -23,7 +23,7 @@
     }
   },
   "bundle": {
-    "externalBin": ["binaries/mash-notes-back"],
+    "externalBin": ["binaries/yana-back"],
     "active": true,
     "targets": "all",
     "icon": [

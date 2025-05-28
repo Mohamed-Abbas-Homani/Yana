@@ -67,7 +67,6 @@ const useFetchNotes = () => {
         } else {
           const fetchedNotes = await Promise.all(
             data.notes?.map(async (note: any) => {
-              console.log(note);
               if (note.bPictureId) {
                 note.bpicture = await fetchDocument(note.bPictureId);
               }

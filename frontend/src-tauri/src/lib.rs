@@ -2,7 +2,7 @@ use tauri::{AppHandle, Manager};
 use tauri_plugin_shell::{process::CommandEvent, ShellExt};
 
 #[tauri::command]
-async fn run_mash_notes_back_sidecar(app: AppHandle) {
+async fn run_yana_back_sidecar(app: AppHandle) {
     let app_data_dir = app
         .path()
         .app_data_dir()
@@ -12,7 +12,7 @@ async fn run_mash_notes_back_sidecar(app: AppHandle) {
 
     if let Ok((mut rx, _)) = app
         .shell()
-        .sidecar("mash-notes-back")
+        .sidecar("yana-back")
         .unwrap()
         .args([app_data_dir.clone()])
         .spawn()
@@ -28,7 +28,7 @@ async fn run_mash_notes_back_sidecar(app: AppHandle) {
             }
         });
     } else {
-        eprintln!("Failed to spawn sidecar");
+        eprintln!("Failed to run Yana Back");
     }
 }
 
@@ -38,7 +38,7 @@ pub fn run() {
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![run_mash_notes_back_sidecar])
+        .invoke_handler(tauri::generate_handler![run_yana_back_sidecar])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -7,7 +7,6 @@ const useSaveUser = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  console.log("saving");
   const saveUser = async (userData: {
     name?: string;
     nickName?: string;
@@ -20,7 +19,6 @@ const useSaveUser = () => {
     setLoading(true);
     setError(null);
     setSuccessMessage(null);
-    console.log("saving");
     const formData = new FormData();
     formData.append("name", userData.name || "");
     formData.append("nick_name", userData.nickName || "");
@@ -34,7 +32,6 @@ const useSaveUser = () => {
     if (userData.id !== undefined) {
       formData.append("id", userData.id.toString());
     }
-    console.log(userData);
 
     try {
       const response = await fetch(`${CONSTANTS.BackURL}/save-user`, {

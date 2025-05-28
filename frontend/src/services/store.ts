@@ -63,7 +63,7 @@ const useStore = create<Store>()(
           set({ lastPage });
         },
       }),
-      { name: "mash-store" },
+      { name: "yana-store" },
     ),
   ),
 );

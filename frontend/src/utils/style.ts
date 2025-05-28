@@ -30,7 +30,6 @@ export const adjustCSSVariable = (
   // Extract the numeric value and unit (assuming the value might have units like 'px', 'em', etc.)
   const numericValueMatch = currentValue.match(/^-?\d+(\.\d+)?/);
   const unitMatch = currentValue.match(/[a-zA-Z%]+$/);
-  console.log(currentValue);
   if (!numericValueMatch) {
     console.error("CSS variable value must be numeric.");
     return;

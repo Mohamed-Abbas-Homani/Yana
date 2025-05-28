@@ -57,7 +57,7 @@ const useConfig = create<Store>()(
           updateCSSVariable("--menu-toggle-background", color); // Update CSS variable for menu toggle background
         },
       }),
-      { name: "mash-config-store" },
+      { name: "yana-config-store" },
     ),
   ),
 );

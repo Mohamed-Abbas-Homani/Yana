@@ -92,7 +92,7 @@ const useNoteStore = create<NoteStore>()(
             mood: "",
           }),
       }),
-      { name: "mash-note-store" },
+      { name: "yana-editor-store" },
     ),
   ),
 );

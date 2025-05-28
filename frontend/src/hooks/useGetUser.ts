@@ -28,11 +28,9 @@ const useGetUser = () => {
       }
     };
     if (user?.id) {
-      console.log("we will fetch the user");
 
       fetchUser();
     }
-    console.log("no user id");
   }, [user]); // Dependency on userId to refetch if it changes
 
   return { user, loading, error };
