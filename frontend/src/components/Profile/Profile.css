@@ -1,6 +1,6 @@
 .profile-picture {
-  width: 199px;
-  height: 199px;
+  width: min(20vw, 32vh);
+  height: min(20vw, 32vh);
   border-radius: 50%;
   background-size: cover;
   background-position: center;
@@ -9,6 +9,7 @@
   animation: profile-flash 1s infinite;
   animation-delay: 0.55s;
 }
+
 
 .profile-picture-container {
   position: relative;
@@ -38,11 +39,11 @@
 .profile-container::after {
   content: "";
   position: absolute;
-  top: 21px; /* Start 13px from the top */
-  bottom: 21px; /* End 13px from the bottom */
+  top: 3%;
+  bottom: 3%;
   right: 0;
-  width: 2px;
-  border-right: 2px solid var(--profile-color);
+  width: 0.125rem;
+  border-right: 0.125rem solid var(--profile-color);
 }
 
 .profile-input-container button {
@@ -51,8 +52,8 @@
   background: var(--profile-color);
   color: var(--profile-background-color);
   border-radius: 13px;
-  padding: 13px 21px;
-  font-size: 1em;
+  padding: 3.14% 6%;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   transition: transform 0.34s;
@@ -61,92 +62,75 @@
 .profile-input-container button:hover {
   transform: scale(1.055);
 }
-.profile-picture-container::after {
-  content: "";
-  box-shadow:
-    10px -15px 10px var(--profile-color),
-    -10px -15px 10px var(--profile-color),
-    -10px -40px 40px var(--profile-color),
-    10px -20px 40px var(--profile-color),
-    -20px -50px 40px var(--profile-color);
-  background-color: var(--profile-color);
-  filter: blur(5px) brightness(1.1);
-  position: absolute;
-  border-radius: 13px;
-  width: 3px;
-  height: 89px;
-  transform: rotate(42deg);
-  left: 22px;
-  bottom: 24px;
-  transform-origin: bottom;
-  animation: flash-left-light 0.55s;
+@media (width: 987px) and (height: 610px) {
+  .profile-picture-container::after {
+    content: "";
+    box-shadow:
+      10px -15px 10px var(--profile-color),
+      -10px -15px 10px var(--profile-color),
+      -10px -40px 40px var(--profile-color),
+      10px -20px 40px var(--profile-color),
+      -20px -50px 40px var(--profile-color);
+    background-color: var(--profile-color);
+    filter: blur(5px) brightness(1.1);
+    position: absolute;
+    border-radius: 13px;
+    width: 3px;
+    height: 89px;
+    transform: rotate(42deg);
+    left: 22px;
+    bottom: 24px;
+    transform-origin: bottom;
+    animation: flash-left-light 0.55s;
+  }
+
+  .profile-picture-container::before {
+    content: "";
+    box-shadow:
+      10px -15px 10px var(--profile-color),
+      -10px -15px 10px var(--profile-color),
+      -10px -40px 40px var(--profile-color),
+      10px -20px 40px var(--profile-color),
+      20px -50px 40px var(--profile-color);
+    background-color: var(--profile-color);
+    filter: blur(5px) brightness(1.1);
+    position: absolute;
+    border-radius: 13px;
+    width: 3px;
+    height: 89px;
+    transform: rotate(-42deg);
+    right: 22px;
+    bottom: 24px;
+    transform-origin: bottom;
+    animation: flash-right-light 0.55s;
+  }
 }
 
-.profile-picture-container::before {
-  content: "";
-  box-shadow:
-    10px -15px 10px var(--profile-color),
-    -10px -15px 10px var(--profile-color),
-    -10px -40px 40px var(--profile-color),
-    10px -20px 40px var(--profile-color),
-    20px -50px 40px var(--profile-color);
-  background-color: var(--profile-color);
-  filter: blur(5px) brightness(1.1);
-  position: absolute;
-  border-radius: 13px;
-  width: 3px;
-  height: 89px;
-  transform: rotate(-42deg);
-  right: 22px;
-  bottom: 24px;
-  transform-origin: bottom;
-  animation: flash-right-light 0.55s;
-}
+
+
 
 .language-tabs {
   display: flex;
   position: relative;
   background-color: var(--profile-color);
-  padding: 13px 8px;
+  padding: 4% 2.3%;
   border-radius: 13px;
 }
 
 .language-container {
-  margin-left: 35%;
   width: 89%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex: 1;
 }
 
-.hint-container label {
-  color: var(--profile-background-color);
-  font-weight: bold;
-  margin: 0 8px;
-}
-.hint-input {
-  border: none;
-  height: 21px;
-  width: 21px;
-  border-radius: 50%;
-  cursor: pointer;
-  padding: 0;
-  outline: none;
-}
-
-.hint-container {
-  display: flex;
-  position: relative;
-  background-color: var(--profile-color);
-  padding: 13px 8px;
-  border-radius: 13px;
-}
 .language-tabs .lang-label * {
+  position: relative;
   color: var(--profile-background-color);
   font-weight: bold;
-  font-size: 1.21em;
-  margin: 0 8px;
+  font-size: 1.21rem;
+  margin: 0 .5rem;
 }
 .language-tabs * {
   z-index: 2;
@@ -157,11 +141,12 @@
 }
 
 .language-tab {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 21px;
-  width: 34px;
+  height: 1.31rem;
+  width: 2.12rem;
   font-size: 1rem;
   color: var(--profile-background-color);
   opacity: 0.7;
@@ -196,8 +181,8 @@
 .glider {
   position: absolute;
   display: flex;
-  height: 21px;
-  width: 34px;
+  height: 1.31rem;
+  width: 2.12rem;
   background-color: var(--profile-background-color);
   opacity: 0.34;
   z-index: 1;
@@ -205,26 +190,19 @@
   transition: 0.25s ease-out;
 }
 
-@media (max-width: 700px) {
-  .language-tabs {
-    transform: scale(0.6);
-  }
-}
-
-/* From Uiverse.io by Maximinodotpy */
 .inputGroup {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 89%;
-  margin: 21px 0;
+  margin: 1.31rem 0;
   position: relative;
 }
 
 .inputGroup input {
   width: 89%;
-  font-size: 1em;
-  padding: 13px 21px;
+  font-size: 1rem;
+  padding: .81rem 1.31rem;
   outline: none;
   border: 2px solid var(--profile-color);
   background-color: transparent;
@@ -239,11 +217,11 @@
 
 .inputGroup label {
   background-color: transparent;
-  font-size: 0.89em;
+  font-size: 0.89rem;
   position: absolute;
   left: 0;
-  padding: 0.8em;
-  margin-left: 0.5em;
+  padding: 0.8rem;
+  margin-left: 0.5rem;
   pointer-events: none;
   transition: transform 0.3s ease;
   opacity: 0.5;
@@ -251,10 +229,10 @@
 }
 
 .inputGroup :is(input:focus, input:valid) ~ label {
-  transform: translateY(-89%) scale(0.9);
+  transform: translateY(-1.7rem) scale(0.9);
   margin: 0em;
   margin-left: 1.3em;
-  padding: 3px;
+  padding: .18rem;
   opacity: 1;
   color: var(--profile-color);
   background-color: var(--profile-background-color);
@@ -265,7 +243,7 @@
 }
 
 .profile-light * {
-  font-size: 1.34em;
+  font-size: 1.34rem;
   color: var(--profile-color);
 }
 
@@ -287,6 +265,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  font-size: 1.2rem;
 }
 
 @keyframes flash-left {

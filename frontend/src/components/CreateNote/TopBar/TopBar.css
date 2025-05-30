@@ -77,10 +77,10 @@
   position: absolute;
   background-color: var(--background-color);
   z-index: 1000;
-  width: 34px;
-  height: 200px;
-  top: 55px;
-  left: 46%;
+  width: 6%;
+  height: 500%;
+  top: 105%;
+  left: 45%;
   border-radius: 13px;
 }
 .font-size-buttons button {
@@ -93,8 +93,9 @@
 }
 
 .mode-button {
-  padding: 5px 8px;
-  width: 80px;
+  font-size: 1rem;
+  width: 5em;
+  padding: .1rem .3rem;
   color: var(--color);
   background-color: transparent;
   border: none;
@@ -107,7 +108,7 @@
 }
 
 .auto-button {
-  padding: 3px;
+  padding: .19rem;
   color: var(--color);
   background-color: transparent;
   border-radius: 50%;
@@ -121,5 +122,5 @@
 }
 
 .control-btn {
-  font-size: 0.8em;
+  font-size: 0.8rem;
 }

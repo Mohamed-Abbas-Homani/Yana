@@ -18,7 +18,7 @@ import useNoteHandler from "../../../hooks/useNoteHandler.ts";
 import { useNavigate } from "react-router-dom";
 import useDeleteNote from "../../../hooks/useDeleteNote.tsx";
 import { useTranslation } from "react-i18next";
-import { FaSave, FaTimes, FaTrash } from "react-icons/fa";
+import { FaEye, FaPen, FaSave, FaTimes, FaTrash } from "react-icons/fa";
 const TopBar = ({ inputRef, content, setContent }: any) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -131,36 +131,36 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
     <div className="top-bar">
       <div className="top-bar-menu">
         <div className="sub s1">
-          <GoBold size="1.4em" onClick={handleBold} title={t("bold")} />
-          <GoItalic size="1.4em" onClick={handleItalic} title={t("italic")} />
+          <GoBold size="1.4rem" onClick={handleBold} title={t("bold")} />
+          <GoItalic size="1.4rem" onClick={handleItalic} title={t("italic")} />
           <FiUnderline
-            size="1.4em"
+            size="1.4rem"
             onClick={handleUnderline}
             title={t("underline")}
           />
           <GoStrikethrough
-            size="1.4em"
+            size="1.4rem"
             onClick={handleStrikethrough}
             title={t("strikethrough")}
           />
           <MdFormatListBulleted
-            size="1.4em"
+            size="1.4rem"
             onClick={handleBulletList}
             title={t("bulletedList")}
           />
           <MdFormatListNumbered
-            size="1.4em"
+            size="1.4rem"
             onClick={handleNumberedList}
             title={t("numberedList")}
           />
           <PiHighlighter
-            size="1.4em"
+            size="1.4rem"
             onClick={handleHighlight}
             title={t("highlight")}
           />
           <RiFontSize
             title={t("heading")}
-            size="1.4em"
+            size="1.4rem"
             onClick={() => setShowFS(!showFS)}
           />
 
@@ -175,9 +175,9 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
             </div>
           )}
 
-          <TbQuote size="1.4em" onClick={handleQuote} title={t("quote")} />
-          <MdLink size="1.4em" onClick={handleLink} title={t("link")} />
-          <FaCode size="1.4em" onClick={handleCode} title={t("code")} />
+          <TbQuote size="1.4rem" onClick={handleQuote} title={t("quote")} />
+          <MdLink size="1.4rem" onClick={handleLink} title={t("link")} />
+          <FaCode size="1.4rem" onClick={handleCode} title={t("code")} />
         </div>
         <div className="sub s2">
           <button
@@ -200,14 +200,22 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
               }, 0);
             }}
           >
-            {mode === "read" ? t("readMode") : t("writeMode")}
+{mode === "read" ? (
+  <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+    {t("readMode")} <FaEye />
+  </span>
+) : (
+  <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+    {t("writeMode")} <FaPen />
+  </span>
+)}
           </button>
           <button
             title={t("toggleAutoMode")}
             className="auto-button"
             onClick={() => setAuto(!auto)}
           >
-            <MdAutoAwesome />
+            <MdAutoAwesome fontSize={"1.3rem"}/>
           </button>
           {auto && <sup>{t("auto")}</sup>}
         </div>
@@ -230,7 +238,7 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
             {deleting ? (
               <span title={t("deleting...")}>{t("deleting...")}</span>
             ) : (
-              <FaTrash fontSize={"1.5em"} />
+              <FaTrash fontSize={"1.4rem"} />
             )}
           </button>
         )}
@@ -245,7 +253,7 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
           disabled={loading}
           title={t("cancel")}
         >
-          <FaTimes fontSize={"1.5em"} />
+          <FaTimes fontSize={"1.4rem"} />
         </button>
         <button
           className="control-btn"
@@ -262,7 +270,7 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
           {loading ? (
             <span title={t("Saving...")}>{t("Saving...")}</span>
           ) : (
-            <FaSave fontSize={"1.5em"} />
+            <FaSave fontSize={"1.4rem"} />
           )}
         </button>
       </div>

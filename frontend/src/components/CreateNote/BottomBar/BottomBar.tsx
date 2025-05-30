@@ -50,7 +50,7 @@ const BottomBar = () => {
       return { file, objectUrl };
     });
   }, [files]);
-
+  console.log(filePreviews)
   useEffect(() => {
     return () => {
       filePreviews.forEach(({ objectUrl }) => {

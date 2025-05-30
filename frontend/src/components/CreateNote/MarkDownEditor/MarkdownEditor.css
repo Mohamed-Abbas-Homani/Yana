@@ -21,7 +21,7 @@
   outline: none;
   width: 95%;
   height: 90%;
-  font-size: 0.9em;
+  font-size: 0.9rem;
   resize: none;
   overflow: scroll;
 }
@@ -36,7 +36,7 @@
   outline: none;
   width: 95%;
   height: 90%;
-  font-size: 1em;
+  font-size: 1rem;
   color: var(--current-font);
   resize: none;
   overflow: scroll;
@@ -46,5 +46,5 @@
   padding: 0;
   margin: 0;
   background-color: transparent;
-  font-size: 1em;
+  font-size: 1rem;
 }

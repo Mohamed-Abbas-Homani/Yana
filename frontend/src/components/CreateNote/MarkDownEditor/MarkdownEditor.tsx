@@ -8,6 +8,8 @@ import rehypeKatex from "rehype-katex";
 import { useTranslation } from "react-i18next";
 import "katex/dist/katex.min.css";
 import "./MarkdownEditor.css";
+import Link from "./Link"; // Your styled Link component
+import MarkdownImageOrGallery from "./MarkdownImageOrGallery";
 
 const MarkdownEditor = ({
   mode,
@@ -36,7 +38,7 @@ const MarkdownEditor = ({
           className="textarea"
           placeholder={t(
             "markdownEditorPlaceholder",
-            "Write down your note...",
+            "Write down your note..."
           )}
         />
       ) : (
@@ -46,6 +48,7 @@ const MarkdownEditor = ({
             rehypePlugins={[rehypeKatex, rehypeRaw]}
             remarkPlugins={[remarkGfm, remarkMath, remarkBreaks]}
             components={{
+              // Code block syntax highlighting
               code({ node, inline, className, children, ...props }: any) {
                 const match = /language-(\w+)/.exec(className || "");
                 return !inline && match ? (
@@ -62,6 +65,17 @@ const MarkdownEditor = ({
                   </code>
                 );
               },
+              // Override link rendering
+              a: ({ href, children, ...rest }: any) => (
+                <Link href={href} {...rest}>
+                  {children}
+                </Link>
+              ),
+
+              // Override image rendering with your MarkdownImage component
+              img: ({ src, alt }: any) => (
+                <MarkdownImageOrGallery src={src ?? ""} alt={alt ?? ""} />
+              ),
             }}
           >
             {content}

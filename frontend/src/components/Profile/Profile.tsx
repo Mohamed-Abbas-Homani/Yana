@@ -25,7 +25,7 @@ const ProfilePictureSection = ({
   handleFileChange,
   t,
 }: any) => (
-  <FlexBetween width="377px" height="233px" justifyContent="center">
+  <FlexBetween width="38.2vw" height="38.2vh" justifyContent="center">
     <div className="profile-picture-container">
       <div className="profile-light profile-light-left">
         <IoFlashlight />
@@ -93,8 +93,8 @@ const ProfileFormSection = ({
   t,
 }: any) => (
   <FlexBetween
-    width="377px"
-    height="377px"
+    width="38.2vw"
+    height="61.8vh"
     direction="column"
     padding="13px"
   >
@@ -232,11 +232,11 @@ const Profile = () => {
 
   return (
     <FlexBetween
-      width="377px"
-      height="100%"
+      width="38.2vw"
+      height="100vh"
       direction="column"
       className="profile-container"
-      padding="13px"
+      padding="0.81rem"
     >
       <ProfilePictureSection
         profilePictureUrl={profilePictureUrl}

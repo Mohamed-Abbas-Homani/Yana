@@ -15,7 +15,11 @@
         "title": "y a n a",
         "width": 987,
         "height": 610,
-        "resizable": true
+        "minWidth": 610,
+        "minHeight": 367,
+        "resizable": true,
+        "transparent": true,
+        "titleBarStyle": "Transparent"
       }
     ],
     "security": {

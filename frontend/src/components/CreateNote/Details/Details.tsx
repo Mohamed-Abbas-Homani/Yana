@@ -1,6 +1,6 @@
 import useNoteStore from "../../../services/note.ts";
 import { useTranslation } from "react-i18next";
-
+import "./Details.css"
 const Details = () => {
   const { t } = useTranslation();
   const { title, setTitle, password, setPassword, tag, setTag, mood, setMood } =

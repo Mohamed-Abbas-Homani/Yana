@@ -3,36 +3,36 @@
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  border-radius: 13px;
+  border-radius: .81rem;
   background: var(--background-color);
   box-shadow:
-    inset 7px 7px 13px color-mix(in srgb, var(--background-color) 89%, #000000),
-    inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+    inset 7px 7px .81rem color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -7px -7px .81rem color-mix(in srgb, var(--background-color) 97.5%, #fff);
   width: 7.5%;
   height: 100%;
 }
 
 .color-input {
   border: none;
-  height: 21px;
-  width: 21px;
+  height: 1.31rem;
+  width: 1.31rem;
   border-radius: 50%;
   cursor: pointer;
   padding: 0;
   outline: none;
-  margin: 13px 0;
+  margin: .81rem 0;
   transition: all 0.34s;
 }
 
 .color-input-back {
-  border: 2px solid var(--color);
+  border: .125rem solid var(--color);
 }
 .emojie-button-container {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 13px 0;
+  margin: .81rem 0;
   cursor: pointer;
   transition: all 0.34s;
 }
@@ -42,7 +42,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 13px 0;
+  margin: .81rem 0;
   cursor: pointer;
   transition: all 0.34s;
   cursor: pointer;
@@ -53,7 +53,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 13px 0;
+  margin: .81rem 0;
   cursor: pointer;
   transition: all 0.34s;
   cursor: pointer;
@@ -64,7 +64,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 13px 0;
+  margin: .81rem 0;
   cursor: pointer;
   transition: all 0.34s;
   cursor: pointer;
@@ -81,5 +81,5 @@
 .emoji-picker-container {
   position: absolute;
   z-index: 1000;
-  left: 50px;
+  left: 3.125rem;
 }

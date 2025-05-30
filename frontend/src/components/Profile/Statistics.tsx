@@ -118,20 +118,19 @@ const Statistics = () => {
 
   return (
     <FlexBetween
-      width="610px"
-      height="100%"
+      width="61.8vw"
+      height="100vh"
       direction="column"
-      padding="13px"
+      padding="0.81rem"
       className="stats-container"
     >
       <h3 className="stats-header" style={{ color: profileColor }}>
         {t("Stats")}
-      </h3>{" "}
-      {/* Set header text color */}
+      </h3>
       <div
         style={{
           width: "89%",
-          height: "300px",
+          height: "49%",
           backgroundColor: backgroundColor,
           padding: "10px",
           borderRadius: "8px",

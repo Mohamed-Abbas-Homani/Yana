@@ -65,14 +65,14 @@ const SideBar: React.FC<SideBarProps> = ({
         className="emojie-button-container"
         onClick={() => setShowEmojie(!showEmojie)}
       >
-        <MdEmojiEmotions size="1.5em" />
+        <MdEmojiEmotions size="1.5rem" />
       </div>
       <div
         title={t("setImageBackground", "Set an image as background")}
         className="img-back-container"
       >
-        <label htmlFor="image-back">
-          <FaImage size="1.5em" />
+        <label htmlFor="image-back" style={{cursor:"pointer"}}>
+          <FaImage size="1.5rem" />
         </label>
         <input
           id="image-back"
@@ -96,7 +96,7 @@ const SideBar: React.FC<SideBarProps> = ({
           }
         }}
       >
-        <MdContentCopy size="1.5em" />
+        <MdContentCopy size="1.5rem" />
       </div>
       <div
         title={t("pasteFromClipboard", "Paste from clipboard")}
@@ -105,7 +105,7 @@ const SideBar: React.FC<SideBarProps> = ({
           setContent(content + "\n" + (await readText()));
         }}
       >
-        <MdContentPaste size="1.5em" />
+        <MdContentPaste size="1.5rem" />
       </div>
       {showEmojie && (
         <div className="emoji-picker-container" ref={emojiPickerRef}>

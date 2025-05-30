@@ -13,7 +13,7 @@
 
 .modal-content {
   background: var(--background-color);
-  padding: 20px;
+  padding: 4%;
   border-radius: 10px;
   max-width: 90%;
   max-height: 90%;
@@ -75,7 +75,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin: 5px 10px;
+  margin: 1.9vh .7vw;
   text-align: center;
 }
 

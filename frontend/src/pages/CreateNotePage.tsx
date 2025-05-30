@@ -114,22 +114,6 @@ const CreateNotePage = () => {
         <div className="create-note-container-top">
           <div
             className="create-note-container-internal"
-            onDoubleClick={() => {
-              toggleMood();
-              setTimeout(() => {
-                const inputElement = inputRef.current;
-                if (
-                  inputElement &&
-                  inputElement instanceof HTMLTextAreaElement
-                ) {
-                  inputElement.focus();
-                  inputElement.setSelectionRange(
-                    inputElement.value.length,
-                    inputElement.value.length,
-                  );
-                }
-              }, 0);
-            }}
           >
             <TopBar
               inputRef={inputRef}
