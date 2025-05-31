@@ -33,7 +33,6 @@
   "addFile": "Add File",
   "removeFile": "Remove File",
   "downloadFile": "Download File",
-  "clickToPreview": "Click to preview",
   "previewImage": "Preview image",
   "previewVideo": "Preview video",
   "closePreview": "Close preview",
@@ -90,5 +89,12 @@
     "search": "Search for Anything!",
     "settings": "Configure Everything!",
     "profile": "My Profile"
-  }
+  },
+  "clickToPreview": "Click to preview",
+  "previewDocument": "Preview document",
+  "pdfPreviewTitle": "PDF Preview",
+  "loading": "Loading...",
+  "emptyFile": "File is empty",
+  "previewNotSupported": "Preview not available for this file type",
+  "errorReadingFile": "Error reading file"
 }

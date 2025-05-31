@@ -24,19 +24,6 @@
   border-radius: 13px;
 }
 
-.create-note-container-bottom {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 21%;
-  background: var(--background-color);
-  box-shadow:
-    inset 7px 7px 13px color-mix(in srgb, var(--background-color) 89%, #000000),
-    inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
-}
-
 .create-note-container-internal {
   position: relative;
   display: flex;
@@ -150,27 +137,6 @@
   transform: scale(1.034);
   background-color: var(--color);
   opacity: 0.5;
-}
-
-.file-upload-container {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-}
-
-.file-upload-button {
-  cursor: pointer;
-  font-size: 2rem;
-  position: absolute;
-}
-
-.file-list-horizontal {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  padding-left: 50px;
 }
 
 .create-note-container-submit {

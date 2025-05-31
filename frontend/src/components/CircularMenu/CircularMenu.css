@@ -1,12 +1,11 @@
-/* CircularMenu.css */
 .menu {
   position: absolute;
-  bottom: -34px; /* Adjust as necessary */
-  left: -34px; /* Adjust as necessary */
-  max-width: 200px;
-  max-height: 200px;
-  min-width: 200px;
-  min-height: 200px;
+  bottom: -2.125rem;
+  left: -2.125rem;
+  max-width: 12.5rem;
+  max-height: 12.5rem;
+  min-width: 12.5rem;
+  min-height: 12.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,16 +15,16 @@
 .menu li {
   left: 0;
   opacity: 0;
-  width: 34px;
-  height: 34px;
+  width: 2.125rem;
+  height: 2.125rem;
   background: var(--menu-item-background);
   border-radius: 50%;
   position: absolute;
   list-style: none;
-  transform-origin: 100px;
+  transform-origin: 6.25rem;
   transition: 0.34s;
   transition-delay: calc(0.1s * var(--i));
-  transform: rotate(0deg) translateX(100px);
+  transform: rotate(0deg) translateX(6.25rem);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,10 +53,11 @@
 .menu li div:hover * {
   transform: scale(1.034);
 }
+
 .toggle {
   position: absolute;
-  width: 55px;
-  height: 55px;
+  width: 3.4375rem;
+  height: 3.4375rem;
   background: var(--menu-toggle-background);
   border-radius: 50%;
   display: flex;
@@ -87,5 +87,5 @@
 
 .menu.hide {
   opacity: 0;
-  transform: translateX(-34px) translateY(34px);
+  transform: translateX(-2.125rem) translateY(2.125rem);
 }
