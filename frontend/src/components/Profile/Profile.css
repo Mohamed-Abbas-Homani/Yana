@@ -10,7 +10,6 @@
   animation-delay: 0.55s;
 }
 
-
 .profile-picture-container {
   position: relative;
   width: 100%;
@@ -106,9 +105,6 @@
   }
 }
 
-
-
-
 .language-tabs {
   display: flex;
   position: relative;
@@ -130,7 +126,7 @@
   color: var(--profile-background-color);
   font-weight: bold;
   font-size: 1.21rem;
-  margin: 0 .5rem;
+  margin: 0 0.5rem;
 }
 .language-tabs * {
   z-index: 2;
@@ -202,7 +198,7 @@
 .inputGroup input {
   width: 89%;
   font-size: 1rem;
-  padding: .81rem 1.31rem;
+  padding: 0.81rem 1.31rem;
   outline: none;
   border: 2px solid var(--profile-color);
   background-color: transparent;
@@ -232,7 +228,7 @@
   transform: translateY(-1.7rem) scale(0.9);
   margin: 0em;
   margin-left: 1.3em;
-  padding: .18rem;
+  padding: 0.18rem;
   opacity: 1;
   color: var(--profile-color);
   background-color: var(--profile-background-color);

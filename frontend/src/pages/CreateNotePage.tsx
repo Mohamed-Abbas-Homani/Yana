@@ -14,23 +14,24 @@ import { useLocation } from "react-router-dom";
 import useGetNote from "../hooks/useGetNote.ts";
 
 const CreateNotePage = () => {
-  useGetNote();
+  const { id } = useGetNote();
   const location = useLocation();
   const { setUserAction, setLastPage } = useStore();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const [imageURL, setImageURL] = useState<string | null>(null);
   const { backImage, setBackImage } = useFileNoteStore();
   const emojiPickerRef = useRef<any>(null);
-  const {
-    auto,
-    setShowEmojie,
-    content,
-    setContent,
-    mode,
-    setMode,
-    toggleMood,
-  } = useNoteStore();
-
+  const { auto, setShowEmojie, content, setContent, mode, setMode } =
+    useNoteStore();
+  useEffect(() => {
+    if (!id) {
+      console.log("i entered here", id);
+      setMode("write");
+    } else {
+      console.log("i entered here2");
+      setMode("read");
+    }
+  }, []);
   const debouncedSetMode = useCallback(
     debounce(() => setMode("read"), 3000),
     [],
@@ -112,9 +113,7 @@ const CreateNotePage = () => {
     <Page>
       <div className="create-note-container">
         <div className="create-note-container-top">
-          <div
-            className="create-note-container-internal"
-          >
+          <div className="create-note-container-internal">
             <TopBar
               inputRef={inputRef}
               content={content}

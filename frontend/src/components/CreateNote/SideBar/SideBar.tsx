@@ -71,7 +71,7 @@ const SideBar: React.FC<SideBarProps> = ({
         title={t("setImageBackground", "Set an image as background")}
         className="img-back-container"
       >
-        <label htmlFor="image-back" style={{cursor:"pointer"}}>
+        <label htmlFor="image-back" style={{ cursor: "pointer" }}>
           <FaImage size="1.5rem" />
         </label>
         <input

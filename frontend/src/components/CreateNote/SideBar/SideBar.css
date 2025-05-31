@@ -3,11 +3,13 @@
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  border-radius: .81rem;
+  border-radius: 0.81rem;
   background: var(--background-color);
   box-shadow:
-    inset 7px 7px .81rem color-mix(in srgb, var(--background-color) 89%, #000000),
-    inset -7px -7px .81rem color-mix(in srgb, var(--background-color) 97.5%, #fff);
+    inset 7px 7px 0.81rem
+      color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -7px -7px 0.81rem
+      color-mix(in srgb, var(--background-color) 97.5%, #fff);
   width: 7.5%;
   height: 100%;
 }
@@ -20,19 +22,19 @@
   cursor: pointer;
   padding: 0;
   outline: none;
-  margin: .81rem 0;
+  margin: 0.81rem 0;
   transition: all 0.34s;
 }
 
 .color-input-back {
-  border: .125rem solid var(--color);
+  border: 0.125rem solid var(--color);
 }
 .emojie-button-container {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: .81rem 0;
+  margin: 0.81rem 0;
   cursor: pointer;
   transition: all 0.34s;
 }
@@ -42,7 +44,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: .81rem 0;
+  margin: 0.81rem 0;
   cursor: pointer;
   transition: all 0.34s;
   cursor: pointer;
@@ -53,7 +55,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: .81rem 0;
+  margin: 0.81rem 0;
   cursor: pointer;
   transition: all 0.34s;
   cursor: pointer;
@@ -64,7 +66,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: .81rem 0;
+  margin: 0.81rem 0;
   cursor: pointer;
   transition: all 0.34s;
   cursor: pointer;

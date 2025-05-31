@@ -25,7 +25,7 @@ type NoteStore = {
   setTag: (tag: string) => void;
   mood: string;
   setMood: (mood: string) => void;
-  toggleMood: () => void;
+  toggleMode: () => void;
   reset: () => void;
 };
 
@@ -71,8 +71,8 @@ const useNoteStore = create<NoteStore>()(
 
         mood: "",
         setMood: (mood: string) => set({ mood }),
-        // Implement toggleMood to switch between two example moods
-        toggleMood: () =>
+        // Implement toggleMode to switch between two example moods
+        toggleMode: () =>
           set((state) => ({
             mode: state.mode === "read" ? "write" : "read",
           })),

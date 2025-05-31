@@ -24,7 +24,7 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
   const navigate = useNavigate();
   const { loading, handleNoteSubmission } = useNoteHandler();
   const { setUserAction } = useStore();
-  const { auto, setAuto, mode, toggleMood, reset, id } = useNoteStore();
+  const { auto, setAuto, mode, toggleMode, reset, id } = useNoteStore();
   const { reset: resetFiles } = useFileNoteStore();
   const [isBulletListActive, setIsBulletListActive] = useState(false);
   const [isNumberedListActive, setIsNumberedListActive] = useState(false);
@@ -184,7 +184,7 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
             title={t("toggleMode")}
             className="mode-button"
             onClick={() => {
-              toggleMood();
+              toggleMode();
               setTimeout(() => {
                 const inputElement = inputRef.current;
                 if (
@@ -200,22 +200,34 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
               }, 0);
             }}
           >
-{mode === "read" ? (
-  <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
-    {t("readMode")} <FaEye />
-  </span>
-) : (
-  <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
-    {t("writeMode")} <FaPen />
-  </span>
-)}
+            {mode === "read" ? (
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.3rem",
+                }}
+              >
+                {t("readMode")} <FaEye />
+              </span>
+            ) : (
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.3rem",
+                }}
+              >
+                {t("writeMode")} <FaPen />
+              </span>
+            )}
           </button>
           <button
             title={t("toggleAutoMode")}
             className="auto-button"
             onClick={() => setAuto(!auto)}
           >
-            <MdAutoAwesome fontSize={"1.3rem"}/>
+            <MdAutoAwesome fontSize={"1.3rem"} />
           </button>
           {auto && <sup>{t("auto")}</sup>}
         </div>

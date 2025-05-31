@@ -92,12 +92,7 @@ const ProfileFormSection = ({
   handleLanguageChange,
   t,
 }: any) => (
-  <FlexBetween
-    width="38.2vw"
-    height="61.8vh"
-    direction="column"
-    padding="13px"
-  >
+  <FlexBetween width="38.2vw" height="61.8vh" direction="column" padding="13px">
     <div className="inputGroup">
       <input
         autoFocus

@@ -28,7 +28,6 @@ const useGetUser = () => {
       }
     };
     if (user?.id) {
-
       fetchUser();
     }
   }, [user]); // Dependency on userId to refetch if it changes

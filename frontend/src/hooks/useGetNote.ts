@@ -113,6 +113,7 @@ const useGetNote = () => {
 
   return {
     loading,
+    id,
   };
 };
 

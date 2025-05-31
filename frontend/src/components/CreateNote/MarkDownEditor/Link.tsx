@@ -1,7 +1,7 @@
-import React, { FC, AnchorHTMLAttributes, useState } from 'react';
-import styled from 'styled-components';
-import { writeText } from '@tauri-apps/plugin-clipboard-manager';
-import { useTranslation } from 'react-i18next';
+import React, { FC, AnchorHTMLAttributes, useState } from "react";
+import styled from "styled-components";
+import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+import { useTranslation } from "react-i18next";
 
 interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
@@ -12,7 +12,7 @@ const LinkWrapper = styled.a`
   align-items: center;
   gap: 0.5rem;
   max-width: 100%;
-  padding: 0.3rem 0.5rem;  // container padding (good to keep)
+  padding: 0.3rem 0.5rem; // container padding (good to keep)
   background-color: transparent;
   color: var(--current-font);
   text-decoration: none;
@@ -29,7 +29,7 @@ const LinkWrapper = styled.a`
   overflow: hidden;
 
   &:hover {
-    transform: translateY(-.05rem);
+    transform: translateY(-0.05rem);
 
     .copy-icon {
       opacity: 1;
@@ -73,25 +73,25 @@ function truncateMiddle(text: string, maxLength = 30): string {
   if (!urlParts) {
     const front = Math.ceil(maxLength / 2);
     const back = Math.floor(maxLength / 2);
-    return text.slice(0, front) + '...' + text.slice(text.length - back);
+    return text.slice(0, front) + "..." + text.slice(text.length - back);
   }
 
   const base = urlParts[1];
   const rest = urlParts[2];
 
   if (base.length >= maxLength - 3) {
-    return base.slice(0, maxLength - 3) + '...';
+    return base.slice(0, maxLength - 3) + "...";
   }
 
   const remainLength = maxLength - base.length - 3;
   const tail = rest.slice(-remainLength);
 
-  return base + '...' + tail;
+  return base + "..." + tail;
 }
 
 const Link: FC<LinkProps> = ({ href, children, ...rest }) => {
   const [copied, setCopied] = useState(false);
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const handleCopy = async (e: React.MouseEvent | React.KeyboardEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -104,13 +104,13 @@ const Link: FC<LinkProps> = ({ href, children, ...rest }) => {
 
   // Support keyboard interaction on the copy icon
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === "Enter" || e.key === " ") {
       handleCopy(e);
     }
   };
 
   const displayText =
-    typeof children === 'string' && children === href
+    typeof children === "string" && children === href
       ? truncateMiddle(href)
       : children;
 
@@ -126,7 +126,7 @@ const Link: FC<LinkProps> = ({ href, children, ...rest }) => {
         aria-label={t("Copy to clipboard")}
         title={t("Copy to clipboard")}
       >
-        {copied ? '✅' : '📋'}
+        {copied ? "✅" : "📋"}
       </CopyIcon>
     </LinkWrapper>
   );

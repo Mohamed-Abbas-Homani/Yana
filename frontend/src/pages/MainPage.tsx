@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 const MainPage = () => {
   const { lastPage, userAction, user } = useStore();
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const navigate = useNavigate();
   useEffect(() => {
     if (!user?.id) {
@@ -15,7 +15,7 @@ const MainPage = () => {
   }, []);
   return (
     <Page>
-      <p>{t('Loading')}...</p>
+      <p>{t("Loading")}...</p>
     </Page>
   );
 };

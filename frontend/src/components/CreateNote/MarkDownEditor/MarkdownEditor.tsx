@@ -38,7 +38,7 @@ const MarkdownEditor = ({
           className="textarea"
           placeholder={t(
             "markdownEditorPlaceholder",
-            "Write down your note..."
+            "Write down your note...",
           )}
         />
       ) : (
@@ -72,18 +72,18 @@ const MarkdownEditor = ({
                 </Link>
               ),
 
-img: ({ src, alt }: any) => {
-  const altText = alt ?? "";
-  const shouldOverride =
-    /\bwidth=\d+\b/.test(altText) || /\bheight=\d+\b/.test(altText);
+              img: ({ src, alt }: any) => {
+                const altText = alt ?? "";
+                const shouldOverride =
+                  /\bwidth=\d+\b/.test(altText) ||
+                  /\bheight=\d+\b/.test(altText);
 
-  return shouldOverride ? (
-    <MarkdownImageOrGallery src={src ?? ""} alt={altText} />
-  ) : (
-    <img src={src ?? ""} alt={altText} />
-  );
-}
-
+                return shouldOverride ? (
+                  <MarkdownImageOrGallery src={src ?? ""} alt={altText} />
+                ) : (
+                  <img src={src ?? ""} alt={altText} />
+                );
+              },
             }}
           >
             {content}

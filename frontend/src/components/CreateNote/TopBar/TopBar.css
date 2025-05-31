@@ -95,7 +95,7 @@
 .mode-button {
   font-size: 1rem;
   width: 5em;
-  padding: .1rem .3rem;
+  padding: 0.1rem 0.3rem;
   color: var(--color);
   background-color: transparent;
   border: none;
@@ -108,7 +108,7 @@
 }
 
 .auto-button {
-  padding: .19rem;
+  padding: 0.19rem;
   color: var(--color);
   background-color: transparent;
   border-radius: 50%;
