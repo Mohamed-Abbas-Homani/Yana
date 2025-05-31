@@ -128,9 +128,10 @@
   background: none;
   background-color: var(--color);
   color: var(--background-color);
-  padding: 8px 5px;
+  padding: 0rem .31rem;
   font-size: 0.8rem;
-  margin-right: 5px;
+  margin-right: .31rem;
+    height: 55%;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
 }
@@ -146,13 +147,13 @@
   align-items: center;
   flex: 1;
   cursor: pointer;
-  height: 33px;
+  height: 55%;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
 }
 
 .search-btn * {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   fill: var(--background-color);
 }
 

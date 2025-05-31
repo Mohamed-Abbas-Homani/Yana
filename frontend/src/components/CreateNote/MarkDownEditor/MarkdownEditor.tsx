@@ -72,10 +72,18 @@ const MarkdownEditor = ({
                 </Link>
               ),
 
-              // Override image rendering with your MarkdownImage component
-              img: ({ src, alt }: any) => (
-                <MarkdownImageOrGallery src={src ?? ""} alt={alt ?? ""} />
-              ),
+img: ({ src, alt }: any) => {
+  const altText = alt ?? "";
+  const shouldOverride =
+    /\bwidth=\d+\b/.test(altText) || /\bheight=\d+\b/.test(altText);
+
+  return shouldOverride ? (
+    <MarkdownImageOrGallery src={src ?? ""} alt={altText} />
+  ) : (
+    <img src={src ?? ""} alt={altText} />
+  );
+}
+
             }}
           >
             {content}
