@@ -92,13 +92,7 @@
   justify-content: space-around;
   align-items: center;
   flex: 2;
-  padding-left: 30px;
-}
-
-.flags-container small {
-  position: absolute;
-  top: 0px;
-  left: 0;
+  padding-left: 1.9rem;
 }
 
 .flags-container .flag {
@@ -108,7 +102,7 @@
   text-align: center;
   background-color: var(--color);
   color: var(--background-color);
-  padding: 8px 13px;
+  padding: 0.5rem 0.81rem;
   border-radius: 8px;
   cursor: pointer;
 }

@@ -10,6 +10,7 @@ import "katex/dist/katex.min.css";
 import "./MarkdownEditor.css";
 import Link from "./Link"; // Your styled Link component
 import MarkdownImageOrGallery from "./MarkdownImageOrGallery";
+import useNoteStore from "../../../services/note";
 
 const MarkdownEditor = ({
   mode,
@@ -19,6 +20,7 @@ const MarkdownEditor = ({
   imageURL,
 }: any) => {
   const { t } = useTranslation();
+  const { id } = useNoteStore();
 
   return (
     <div
@@ -38,7 +40,7 @@ const MarkdownEditor = ({
           className="textarea"
           placeholder={t(
             "markdownEditorPlaceholder",
-            "Write down your note...",
+            "Write down your note..."
           )}
         />
       ) : (
@@ -48,7 +50,6 @@ const MarkdownEditor = ({
             rehypePlugins={[rehypeKatex, rehypeRaw]}
             remarkPlugins={[remarkGfm, remarkMath, remarkBreaks]}
             components={{
-              // Code block syntax highlighting
               code({ node, inline, className, children, ...props }: any) {
                 const match = /language-(\w+)/.exec(className || "");
                 return !inline && match ? (
@@ -65,23 +66,39 @@ const MarkdownEditor = ({
                   </code>
                 );
               },
-              // Override link rendering
               a: ({ href, children, ...rest }: any) => (
                 <Link href={href} {...rest}>
                   {children}
                 </Link>
               ),
-
-              img: ({ src, alt }: any) => {
+              img: ({ src, alt}: any) => {
                 const altText = alt ?? "";
+                const srcValue = src ?? "";
+                const isCommaSeparated = srcValue.includes(",");
+                let isUrl = false;
+
+                if (!isCommaSeparated) {
+                  try {
+                    new URL(srcValue);
+                    isUrl = true;
+                  } catch {
+                    console.log("Not a valid URL:", srcValue);
+                  }
+                }
+
                 const shouldOverride =
                   /\bwidth=\d+\b/.test(altText) ||
-                  /\bheight=\d+\b/.test(altText);
-
+                  /\bheight=\d+\b/.test(altText) ||
+                  isCommaSeparated ||
+                  !isUrl;
                 return shouldOverride ? (
-                  <MarkdownImageOrGallery src={src ?? ""} alt={altText} />
+                  <MarkdownImageOrGallery
+                    src={srcValue}
+                    alt={altText}
+                    noteId={id}
+                  />
                 ) : (
-                  <img src={src ?? ""} alt={altText} />
+                  <img src={srcValue} alt={altText} />
                 );
               },
             }}

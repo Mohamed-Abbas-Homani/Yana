@@ -126,10 +126,10 @@ const ProfileFormSection = ({
     {userAction === "editing profile" && (
       <div className="profile-input-container">
         <button onClick={handleCancel} disabled={loading}>
-          {t("Cancel")}
+          {t("cancel")}
         </button>
         <button onClick={handleSubmit} disabled={loading}>
-          {t("Save")}
+          {t("save")}
         </button>
       </div>
     )}

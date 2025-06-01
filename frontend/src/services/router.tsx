@@ -4,6 +4,7 @@ import CreateNotePage from "../pages/CreateNotePage";
 import MainPage from "../pages/MainPage";
 import HomePage from "../pages/HomePage";
 import SettingsPage from "../pages/SettingsPage";
+import WhiteBoardPage from "../pages/WhiteBoardPage";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: "/note/:id",
     element: <CreateNotePage />,
+  },
+  {
+    path: "/whiteboard",
+    element: <WhiteBoardPage />,
   },
 ]);
 

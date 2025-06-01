@@ -27,17 +27,59 @@ type NoteStore = {
   setMood: (mood: string) => void;
   toggleMode: () => void;
   reset: () => void;
+  history: string[];
+  future: string[];
+  undo: () => void;
+  redo: () => void;
 };
 
 const useNoteStore = create<NoteStore>()(
   devtools(
     persist(
-      (set) => ({
+      (set, get) => ({
         mode: "read",
         setMode: (mode: "read" | "write") => set({ mode }),
 
         content: "",
-        setContent: (content: string) => set({ content }),
+        history: [],
+        future: [],
+
+        setContent: (newContent: string) => {
+          const { content, history } = get();
+          if (newContent !== content) {
+            const updatedHistory = [...history, content];
+            const limitedHistory = updatedHistory.slice(-100)// Keep only last 100
+            set({
+              content: newContent,
+              history: limitedHistory,
+              future: [],
+            });
+          }
+        },
+
+        undo: () => {
+          const { history, content, future } = get();
+          if (history.length === 0) return;
+          const previous = history[history.length - 1];
+          const newHistory = history.slice(0, -1);
+          set({
+            content: previous,
+            history: newHistory,
+            future: [content, ...future],
+          });
+        },
+
+        redo: () => {
+          const { history, content, future } = get();
+          if (future.length === 0) return;
+          const next = future[0];
+          const newFuture = future.slice(1);
+          set({
+            content: next,
+            history: [...history, content],
+            future: newFuture,
+          });
+        },
 
         id: "",
         setId: (id: string) => set({ id }),
@@ -92,9 +134,9 @@ const useNoteStore = create<NoteStore>()(
             mood: "",
           }),
       }),
-      { name: "yana-editor-store" },
-    ),
-  ),
+      { name: "yana-editor-store" }
+    )
+  )
 );
 
 type FileNoteStore = {
@@ -112,7 +154,7 @@ export const useFileNoteStore = create<FileNoteStore>()(
     backImage: null,
     setBackImage: (backImage: File | null) => set({ backImage }),
     reset: () => set({ files: [], backImage: null }),
-  })),
+  }))
 );
 
 type DisplayNote = {
@@ -163,7 +205,7 @@ export const useNotesDisplayStore = create<NotesDisplayStore>()(
           ? state.filters.filter((f) => f !== filter)
           : [...state.filters, filter],
       })),
-  })),
+  }))
 );
 
 export default useNoteStore;

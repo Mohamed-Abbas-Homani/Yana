@@ -5,6 +5,23 @@ import { writeText, readText } from "@tauri-apps/plugin-clipboard-manager";
 import { useTranslation } from "react-i18next";
 import "./SideBar.css";
 import useNoteStore from "../../../services/note.ts";
+import styled from "styled-components";
+
+const ColorWrapper = styled.label<{ color: string; border?: boolean }>`
+  display: inline-block;
+  width: 1.31rem;
+  height: 1.31rem;
+  border-radius: 50%;
+  background-color: ${({ color }) => color};
+  cursor: pointer;
+  margin: 0.81rem 0;
+  transition: all 0.34s;
+  border: ${({ border }) => (border ? "0.1rem solid var(--color)" : "none")};
+`;
+
+const HiddenInput = styled.input`
+  display: none;
+`;
 
 interface SideBarProps {
   setImageURL: (url: string | null) => void;
@@ -40,26 +57,33 @@ const SideBar: React.FC<SideBarProps> = ({
 
   return (
     <div className="side-bar-menu">
-      <input
+      <ColorWrapper
         title={t("changeFontColor", "Change font color")}
-        type="color"
-        value={currentFont}
-        onChange={(e) => setCurrentFont(e.target.value)}
-        className="color-input"
-        style={{ backgroundColor: currentFont }}
-      />
-      <input
+        color={currentFont}
+      >
+        <HiddenInput
+          type="color"
+          value={currentFont}
+          onChange={(e) => setCurrentFont(e.target.value)}
+        />
+      </ColorWrapper>
+
+      <ColorWrapper
         title={t("changeBackgroundColor", "Change background color")}
-        type="color"
-        value={currentBack}
-        onChange={(e) => {
-          setCurrentBack(e.target.value);
-          setImageURL(null);
-          setBackImage(null);
-        }}
-        className="color-input color-input-back"
-        style={{ backgroundColor: currentBack }}
-      />
+        color={currentBack}
+        border
+      >
+        <HiddenInput
+          type="color"
+          value={currentBack}
+          onChange={(e) => {
+            setCurrentBack(e.target.value);
+            setImageURL(null);
+            setBackImage(null);
+          }}
+        />
+      </ColorWrapper>
+
       <div
         title={t("pickEmoji", "Pick an emoji!")}
         className="emojie-button-container"

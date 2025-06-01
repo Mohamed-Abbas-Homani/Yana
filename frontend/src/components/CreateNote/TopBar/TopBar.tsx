@@ -277,7 +277,7 @@ const TopBar = ({ inputRef, content, setContent }: any) => {
             navigate("/home");
             setUserAction("neutral");
           }}
-          title={t("Save")}
+          title={t("save")}
         >
           {loading ? (
             <span title={t("Saving...")}>{t("Saving...")}</span>

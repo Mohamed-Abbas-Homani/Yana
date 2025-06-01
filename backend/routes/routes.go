@@ -39,7 +39,7 @@ func InitEcho() {
 	e.GET("/notes/creation-stat", handlers.GetNotesCountByWeekdayHandler)
 	e.GET("/notes/mood-stat", handlers.GetNotesCountByMoodHandler)
 	e.DELETE("/notes/:id", handlers.DeleteNoteHandler)
-
+	e.GET("/notes/:id/documents/:documentName", handlers.GetNoteDocumentByName)
 	// Start server
 	e.Logger.Fatal(e.Start(":8090"))
 }

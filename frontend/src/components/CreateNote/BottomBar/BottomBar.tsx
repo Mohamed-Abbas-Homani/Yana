@@ -213,8 +213,9 @@ const ModalPDF = styled.iframe`
 
 const ModalTextContent = styled.div`
   text-align: start;
-  width: 100%;
+  width: 89%;
   max-height: 90vh;
+  height: 100%;
   overflow: auto;
   padding: 1.2rem;
   background: var(--background-color);

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { CONSTANTS } from "../../../const";
 
 interface MarkdownImageProps {
   src: string;
@@ -181,6 +182,7 @@ const Gallery: React.FC<GalleryProps> = ({ images, width, height, alt }) => {
 interface MarkdownGalleryWrapperProps {
   src: string;
   alt?: string;
+  noteId: string;
 }
 
 function parseSizeAndAlt(alt: string) {
@@ -212,25 +214,68 @@ function parseSizeAndAlt(alt: string) {
 const MarkdownImageOrGallery: React.FC<MarkdownGalleryWrapperProps> = ({
   src,
   alt = "",
+  noteId,
 }) => {
-  if (!src) return null;
+  // console.log(alt, src, noteId)
+  const [resolvedImages, setResolvedImages] = useState<string[]>([]);
 
-  // Split src on commas and trim
-  const images = src
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
+  useEffect(() => {
+    const resolveSources = async () => {
+      const rawSources = src
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      const resolved = await Promise.all(
+        rawSources.map((name) => resolveImageSrc(name, noteId))
+      );
+      setResolvedImages(resolved);
+    };
+
+    resolveSources().catch((err) => {
+      console.error("Failed to resolve image sources:", err);
+      setResolvedImages([]); // Optional: set fallback or leave blank
+    });
+  }, [src, noteId]);
+
   const { parsedAlt, width, height } = parseSizeAndAlt(alt);
 
-  if (images.length > 1) {
-    // Render gallery if multiple images
+  if (resolvedImages.length === 0) return null;
+
+  if (resolvedImages.length > 1) {
     return (
-      <Gallery images={images} width={width} height={height} alt={parsedAlt} />
+      <Gallery
+        images={resolvedImages}
+        width={width}
+        height={height}
+        alt={parsedAlt}
+      />
     );
   }
 
-  // Single image fallback
-  return <MarkdownImage src={src} alt={alt} />;
+  return <MarkdownImage src={resolvedImages[0]} alt={alt} />;
 };
+
+async function resolveImageSrc(name: string, noteId: string): Promise<string> {
+  // Check if name looks like a URL
+  try {
+    new URL(name);
+    return name; // Already a full URL
+  } catch {
+    // It's not a URL, so treat it as a document name
+  }
+
+  const response = await fetch(
+    `${CONSTANTS.BackURL}/notes/${noteId}/documents/${name}`
+  );
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch document "${name}" for note ID "${noteId}"`
+    );
+  }
+
+  const blob = await response.blob();
+  return URL.createObjectURL(blob);
+}
 
 export default MarkdownImageOrGallery;

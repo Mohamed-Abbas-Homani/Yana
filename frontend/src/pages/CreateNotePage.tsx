@@ -23,6 +23,41 @@ const CreateNotePage = () => {
   const emojiPickerRef = useRef<any>(null);
   const { auto, setShowEmojie, content, setContent, mode, setMode } =
     useNoteStore();
+  const { undo, redo } = useNoteStore();
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    const ctrlKey = event.ctrlKey;
+
+    // Ctrl+Z or Cmd+Z for Undo
+    if (ctrlKey && event.key === "z" && !event.shiftKey) {
+      event.preventDefault();
+      undo();
+      return;
+    }
+
+    // Ctrl+Shift+Z or Cmd+Shift+Z for Redo
+    if (ctrlKey && event.key === "Z" && event.shiftKey) {
+      event.preventDefault();
+      redo();
+      return;
+    }
+
+    // Spacebar to switch to write mode
+    if (event.key === " " && mode === "read") {
+      setMode("write");
+      setTimeout(() => {
+        const inputElement = inputRef.current;
+        if (inputElement && inputElement instanceof HTMLTextAreaElement) {
+          inputElement.focus();
+          inputElement.setSelectionRange(
+            inputElement.value.length,
+            inputElement.value.length
+          );
+        }
+      }, 0);
+    }
+  };
+
   useEffect(() => {
     if (!id) {
       console.log("i entered here", id);
@@ -34,28 +69,12 @@ const CreateNotePage = () => {
   }, []);
   const debouncedSetMode = useCallback(
     debounce(() => setMode("read"), 3000),
-    [],
+    []
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(event.currentTarget.value);
     if (auto) debouncedSetMode();
-  };
-
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === " " && mode === "read") {
-      setMode("write");
-      setTimeout(() => {
-        const inputElement = inputRef.current;
-        if (inputElement && inputElement instanceof HTMLTextAreaElement) {
-          inputElement.focus();
-          inputElement.setSelectionRange(
-            inputElement.value.length,
-            inputElement.value.length,
-          );
-        }
-      }, 0);
-    }
   };
 
   useEffect(() => {
@@ -83,7 +102,7 @@ const CreateNotePage = () => {
   }, []);
   // Image upload handler
   const handleBackImageUpload = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
     if (file) {
