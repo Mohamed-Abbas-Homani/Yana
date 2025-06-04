@@ -16,7 +16,7 @@ import useGetNote from "../hooks/useGetNote.ts";
 const CreateNotePage = () => {
   const { id } = useGetNote();
   const location = useLocation();
-  const { setUserAction, setLastPage } = useStore();
+  const { setUserAction, setLastPage, isPomoOn } = useStore();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const [imageURL, setImageURL] = useState<string | null>(null);
   const { backImage, setBackImage } = useFileNoteStore();
@@ -51,7 +51,7 @@ const CreateNotePage = () => {
           inputElement.focus();
           inputElement.setSelectionRange(
             inputElement.value.length,
-            inputElement.value.length
+            inputElement.value.length,
           );
         }
       }, 0);
@@ -60,16 +60,14 @@ const CreateNotePage = () => {
 
   useEffect(() => {
     if (!id) {
-      console.log("i entered here", id);
       setMode("write");
     } else {
-      console.log("i entered here2");
       setMode("read");
     }
   }, []);
   const debouncedSetMode = useCallback(
     debounce(() => setMode("read"), 3000),
-    []
+    [],
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -102,7 +100,7 @@ const CreateNotePage = () => {
   }, []);
   // Image upload handler
   const handleBackImageUpload = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (file) {

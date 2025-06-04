@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./CircularMenu.css";
 import { FaChalkboard, FaHome, FaPencilAlt, FaUser } from "react-icons/fa";
-import { IoSettings } from "react-icons/io5";
+import { IoSettings, IoTime } from "react-icons/io5";
 import { debounce } from "../../utils/functions";
 import { useNavigate } from "react-router-dom";
 import useStore from "../../services/store";
@@ -78,13 +78,22 @@ const CircularMenu: React.FC = () => {
           <FaChalkboard />
         </div>
       </li>
-      <li
+      {/* <li
         style={{ "--i": 4 } as React.CSSProperties}
         title={t("circularMenu.settings")}
         onClick={() => onItemClick("/settings")}
       >
         <div>
           <IoSettings />
+        </div>
+      </li> */}
+      <li
+        style={{ "--i": 4 } as React.CSSProperties}
+        title={t("circularMenu.pomodoro")}
+        onClick={() => onItemClick("/pomodoro")}
+      >
+        <div>
+          <IoTime />
         </div>
       </li>
       <li

@@ -86,7 +86,8 @@
     "search": "Search for Anything!",
     "settings": "Configure Everything!",
     "profile": "My Profile",
-    "whiteboard": "WhiteBoard"
+    "whiteboard": "WhiteBoard",
+    "pomodoro": "Pomodoro"
   },
   "clickToPreview": "Click to preview",
   "previewDocument": "Preview document",

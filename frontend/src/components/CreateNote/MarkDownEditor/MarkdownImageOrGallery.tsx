@@ -216,7 +216,6 @@ const MarkdownImageOrGallery: React.FC<MarkdownGalleryWrapperProps> = ({
   alt = "",
   noteId,
 }) => {
-  // console.log(alt, src, noteId)
   const [resolvedImages, setResolvedImages] = useState<string[]>([]);
 
   useEffect(() => {
@@ -227,7 +226,7 @@ const MarkdownImageOrGallery: React.FC<MarkdownGalleryWrapperProps> = ({
         .filter(Boolean);
 
       const resolved = await Promise.all(
-        rawSources.map((name) => resolveImageSrc(name, noteId))
+        rawSources.map((name) => resolveImageSrc(name, noteId)),
       );
       setResolvedImages(resolved);
     };
@@ -266,11 +265,11 @@ async function resolveImageSrc(name: string, noteId: string): Promise<string> {
   }
 
   const response = await fetch(
-    `${CONSTANTS.BackURL}/notes/${noteId}/documents/${name}`
+    `${CONSTANTS.BackURL}/notes/${noteId}/documents/${name}`,
   );
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch document "${name}" for note ID "${noteId}"`
+      `Failed to fetch document "${name}" for note ID "${noteId}"`,
     );
   }
 

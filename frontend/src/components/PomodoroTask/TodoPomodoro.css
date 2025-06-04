@@ -1,0 +1,840 @@
+.todo-pomodoro-container {
+  --primary-color: color-mix(
+    in srgb,
+    var(--color) 80%,
+    var(--background-color) 20%
+  );
+  --success-color: color-mix(in srgb, green 70%, var(--color) 30%);
+  --danger-color: color-mix(in srgb, red 70%, var(--color) 30%);
+  --warning-color: color-mix(in srgb, orange 70%, var(--color) 30%);
+
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+
+  background-color: var(--background-color);
+  color: var(--color);
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  border-radius: 13px;
+  overflow: hidden;
+}
+
+.todo-section {
+  width: 70vw;
+  height: 100%;
+  padding: 20px;
+  background: var(--background-color);
+  box-shadow:
+    inset 7px 7px 13px color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  border-radius: 13px 0 0 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.pomodoro-section {
+  width: 30vw;
+  height: 100%;
+  padding: 20px;
+  background: var(--background-color);
+  box-shadow:
+    inset 7px 7px 13px color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  border-radius: 0 13px 13px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.todo-header,
+.pomodoro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.todo-header h2,
+.pomodoro-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--color);
+}
+
+.settings-btn {
+  background: transparent;
+  border: none;
+  color: var(--color);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow:
+    3px 3px 5px color-mix(in srgb, var(--background-color) 89%, #000000),
+    -3px -3px 5px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  transition: all 0.2s;
+}
+
+.settings-btn:hover {
+  box-shadow:
+    inset 3px 3px 5px color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -3px -3px 5px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+}
+
+.list-management {
+  background: var(--background-color);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow:
+    inset 3px 3px 6px color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -3px -3px 6px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.add-list {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.add-list input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--color) 30%, transparent);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color);
+  outline: none;
+}
+
+.add-list button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.list-item button {
+  background: transparent;
+  border: none;
+  color: var(--color);
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  box-shadow:
+    2px 2px 4px color-mix(in srgb, var(--background-color) 89%, #000000),
+    -2px -2px 4px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  transition: all 0.2s;
+}
+
+.list-item button.active {
+  box-shadow:
+    inset 2px 2px 4px color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -2px -2px 4px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  color: var(--primary-color);
+}
+
+.delete-btn {
+  color: var(--danger-color) !important;
+  padding: 4px !important;
+}
+
+.current-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.current-list h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--color);
+}
+
+.add-task {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.add-task input {
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--color) 30%, transparent);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color);
+  outline: none;
+}
+
+.add-task input:first-child {
+  flex: 1;
+}
+
+.time-input {
+  width: 80px !important;
+}
+
+.add-task button {
+  background: var(--success-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tasks-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 350px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--background-color);
+  border-radius: 8px;
+  box-shadow:
+    3px 3px 6px color-mix(in srgb, var(--background-color) 89%, #000000),
+    -3px -3px 6px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  transition: all 0.2s;
+}
+
+.task-item.completed {
+  opacity: 0.6;
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+}
+
+.complete-btn {
+  background: var(--success-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.task-content {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-text {
+  color: var(--color);
+  font-size: 0.95rem;
+}
+
+.task-time {
+  background: var(--warning-color);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.task-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.task-actions button {
+  background: transparent;
+  border: none;
+  color: var(--color);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.task-actions button:hover {
+  opacity: 1;
+}
+
+.edit-task {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.edit-task input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid color-mix(in srgb, var(--color) 30%, transparent);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color);
+  outline: none;
+}
+
+.edit-task button {
+  background: var(--success-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.empty-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--color) 60%, transparent);
+  font-style: italic;
+}
+
+.pomodoro-settings {
+  background: var(--background-color);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow:
+    inset 3px 3px 6px color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -3px -3px 6px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.setting-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.setting-group label {
+  font-size: 0.9rem;
+  color: var(--color);
+  font-weight: 500;
+}
+
+.setting-group input {
+  width: 60px;
+  padding: 6px 8px;
+  border: 1px solid color-mix(in srgb, var(--color) 30%, transparent);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color);
+  outline: none;
+  text-align: center;
+}
+
+.save-settings {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 5px;
+}
+
+.timer-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circular-timer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-svg {
+  transform: rotate(-90deg);
+}
+
+.progress-circle {
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timer-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.time-display {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--color);
+  margin-bottom: 5px;
+}
+
+.session-type {
+  font-size: 1rem;
+  color: color-mix(in srgb, var(--color) 70%, transparent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.pomodoro-controls {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.control-btn {
+  background: var(--background-color);
+  border: none;
+  color: var(--color);
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 50%;
+  box-shadow:
+    5px 5px 10px color-mix(in srgb, var(--background-color) 89%, #000000),
+    -5px -5px 10px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+}
+
+.control-btn:hover {
+  box-shadow:
+    inset 5px 5px 10px color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -5px -5px 10px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+}
+
+.control-btn.primary {
+  background: var(--primary-color);
+  color: white;
+  box-shadow:
+    2px 2px 5px color-mix(in srgb, var(--primary-color) 50%, #000000),
+    -2px -2px 5px color-mix(in srgb, var(--primary-color) 80%, #fff);
+}
+
+.control-btn.primary:hover {
+  box-shadow:
+    inset 5px 5px 10px color-mix(in srgb, var(--primary-color) 70%, #000000),
+    inset -5px -5px 10px color-mix(in srgb, var(--primary-color) 90%, #fff);
+}
+
+.pomodoro-stats {
+  text-align: center;
+  color: var(--color);
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+.pomodoro-stats p {
+  margin: 0;
+  padding: 8px 16px;
+  background: var(--background-color);
+  border-radius: 20px;
+  box-shadow:
+    inset 3px 3px 6px color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -3px -3px 6px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+}
+
+/* Scrollbar styling */
+.tasks-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tasks-list::-webkit-scrollbar-track {
+  background: color-mix(in srgb, var(--background-color) 95%, #000000);
+  border-radius: 3px;
+}
+
+.tasks-list::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color) 30%, transparent);
+  border-radius: 3px;
+}
+
+.tasks-list::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color) 50%, transparent);
+}
+
+/* Audio Player Styles */
+.audio-player-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--background-color);
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--color) 20%, transparent 80%);
+}
+
+.audio-player {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.audio-upload {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.upload-btn,
+.playlist-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--primary-color);
+  color: var(--color);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.upload-btn:hover,
+.playlist-btn:hover {
+  background: color-mix(in srgb, var(--primary-color) 85%, var(--color) 15%);
+  transform: translateY(-1px);
+}
+
+.upload-btn:active,
+.playlist-btn:active {
+  transform: translateY(0);
+}
+
+.audio-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--primary-color) 10%, transparent 90%);
+  border-radius: 10px;
+  border: 1px solid
+    color-mix(in srgb, var(--primary-color) 30%, transparent 70%);
+}
+
+.track-info {
+  text-align: center;
+}
+
+.track-name {
+  font-weight: 600;
+  color: var(--color);
+  font-size: 0.95rem;
+}
+
+.audio-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.time-current,
+.time-duration {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--color) 80%, transparent 20%);
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.progress-slider {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--color) 20%, transparent 80%);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+.progress-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  border: 2px solid var(--background-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  border: 2px solid var(--background-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.audio-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.audio-control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--primary-color);
+  color: var(--color);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px
+    color-mix(in srgb, var(--primary-color) 30%, transparent 70%);
+}
+
+.audio-control-btn:hover {
+  background: color-mix(in srgb, var(--primary-color) 85%, var(--color) 15%);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px
+    color-mix(in srgb, var(--primary-color) 40%, transparent 60%);
+}
+
+.audio-control-btn:active {
+  transform: scale(0.98);
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: color-mix(in srgb, var(--color) 80%, transparent 20%);
+}
+
+.volume-slider {
+  width: 80px;
+  height: 4px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--color) 20%, transparent 80%);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  border: none;
+}
+
+/* Playlist Styles */
+.playlist {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--color) 5%, transparent 95%);
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--color) 15%, transparent 85%);
+}
+
+.playlist h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color);
+}
+
+.playlist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: var(--background-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.playlist-item:hover {
+  background: color-mix(
+    in srgb,
+    var(--primary-color) 10%,
+    var(--background-color) 90%
+  );
+  border-color: color-mix(in srgb, var(--primary-color) 30%, transparent 70%);
+  transform: translateX(4px);
+}
+
+.playlist-item.active {
+  background: color-mix(
+    in srgb,
+    var(--primary-color) 15%,
+    var(--background-color) 85%
+  );
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.playlist-item .track-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: inherit;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+.playlist-item svg {
+  color: color-mix(in srgb, var(--color) 60%, transparent 40%);
+  transition: color 0.2s ease;
+}
+
+.playlist-item:hover svg,
+.playlist-item.active svg {
+  color: var(--primary-color);
+}
+
+.empty-playlist {
+  text-align: center;
+  padding: 2rem;
+  color: color-mix(in srgb, var(--color) 60%, transparent 40%);
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .audio-upload {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .upload-btn,
+  .playlist-btn {
+    justify-content: center;
+  }
+
+  .audio-progress {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .time-current,
+  .time-duration {
+    min-width: auto;
+  }
+
+  .audio-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .volume-control {
+    justify-content: center;
+  }
+
+  .playlist-item .track-name {
+    max-width: 150px;
+  }
+}
+
+/* Smooth animations for progress bars */
+.progress-slider,
+.volume-slider {
+  transition: background 0.2s ease;
+}
+
+.progress-slider::-webkit-slider-thumb,
+.volume-slider::-webkit-slider-thumb {
+  transition: all 0.2s ease;
+}
+
+.progress-slider:hover::-webkit-slider-thumb,
+.volume-slider:hover::-webkit-slider-thumb {
+  transform: scale(1.1);
+}
+
+/* Custom scrollbar for playlist */
+.playlist-items::-webkit-scrollbar {
+  width: 6px;
+}
+
+.playlist-items::-webkit-scrollbar-track {
+  background: color-mix(in srgb, var(--color) 10%, transparent 90%);
+  border-radius: 3px;
+}
+
+.playlist-items::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color) 30%, transparent 70%);
+  border-radius: 3px;
+}
+
+.playlist-items::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color) 50%, transparent 50%);
+}

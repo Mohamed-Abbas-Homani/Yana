@@ -7,6 +7,7 @@ import "./SideBar.css";
 import useNoteStore from "../../../services/note.ts";
 import styled from "styled-components";
 
+// ✅ Make this a styled <label> so it triggers the input inside on click
 const ColorWrapper = styled.label<{ color: string; border?: boolean }>`
   display: inline-block;
   width: 1.31rem;
@@ -17,12 +18,17 @@ const ColorWrapper = styled.label<{ color: string; border?: boolean }>`
   margin: 0.81rem 0;
   transition: all 0.34s;
   border: ${({ border }) => (border ? "0.1rem solid var(--color)" : "none")};
-`;
+  position: relative;
 
-const HiddenInput = styled.input`
-  display: none;
+  input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    border-radius: 50%;
+  }
 `;
-
 interface SideBarProps {
   setImageURL: (url: string | null) => void;
   setBackImage: (image: any) => void;
@@ -57,23 +63,25 @@ const SideBar: React.FC<SideBarProps> = ({
 
   return (
     <div className="side-bar-menu">
+      {/* ✅ Font Color Picker */}
       <ColorWrapper
         title={t("changeFontColor", "Change font color")}
         color={currentFont}
       >
-        <HiddenInput
+        <input
           type="color"
           value={currentFont}
           onChange={(e) => setCurrentFont(e.target.value)}
         />
       </ColorWrapper>
 
+      {/* ✅ Background Color Picker */}
       <ColorWrapper
         title={t("changeBackgroundColor", "Change background color")}
         color={currentBack}
         border
       >
-        <HiddenInput
+        <input
           type="color"
           value={currentBack}
           onChange={(e) => {
@@ -84,6 +92,7 @@ const SideBar: React.FC<SideBarProps> = ({
         />
       </ColorWrapper>
 
+      {/* Emoji Picker Toggle */}
       <div
         title={t("pickEmoji", "Pick an emoji!")}
         className="emojie-button-container"
@@ -91,6 +100,8 @@ const SideBar: React.FC<SideBarProps> = ({
       >
         <MdEmojiEmotions size="1.5rem" />
       </div>
+
+      {/* Image Upload */}
       <div
         title={t("setImageBackground", "Set an image as background")}
         className="img-back-container"
@@ -106,6 +117,8 @@ const SideBar: React.FC<SideBarProps> = ({
           onChange={handleImageUpload}
         />
       </div>
+
+      {/* Copy to Clipboard */}
       <div
         title={t("copyToClipboard", "Copy to clipboard")}
         className="copy-container"
@@ -122,6 +135,8 @@ const SideBar: React.FC<SideBarProps> = ({
       >
         <MdContentCopy size="1.5rem" />
       </div>
+
+      {/* Paste from Clipboard */}
       <div
         title={t("pasteFromClipboard", "Paste from clipboard")}
         className="paste-container"
@@ -131,6 +146,8 @@ const SideBar: React.FC<SideBarProps> = ({
       >
         <MdContentPaste size="1.5rem" />
       </div>
+
+      {/* Emoji Picker */}
       {showEmojie && (
         <div className="emoji-picker-container" ref={emojiPickerRef}>
           <EmojiPicker onEmojiClick={handleEmojiSelect} />

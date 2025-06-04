@@ -40,7 +40,7 @@ const MarkdownEditor = ({
           className="textarea"
           placeholder={t(
             "markdownEditorPlaceholder",
-            "Write down your note..."
+            "Write down your note...",
           )}
         />
       ) : (
@@ -71,7 +71,7 @@ const MarkdownEditor = ({
                   {children}
                 </Link>
               ),
-              img: ({ src, alt}: any) => {
+              img: ({ src, alt }: any) => {
                 const altText = alt ?? "";
                 const srcValue = src ?? "";
                 const isCommaSeparated = srcValue.includes(",");
@@ -81,9 +81,7 @@ const MarkdownEditor = ({
                   try {
                     new URL(srcValue);
                     isUrl = true;
-                  } catch {
-                    console.log("Not a valid URL:", srcValue);
-                  }
+                  } catch {}
                 }
 
                 const shouldOverride =

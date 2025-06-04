@@ -5,6 +5,7 @@ import MainPage from "../pages/MainPage";
 import HomePage from "../pages/HomePage";
 import SettingsPage from "../pages/SettingsPage";
 import WhiteBoardPage from "../pages/WhiteBoardPage";
+import TodoPomodoroPage from "../pages/TodoPomodoroPage";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: "/whiteboard",
     element: <WhiteBoardPage />,
+  },
+  {
+    path: "/pomodoro",
+    element: <TodoPomodoroPage />,
   },
 ]);
 

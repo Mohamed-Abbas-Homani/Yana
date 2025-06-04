@@ -19,6 +19,8 @@ type Store = {
   setUserAction: (userAction: string) => void;
   lastPage: string;
   setLastPage: (lastPage: string) => void;
+  isPomoOn: boolean;
+  setIsPomoOn: (isPomoOn: boolean) => void;
 };
 
 const useStore = create<Store>()(
@@ -30,6 +32,10 @@ const useStore = create<Store>()(
         cmenuStatus: "hide",
         userAction: "neutral",
         lastPage: "/",
+        isPomoOn: false,
+        setIsPomoOn: (isPomoOn: boolean) => {
+          set({ isPomoOn });
+        },
         addNotification: (message, type) => {
           const id = Math.random(); // Generate a unique ID for the notification
           set((state) => ({
@@ -68,4 +74,15 @@ const useStore = create<Store>()(
   ),
 );
 
+type TempStore = {
+  justEnter: boolean;
+  setJustEnter: (justEnter: boolean) => void;
+};
+
+export const useTempStore = create<TempStore>()((set) => ({
+  justEnter: true,
+  setJustEnter: (justEnter: boolean) => {
+    set({ justEnter });
+  },
+}));
 export default useStore;

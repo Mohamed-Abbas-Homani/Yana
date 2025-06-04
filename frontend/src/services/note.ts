@@ -48,7 +48,7 @@ const useNoteStore = create<NoteStore>()(
           const { content, history } = get();
           if (newContent !== content) {
             const updatedHistory = [...history, content];
-            const limitedHistory = updatedHistory.slice(-100)// Keep only last 100
+            const limitedHistory = updatedHistory.slice(-100); // Keep only last 100
             set({
               content: newContent,
               history: limitedHistory,
@@ -134,9 +134,9 @@ const useNoteStore = create<NoteStore>()(
             mood: "",
           }),
       }),
-      { name: "yana-editor-store" }
-    )
-  )
+      { name: "yana-editor-store" },
+    ),
+  ),
 );
 
 type FileNoteStore = {
@@ -154,7 +154,7 @@ export const useFileNoteStore = create<FileNoteStore>()(
     backImage: null,
     setBackImage: (backImage: File | null) => set({ backImage }),
     reset: () => set({ files: [], backImage: null }),
-  }))
+  })),
 );
 
 type DisplayNote = {
@@ -205,7 +205,7 @@ export const useNotesDisplayStore = create<NotesDisplayStore>()(
           ? state.filters.filter((f) => f !== filter)
           : [...state.filters, filter],
       })),
-  }))
+  })),
 );
 
 export default useNoteStore;

@@ -56,28 +56,30 @@ import {
   StatusHighlight,
 } from "./style";
 import { useTranslation } from "react-i18next";
-import useWhiteboardStore, { DrawingElement, Point } from "../../services/whiteBaordStore";
-
+import useWhiteboardStore, {
+  DrawingElement,
+  Point,
+} from "../../services/whiteBaordStore";
 
 const Whiteboard: React.FC = () => {
-const {
-  elements,
-  setElements,
-  history,
-  setHistory,
-  historyIndex,
-  setHistoryIndex,
-  color,
-  setColor,
-  fillColor,
-  setFillColor,
-  strokeWidth,
-  setStrokeWidth,
-  fontSize,
-  setFontSize,
-  zoom,
-  setZoom,
-} = useWhiteboardStore();
+  const {
+    elements,
+    setElements,
+    history,
+    setHistory,
+    historyIndex,
+    setHistoryIndex,
+    color,
+    setColor,
+    fillColor,
+    setFillColor,
+    strokeWidth,
+    setStrokeWidth,
+    fontSize,
+    setFontSize,
+    zoom,
+    setZoom,
+  } = useWhiteboardStore();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const textInputRef = useRef<HTMLInputElement>(null);
@@ -88,7 +90,7 @@ const {
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentPath, setCurrentPath] = useState<Point[]>([]);
   const [startPoint, setStartPoint] = useState<Point | null>(null);
-  const [selectedElement, setSelectedElement] = useState<string | null>(null);;
+  const [selectedElement, setSelectedElement] = useState<string | null>(null);
   const [panOffset] = useState({ x: 0, y: 0 });
 
   // UI states
@@ -501,7 +503,6 @@ const {
       setTextPosition(point);
       setScreenTextPosition(screenPos);
       setShowTextInput(true);
-      console.log(tool, screenPos, point, showTextInput);
       return;
     }
 
@@ -661,7 +662,7 @@ const {
     if (!canvas) return;
 
     const link = document.createElement("a");
-    link.download = "whiteboard2.png";
+    link.download = `whiteboard_at_${new Date().toISOString()}.png`;
     link.href = canvas.toDataURL();
     link.click();
     document.body.removeChild(link);

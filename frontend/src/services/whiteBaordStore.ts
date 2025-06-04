@@ -78,9 +78,9 @@ const useWhiteboardStore = create<WhiteboardStore>()(
       }),
       {
         name: "whiteboard-store",
-      }
-    )
-  )
+      },
+    ),
+  ),
 );
 
 export default useWhiteboardStore;
