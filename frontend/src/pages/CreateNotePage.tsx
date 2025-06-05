@@ -16,7 +16,7 @@ import useGetNote from "../hooks/useGetNote.ts";
 const CreateNotePage = () => {
   const { id } = useGetNote();
   const location = useLocation();
-  const { setUserAction, setLastPage, isPomoOn } = useStore();
+  const { setUserAction, setLastPage } = useStore();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const [imageURL, setImageURL] = useState<string | null>(null);
   const { backImage, setBackImage } = useFileNoteStore();

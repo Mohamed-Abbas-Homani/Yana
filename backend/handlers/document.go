@@ -25,6 +25,7 @@ func GetDocument(c echo.Context) error {
     return c.Blob(http.StatusOK, *document.Type, document.Data)
 }
 
+
 func GetNoteDocumentByName(c echo.Context) error {
 	noteId := c.Param("id")
 	documentName := c.Param("documentName")

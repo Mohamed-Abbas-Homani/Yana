@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import notificationSound from "../assets/notification.mp3";
-
+import { convertFileSrc } from "@tauri-apps/api/core";
+import { CONSTANTS } from "../const";
 // Types
 interface Task {
   id: string;
@@ -55,15 +56,20 @@ export class PomodoroTimer {
 
   initAudio() {
     if (!this.audio) {
-      this.audio = new Audio(notificationSound);
+      const audioPath = convertFileSrc("assets/sound.mp3");
+      this.audio = new Audio(audioPath);
       this.audio.preload = "auto";
     }
   }
 
+  initAudio2() {
+    this.audio = new Audio(notificationSound);
+    this.audio.preload = "auto";
+  }
   start() {
     if (this.intervalId) return; // Already running
-
-    // Update last tick time
+    this.initAudio2();
+    // Update  last tick time
     if (this.store) {
       this.store.getState().setPomodoroState({
         lastTickTime: Date.now(),
@@ -71,8 +77,8 @@ export class PomodoroTimer {
       });
     }
     this.systemStore.getState().setIsPomoOn(true);
-    this.intervalId = window.setInterval(() => {
-      this.tick();
+    this.intervalId = window.setInterval(async () => {
+      await this.tick();
     }, 1000);
   }
 
@@ -87,7 +93,7 @@ export class PomodoroTimer {
     }
   }
 
-  private tick() {
+  private async tick() {
     if (!this.store) return;
 
     const state = this.store.getState();
@@ -105,7 +111,7 @@ export class PomodoroTimer {
       });
     } else if (pomodoroState.timeLeft === 0) {
       // Play notification
-      this.playNotification();
+      await this.playNotification();
       // Complete pomodoro
       state.completePomodoro();
       // Continue timer for next session
@@ -113,15 +119,11 @@ export class PomodoroTimer {
     }
   }
 
-  private playNotification() {
+  private async playNotification() {
     try {
-      if (this.audio) {
-        this.audio.currentTime = 0;
-        this.audio
-          .play()
-          .catch((e) => console.error("Failed to play notification:", e));
-      }
-
+      await fetch(`${CONSTANTS.BackURL}/music`, {
+        method: "POST",
+      });
       const state = this.store?.getState();
       const session = state?.pomodoroState.currentSession;
       let message = "Time to take a break!";

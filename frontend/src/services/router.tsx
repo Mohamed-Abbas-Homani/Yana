@@ -5,7 +5,7 @@ import MainPage from "../pages/MainPage";
 import HomePage from "../pages/HomePage";
 import SettingsPage from "../pages/SettingsPage";
 import WhiteBoardPage from "../pages/WhiteBoardPage";
-import TodoPomodoroPage from "../pages/TodoPomodoroPage";
+import TodoPomodoroPage from "../pages/PomodoroTaskPage";
 
 const router = createBrowserRouter([
   {

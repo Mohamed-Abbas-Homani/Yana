@@ -5,11 +5,11 @@ import (
 	"mash-notes-back/handlers"
 	"mash-notes-back/models"
 	"mash-notes-back/routes"
-	"os"
 	"path/filepath"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+    "os"
 )
 
 func main() {

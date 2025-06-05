@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { summarizeText } from "../../utils/functions";
 import { useTranslation } from "react-i18next";
+import "./Note.css";
 
 // Function to format timestamp
 const formatDate = (timestamp: string) => {

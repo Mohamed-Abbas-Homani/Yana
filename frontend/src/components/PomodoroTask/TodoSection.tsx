@@ -1,7 +1,301 @@
 import { useState } from "react";
 import { usePomodoroTaskStore } from "../../services/pomodoroTaskStore";
 import { Check, Edit3, Plus, Settings, Trash2 } from "lucide-react";
-import "./TodoPomodoro.css";
+import styled from "styled-components";
+
+const TodoSectionContainer = styled.div`
+  width: 70vw;
+  height: 100%;
+  padding: 20px;
+  background: var(--background-color);
+  box-shadow:
+    inset 7px 7px 13px color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -7px -7px 13px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  border-radius: 13px 0 0 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+
+const TodoHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--color);
+  }
+`;
+
+const SettingsButton = styled.button`
+  background: transparent;
+  border: none;
+  color: var(--color);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow:
+    3px 3px 5px color-mix(in srgb, var(--background-color) 89%, #000000),
+    -3px -3px 5px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  transition: all 0.2s;
+
+  &:hover {
+    box-shadow:
+      inset 3px 3px 5px color-mix(in srgb, var(--background-color) 89%, #000000),
+      inset -3px -3px 5px
+        color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  }
+`;
+
+const ListManagement = styled.div`
+  background: var(--background-color);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow:
+    inset 3px 3px 6px color-mix(in srgb, var(--background-color) 89%, #000000),
+    inset -3px -3px 6px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const AddListContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid color-mix(in srgb, var(--color) 30%, transparent);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--color);
+    outline: none;
+  }
+
+  button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
+const ListSelector = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+const ListItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  button {
+    background: transparent;
+    border: none;
+    color: var(--color);
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 6px;
+    box-shadow:
+      2px 2px 4px color-mix(in srgb, var(--background-color) 89%, #000000),
+      -2px -2px 4px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+    transition: all 0.2s;
+
+    &.active {
+      box-shadow:
+        inset 2px 2px 4px
+          color-mix(in srgb, var(--background-color) 89%, #000000),
+        inset -2px -2px 4px
+          color-mix(in srgb, var(--background-color) 97.5%, #fff);
+      color: var(--primary-color);
+    }
+  }
+`;
+
+const DeleteButton = styled.button`
+  color: var(--danger-color) !important;
+  padding: 4px !important;
+`;
+
+const CurrentList = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--color);
+  }
+`;
+
+const AddTaskContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  input {
+    padding: 8px 12px;
+    border: 1px solid color-mix(in srgb, var(--color) 30%, transparent);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--color);
+    outline: none;
+
+    &:first-child {
+      flex: 1;
+    }
+  }
+`;
+
+const TimeInput = styled.input`
+  width: 80px !important;
+`;
+
+const AddTaskButton = styled.button`
+  background: var(--success-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const TasksList = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 350px;
+`;
+
+const TaskItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--background-color);
+  border-radius: 8px;
+  box-shadow:
+    3px 3px 6px color-mix(in srgb, var(--background-color) 89%, #000000),
+    -3px -3px 6px color-mix(in srgb, var(--background-color) 97.5%, #fff);
+  transition: all 0.2s;
+
+  &.completed {
+    opacity: 0.6;
+
+    .task-text {
+      text-decoration: line-through;
+    }
+  }
+`;
+
+const CompleteButton = styled.button`
+  background: var(--success-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+`;
+
+const TaskContent = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const TaskText = styled.span`
+  color: var(--color);
+  font-size: 0.95rem;
+`;
+
+const TaskTime = styled.span`
+  background: var(--warning-color);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+`;
+
+const TaskActions = styled.div`
+  display: flex;
+  gap: 5px;
+
+  button {
+    background: transparent;
+    border: none;
+    color: var(--color);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+`;
+
+const EditTask = styled.div`
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  input {
+    flex: 1;
+    padding: 6px 10px;
+    border: 1px solid color-mix(in srgb, var(--color) 30%, transparent);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--color);
+    outline: none;
+  }
+
+  button {
+    background: var(--success-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+`;
+
+const EmptyState = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--color) 60%, transparent);
+  font-style: italic;
+`;
 
 const TodoSection: React.FC = () => {
   const {
@@ -61,20 +355,17 @@ const TodoSection: React.FC = () => {
   };
 
   return (
-    <div className="todo-section">
-      <div className="todo-header">
+    <TodoSectionContainer>
+      <TodoHeader>
         <h2>Todo Lists</h2>
-        <button
-          onClick={() => setShowSettings(!showSettings)}
-          className="settings-btn"
-        >
+        <SettingsButton onClick={() => setShowSettings(!showSettings)}>
           <Settings size={16} />
-        </button>
-      </div>
+        </SettingsButton>
+      </TodoHeader>
 
       {showSettings && (
-        <div className="list-management">
-          <div className="add-list">
+        <ListManagement>
+          <AddListContainer>
             <input
               type="text"
               placeholder="New list name..."
@@ -85,34 +376,31 @@ const TodoSection: React.FC = () => {
             <button onClick={handleAddList}>
               <Plus size={16} />
             </button>
-          </div>
+          </AddListContainer>
 
-          <div className="list-selector">
+          <ListSelector>
             {todoLists.map((list) => (
-              <div key={list.id} className="list-item">
+              <ListItem key={list.id}>
                 <button
                   className={currentListId === list.id ? "active" : ""}
                   onClick={() => setCurrentList(list.id)}
                 >
                   {list.name} ({list.tasks.length})
                 </button>
-                <button
-                  onClick={() => deleteTodoList(list.id)}
-                  className="delete-btn"
-                >
+                <DeleteButton onClick={() => deleteTodoList(list.id)}>
                   <Trash2 size={14} />
-                </button>
-              </div>
+                </DeleteButton>
+              </ListItem>
             ))}
-          </div>
-        </div>
+          </ListSelector>
+        </ListManagement>
       )}
 
       {currentList && (
-        <div className="current-list">
+        <CurrentList>
           <h3>{currentList.name}</h3>
 
-          <div className="add-task">
+          <AddTaskContainer>
             <input
               type="text"
               placeholder="Add new task..."
@@ -120,7 +408,7 @@ const TodoSection: React.FC = () => {
               onChange={(e) => setNewTaskText(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleAddTask()}
             />
-            <input
+            <TimeInput
               type="text"
               placeholder="Time (min)"
               value={newTaskTime || ""}
@@ -129,28 +417,26 @@ const TodoSection: React.FC = () => {
                   e.target.value ? Number(e.target.value) : undefined,
                 )
               }
-              className="time-input"
             />
-            <button onClick={handleAddTask}>
+            <AddTaskButton onClick={handleAddTask}>
               <Plus size={16} />
-            </button>
-          </div>
+            </AddTaskButton>
+          </AddTaskContainer>
 
-          <div className="tasks-list">
+          <TasksList>
             {currentList.tasks.map((task) => (
-              <div
+              <TaskItem
                 key={task.id}
-                className={`task-item ${task.completed ? "completed" : ""}`}
+                className={`${task.completed ? "completed" : ""}`}
               >
-                <button
+                <CompleteButton
                   onClick={() => toggleTask(currentList.id, task.id)}
-                  className="complete-btn"
                 >
                   <Check size={16} />
-                </button>
+                </CompleteButton>
 
                 {editingTask === task.id ? (
-                  <div className="edit-task">
+                  <EditTask>
                     <input
                       type="text"
                       value={editTaskText}
@@ -163,38 +449,36 @@ const TodoSection: React.FC = () => {
                     <button onClick={() => handleSaveEdit(task.id)}>
                       Save
                     </button>
-                  </div>
+                  </EditTask>
                 ) : (
-                  <div className="task-content">
-                    <span className="task-text">{task.text}</span>
+                  <TaskContent>
+                    <TaskText>{task.text}</TaskText>
                     {task.timeToFinish && (
-                      <span className="task-time">
-                        {formatTime(task.timeToFinish)}
-                      </span>
+                      <TaskTime>{formatTime(task.timeToFinish)}</TaskTime>
                     )}
-                  </div>
+                  </TaskContent>
                 )}
 
-                <div className="task-actions">
+                <TaskActions>
                   <button onClick={() => handleEditTask(task.id, task.text)}>
                     <Edit3 size={14} />
                   </button>
                   <button onClick={() => deleteTask(currentList.id, task.id)}>
                     <Trash2 size={14} />
                   </button>
-                </div>
-              </div>
+                </TaskActions>
+              </TaskItem>
             ))}
-          </div>
-        </div>
+          </TasksList>
+        </CurrentList>
       )}
 
       {todoLists.length === 0 && (
-        <div className="empty-state">
+        <EmptyState>
           <p>No todo lists yet. Create your first list to get started!</p>
-        </div>
+        </EmptyState>
       )}
-    </div>
+    </TodoSectionContainer>
   );
 };
 

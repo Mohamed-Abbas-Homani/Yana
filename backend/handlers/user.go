@@ -1,16 +1,22 @@
 package handlers
 
 import (
-	"fmt"
-	"io"
-	"log"
 	"mash-notes-back/models"
 	"net/http"
+	"path/filepath"
 	"strconv"
 
+	"github.com/hajimehoshi/go-mp3"
+	"github.com/hajimehoshi/oto/v2"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"time"
 )
 
 func SaveUserHandler(c echo.Context) error {
@@ -160,4 +166,58 @@ func GetUserProfilePictureHandler(c echo.Context) error {
 
 	// Send the document as a binary response without specifying MIME type
 	return c.Blob(http.StatusOK, "", user.ProfilePicture)
+}
+
+func PlayMP3Async(filePath string) {
+    go func() {
+        f, err := os.Open(filePath)
+        if err != nil {
+            log.Println("Failed to open file:", err)
+            return
+        }
+        defer f.Close()
+
+        decoder, err := mp3.NewDecoder(f)
+        if err != nil {
+            log.Println("Failed to decode mp3:", err)
+            return
+        }
+
+        ctx, readyChan, err := oto.NewContext(decoder.SampleRate(), 2, 2)
+        if err != nil {
+            log.Println("Failed to create audio context:", err)
+            return
+        }
+        <-readyChan // wait until context is ready
+
+        player := ctx.NewPlayer(decoder)
+        defer player.Close()
+
+        player.Play()
+
+        // Wait until playback is finished
+        for player.IsPlaying() {
+            time.Sleep(time.Millisecond)
+        }
+    }()
+}
+
+func getExecutableDir() (string, error) {
+    exePath, err := os.Executable()
+    if err != nil {
+        return "", err
+    }
+    exeDir := filepath.Dir(exePath)
+    return exeDir, nil
+}
+
+func PlayPomodoroHandler(c echo.Context) error {
+    exeDir, err := getExecutableDir()
+    if err != nil {
+        return c.String(http.StatusInternalServerError, "Failed to determine executable directory")
+    }
+
+    mp3Path := filepath.Join(exeDir, "music", "notification.mp3")
+    PlayMP3Async(mp3Path)
+    return c.String(http.StatusOK, "Playback started")
 }

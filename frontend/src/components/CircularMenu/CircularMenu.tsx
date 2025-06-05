@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./CircularMenu.css";
 import { FaChalkboard, FaHome, FaPencilAlt, FaUser } from "react-icons/fa";
-import { IoSettings, IoTime } from "react-icons/io5";
+import { IoTime } from "react-icons/io5";
 import { debounce } from "../../utils/functions";
 import { useNavigate } from "react-router-dom";
 import useStore from "../../services/store";

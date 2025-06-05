@@ -3,7 +3,7 @@ import useStore from "../services/store";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 const MainPage = () => {
-  const { lastPage, userAction, user, isPomoOn } = useStore();
+  const { lastPage, userAction, user } = useStore();
   const { t } = useTranslation();
   const navigate = useNavigate();
   useEffect(() => {

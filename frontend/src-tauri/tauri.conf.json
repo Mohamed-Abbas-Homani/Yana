@@ -10,6 +10,7 @@
     "frontendDist": "../dist"
   },
   "app": {
+    
     "windows": [
       {
         "title": "y a n a",
@@ -22,10 +23,16 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": "asset: http://asset.localhost",
+      "assetProtocol":{
+        "enable" : true
+      }
     }
   },
   "bundle": {
+        "resources": [
+      "music/*"
+    ],
     "externalBin": ["binaries/yana-back"],
     "active": true,
     "targets": "all",
