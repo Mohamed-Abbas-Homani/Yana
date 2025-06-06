@@ -1,5 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Play, Pause, RotateCcw, Settings } from "lucide-react";
+import { useState, useEffect } from "react";
+import {
+  Play,
+  Pause,
+  RotateCcw,
+  Settings,
+  RotateCw,
+  Activity,
+  Clock,
+  Target,
+} from "lucide-react";
 import styled from "styled-components";
 import {
   PomodoroTimer,
@@ -9,7 +18,7 @@ import useStore from "../../services/store";
 
 // Styled Components
 const PomodoroContainer = styled.div`
-  width: 30vw;
+  width: 35vw;
   height: 100%;
   padding: 20px;
   background: var(--background-color);
@@ -21,6 +30,7 @@ const PomodoroContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  position: relative;
 `;
 
 const PomodoroHeader = styled.div`
@@ -92,6 +102,12 @@ const SettingGroup = styled.div`
   }
 `;
 
+const SettingsButtonGroup = styled.div`
+  display: flex;
+  gap: 8px;
+  margin-top: 5px;
+`;
+
 const SaveSettings = styled.button`
   background: var(--primary-color);
   color: white;
@@ -100,7 +116,36 @@ const SaveSettings = styled.button`
   padding: 8px 16px;
   cursor: pointer;
   font-weight: 500;
-  margin-top: 5px;
+  flex: 1;
+  transition: all 0.2s;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px
+      color-mix(in srgb, var(--primary-color) 50%, transparent);
+  }
+`;
+
+const ResetCountButton = styled.button`
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 500;
+  flex: 1;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.85rem;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px color-mix(in srgb, #e74c3c 50%, transparent);
+  }
 `;
 
 const TimerDisplay = styled.div`
@@ -118,6 +163,9 @@ const CircularTimer = styled.div`
 
 const TimerSvg = styled.svg`
   transform: rotate(-90deg);
+  filter: drop-shadow(
+    0 2px 4px color-mix(in srgb, var(--background-color) 80%, #000000)
+  );
 `;
 
 const ProgressCircle = styled.circle`
@@ -138,6 +186,8 @@ const TimeDisplay = styled.div`
   font-weight: bold;
   color: var(--color);
   margin-bottom: 5px;
+  text-shadow: 0 1px 2px
+    color-mix(in srgb, var(--background-color) 90%, #000000);
 `;
 
 const SessionType = styled.div`
@@ -212,8 +262,54 @@ const PomodoroStats = styled.div`
   }
 `;
 
+const StatusBar = styled.div`
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background: var(--background-color);
+  border-radius: 0 0 13px 0;
+  box-shadow:
+    inset 2px 2px 4px color-mix(in srgb, var(--background-color) 92%, #000000),
+    inset -2px -2px 4px color-mix(in srgb, var(--background-color) 98%, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--color) 75%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--color) 15%, transparent);
+`;
+
+const StatusItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+`;
+
+const SessionIndicator = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+`;
+
+const SessionDot = styled.div`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: ${(props) => props.color || "#e0e0e0"};
+  box-shadow: 0 0 4px ${(props) => props.color || "#e0e0e0"}40;
+`;
+
 // Component Implementation
-const PomodoroSection: React.FC = () => {
+const PomodoroSection = () => {
   const {
     pomodoroSettings,
     pomodoroState,
@@ -221,10 +317,12 @@ const PomodoroSection: React.FC = () => {
     startPomodoro,
     pausePomodoro,
     resetPomodoro,
+    resetCompletedPomodoros,
   } = usePomodoroTaskStore();
 
   const [showSettings, setShowSettings] = useState(false);
   const [tempSettings, setTempSettings] = useState(pomodoroSettings);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     const timer = PomodoroTimer.getInstance();
@@ -232,7 +330,14 @@ const PomodoroSection: React.FC = () => {
     timer.initAudio();
     timer.syncTime();
 
-    return () => {};
+    // Update current time every second for status bar
+    const timeInterval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(timeInterval);
+    };
   }, []);
 
   useEffect(() => {
@@ -289,6 +394,30 @@ const PomodoroSection: React.FC = () => {
     setPomodoroSettings(tempSettings);
     setShowSettings(false);
     resetPomodoro();
+  };
+
+  const handleResetCount = () => {
+    if (
+      window.confirm(
+        "Are you sure you want to reset the completed pomodoros count?"
+      )
+    ) {
+      resetCompletedPomodoros();
+    }
+  };
+
+  const getNextSession = () => {
+    if (pomodoroState.currentSession === "work") {
+      const nextPomodoroCount = pomodoroState.completedPomodoros + 1;
+      return nextPomodoroCount % pomodoroSettings.longBreakInterval === 0
+        ? "Long Break"
+        : "Break";
+    }
+    return "Work";
+  };
+
+  const getTotalWorkTime = () => {
+    return pomodoroState.completedPomodoros * pomodoroSettings.workTime;
   };
 
   const circumference = 2 * Math.PI * 90;
@@ -354,9 +483,15 @@ const PomodoroSection: React.FC = () => {
               }
             />
           </SettingGroup>
-          <SaveSettings onClick={handleSaveSettings}>
-            Save Settings
-          </SaveSettings>
+          <SettingsButtonGroup>
+            <SaveSettings onClick={handleSaveSettings}>
+              Save Settings
+            </SaveSettings>
+            <ResetCountButton onClick={handleResetCount}>
+              <RotateCw size={14} />
+              Reset Count
+            </ResetCountButton>
+          </SettingsButtonGroup>
         </PomodoroSettings>
       )}
 
@@ -367,7 +502,7 @@ const PomodoroSection: React.FC = () => {
               cx="100"
               cy="100"
               r="90"
-              stroke="#e0e0e0"
+              stroke="color-mix(in srgb, var(--color) 20%, transparent)"
               strokeWidth="8"
               fill="none"
             />
@@ -412,6 +547,31 @@ const PomodoroSection: React.FC = () => {
       <PomodoroStats>
         <p>Completed Pomodoros: {pomodoroState.completedPomodoros}</p>
       </PomodoroStats>
+
+      <StatusBar>
+        <StatusItem>
+          <Clock />
+          {currentTime.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </StatusItem>
+
+        <SessionIndicator>
+          <StatusItem>
+            <Activity />
+            {pomodoroState.isRunning ? "Running" : "Paused"}
+          </StatusItem>
+          <SessionDot color={getSessionColor()} />
+        </SessionIndicator>
+
+        <StatusItem>
+          <Target />
+          Next: {getNextSession()}
+        </StatusItem>
+
+        <StatusItem>Work Time: {getTotalWorkTime()}m</StatusItem>
+      </StatusBar>
     </PomodoroContainer>
   );
 };
