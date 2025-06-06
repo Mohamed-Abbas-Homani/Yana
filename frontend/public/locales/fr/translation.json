@@ -123,5 +123,32 @@
   "loading": "Chargement...",
   "emptyFile": "Le fichier est vide",
   "previewNotSupported": "Aperçu non disponible pour ce type de fichier",
-  "errorReadingFile": "Erreur de lecture du fichier"
+  "errorReadingFile": "Erreur de lecture du fichier",
+  "pomodoroTimer": "Minuteur Pomodoro",
+  "workTime": "Temps de travail (min)",
+  "breakTime": "Temps de pause (min)",
+  "longBreakTime": "Longue pause (min)",
+  "longBreakInterval": "Intervalle de longue pause",
+  "saveSettings": "Enregistrer les paramètres",
+  "resetCount": "Réinitialiser le compteur",
+  "confirmResetCount": "Êtes-vous sûr de vouloir réinitialiser le compteur de pomodoros terminés ?",
+  "work": "Travail",
+  "break": "Pause",
+  "longBreak": "Longue pause",
+  "completedPomodoros": "Pomodoros terminés",
+  "running": "En cours",
+  "paused": "En pause",
+  "next": "Suivant",
+  "workTimeLabel": "Temps de travail",
+
+  "Todo Lists": "Listes de tâches",
+  "New list name...": "Nom de la nouvelle liste...",
+  "Add new task...": "Ajouter une nouvelle tâche...",
+  "Time": "Temps",
+  "No todo lists yet. Create your first list to get started!": "Aucune liste de tâches pour le moment. Créez votre première liste pour commencer !",
+  "tasks": "tâches",
+  "done": "terminées",
+  "total": "total",
+  "complete": "complété"
+
 }

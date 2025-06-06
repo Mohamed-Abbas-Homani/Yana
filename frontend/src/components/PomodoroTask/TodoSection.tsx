@@ -1,12 +1,25 @@
 import { useState } from "react";
 import { usePomodoroTaskStore } from "../../services/pomodoroTaskStore";
-import { Check, Edit3, Plus, Settings, Trash2, ChevronLeft, ChevronRight, ListTodo, CheckCircle, Clock, Calendar } from "lucide-react";
+import {
+  Check,
+  Edit3,
+  Plus,
+  Settings,
+  Trash2,
+  ChevronLeft,
+  ChevronRight,
+  ListTodo,
+  CheckCircle,
+  Clock,
+  Calendar,
+} from "lucide-react";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 
 const TodoSectionContainer = styled.div`
   width: 65vw;
-  height: 100%;
-  padding: 20px;
+  height: 100vh;
+  padding: 1.25rem;
   background: var(--background-color);
   box-shadow:
     inset 7px 7px 13px color-mix(in srgb, var(--background-color) 89%, #000000),
@@ -14,7 +27,7 @@ const TodoSectionContainer = styled.div`
   border-radius: 13px 0 0 13px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 0.94rem;
   position: relative;
 `;
 
@@ -36,7 +49,7 @@ const SettingsButton = styled.button`
   border: none;
   color: var(--color);
   cursor: pointer;
-  padding: 8px;
+  padding: 0.5rem;
   border-radius: 8px;
   box-shadow:
     3px 3px 5px color-mix(in srgb, var(--background-color) 89%, #000000),
@@ -54,23 +67,23 @@ const SettingsButton = styled.button`
 const ListManagement = styled.div`
   background: var(--background-color);
   border-radius: 8px;
-  padding: 15px;
+  padding: 0.94rem;
   box-shadow:
     inset 3px 3px 6px color-mix(in srgb, var(--background-color) 89%, #000000),
     inset -3px -3px 6px color-mix(in srgb, var(--background-color) 97.5%, #fff);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.625rem;
 `;
 
 const AddListContainer = styled.div`
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   align-items: center;
 
   input {
     flex: 1;
-    padding: 8px 12px;
+    padding: 0.5rem 0.75rem;
     border: 1px solid color-mix(in srgb, var(--color) 30%, transparent);
     border-radius: 6px;
     background: transparent;
@@ -83,7 +96,7 @@ const AddListContainer = styled.div`
     color: var(--color);
     border: none;
     border-radius: 6px;
-    padding: 8px;
+    padding: 0.5rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -94,20 +107,20 @@ const AddListContainer = styled.div`
 const ListSelector = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 0.32rem;
 `;
 
 const ListItem = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
 
   button {
     background: transparent;
     border: none;
     color: var(--color);
     cursor: pointer;
-    padding: 6px 10px;
+    padding: 0.375rem 0.625rem;
     border-radius: 6px;
     box-shadow:
       2px 2px 4px color-mix(in srgb, var(--background-color) 89%, #000000),
@@ -127,22 +140,22 @@ const ListItem = styled.div`
 
 const DeleteButton = styled.button`
   color: var(--danger-color) !important;
-  padding: 4px !important;
+  padding: 0.25rem !important;
 `;
 
 const CurrentList = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 0.94rem;
 `;
 
 const ListNavigation = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  margin-bottom: 10px;
+  gap: 0.94rem;
+  margin-bottom: 0.625rem;
 `;
 
 const NavButton = styled.button`
@@ -150,15 +163,15 @@ const NavButton = styled.button`
   border: none;
   color: color-mix(in srgb, var(--color) 40%, transparent);
   cursor: pointer;
-  padding: 8px 12px;
+  padding: 0.5rem 0.75rem;
   border-radius: 8px;
   font-size: 0.9rem;
   transition: all 0.3s;
   opacity: 0.6;
   display: flex;
   align-items: center;
-  gap: 6px;
-  max-width: 150px;
+  gap: 0.375rem;
+  max-width: 23.3vw;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -187,22 +200,22 @@ const CurrentListTitle = styled.h3`
   color: var(--color);
   text-align: center;
   font-weight: 600;
-  min-width: 200px;
+  min-width: 31.2vw;
 `;
 
 const AddTaskContainer = styled.div`
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   align-items: center;
 
   input {
-    padding: 8px 12px;
+    padding: 0.5rem 0.75rem;
     border: 1px solid color-mix(in srgb, var(--color) 30%, transparent);
     border-radius: 6px;
     background: transparent;
     color: var(--color);
     outline: none;
-
+    font-size: 0.95rem;
     &:first-child {
       flex: 1;
     }
@@ -210,7 +223,7 @@ const AddTaskContainer = styled.div`
 `;
 
 const TimeInput = styled.input`
-  width: 80px !important;
+  width: 3.5rem !important;
 `;
 
 const AddTaskButton = styled.button`
@@ -218,7 +231,7 @@ const AddTaskButton = styled.button`
   color: var(--color);
   border: none;
   border-radius: 6px;
-  padding: 8px;
+  padding: 0.5rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -230,16 +243,16 @@ const TasksList = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  max-height: 300px;
-  padding-bottom: 35px; /* Space for status bar */
+  gap: 0.5rem;
+  max-height: 40vh;
+  padding-bottom: 2.2rem; /* Space for status bar */
 `;
 
 const TaskItem = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px;
+  gap: 0.625rem;
+  padding: 0.625rem;
   background: var(--background-color);
   border-radius: 8px;
   box-shadow:
@@ -261,13 +274,14 @@ const CompleteButton = styled.button`
   color: var(--color);
   border: none;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  z-index: 1000000000000;
 `;
 
 const TaskContent = styled.div`
@@ -279,27 +293,27 @@ const TaskContent = styled.div`
 
 const TaskText = styled.span`
   color: var(--color);
-  font-size: 0.95rem;
+  font-size: 1rem;
 `;
 
 const TaskTime = styled.span`
   background: var(--warning-color);
   color: var(--color);
-  padding: 2px 6px;
+  padding: 0.125rem 0.375rem;
   border-radius: 4px;
   font-size: 0.8rem;
 `;
 
 const TaskActions = styled.div`
   display: flex;
-  gap: 5px;
+  gap: 0.32rem;
 
   button {
     background: transparent;
     border: none;
     color: var(--color);
     cursor: pointer;
-    padding: 4px;
+    padding: 0.25rem;
     border-radius: 4px;
     opacity: 0.7;
     transition: opacity 0.2s;
@@ -313,12 +327,12 @@ const TaskActions = styled.div`
 const EditTask = styled.div`
   flex: 1;
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   align-items: center;
 
   input {
     flex: 1;
-    padding: 6px 10px;
+    padding: 0.375rem 0.625rem;
     border: 1px solid color-mix(in srgb, var(--color) 30%, transparent);
     border-radius: 4px;
     background: transparent;
@@ -331,7 +345,7 @@ const EditTask = styled.div`
     color: var(--color);
     border: none;
     border-radius: 4px;
-    padding: 6px 10px;
+    padding: 0.375rem 0.625rem;
     cursor: pointer;
     font-size: 0.8rem;
   }
@@ -348,10 +362,10 @@ const EmptyState = styled.div`
 
 const StatusBar = styled.div`
   position: absolute;
-  bottom: 50px;
+  bottom: 2.5rem;
   left: 0;
   right: 0;
-  height: 28px;
+  height: 1.5rem;
   background: var(--background-color);
   border-radius: 0 0 0 13px;
   box-shadow:
@@ -360,8 +374,8 @@ const StatusBar = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 15px;
-  font-size: 0.75rem;
+  padding: 0 0.94rem;
+  font-size: 0.76rem;
   color: color-mix(in srgb, var(--color) 75%, transparent);
   border-top: 1px solid color-mix(in srgb, var(--color) 15%, transparent);
 `;
@@ -369,32 +383,32 @@ const StatusBar = styled.div`
 const StatusItem = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
-  
+  gap: 0.25rem;
+
   svg {
-    width: 12px;
-    height: 12px;
+    width: 0.75rem;
+    height: 0.75rem;
   }
 `;
 
 const StatusGroup = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.75rem;
 `;
 
-const ProgressBar = styled.div<{progress:any}>`
-  width: 60px;
-  height: 4px;
+const ProgressBar = styled.div<{ progress: any }>`
+  width: 5rem;
+  height: 0.4rem;
   background: color-mix(in srgb, var(--color) 20%, transparent);
   border-radius: 2px;
   overflow: hidden;
-  
+
   &::after {
-    content: '';
+    content: "";
     display: block;
     height: 100%;
-    width: ${props => props.progress || 0}%;
+    width: ${(props) => props.progress || 0}%;
     background: var(--success-color);
     border-radius: 2px;
     transition: width 0.3s ease;
@@ -414,6 +428,8 @@ const TodoSection = () => {
     toggleTask,
   } = usePomodoroTaskStore();
 
+  const { t } = useTranslation();
+
   const [newListName, setNewListName] = useState("");
   const [newTaskText, setNewTaskText] = useState("");
   const [newTaskTime, setNewTaskTime] = useState<number | undefined>(undefined);
@@ -423,42 +439,47 @@ const TodoSection = () => {
 
   const currentList = todoLists.find((list) => list.id === currentListId);
   const currentIndex = todoLists.findIndex((list) => list.id === currentListId);
-  
-  // Get previous and next lists for navigation
+
   const getPreviousList = () => {
-    if (currentIndex > 0) {
-      return todoLists[currentIndex - 1];
-    }
+    if (currentIndex > 0) return todoLists[currentIndex - 1];
     return null;
   };
 
   const getNextList = () => {
-    if (currentIndex < todoLists.length - 1) {
-      return todoLists[currentIndex + 1];
-    }
+    if (currentIndex < todoLists.length - 1) return todoLists[currentIndex + 1];
     return null;
   };
 
   const previousList = getPreviousList();
   const nextList = getNextList();
 
-  // Calculate statistics for status bar
   const getListStats = () => {
-    if (!currentList) return { total: 0, completed: 0, pending: 0, totalTime: 0, completedTime: 0 };
-    
+    if (!currentList)
+      return {
+        total: 0,
+        completed: 0,
+        pending: 0,
+        totalTime: 0,
+        completedTime: 0,
+      };
+
     const total = currentList.tasks.length;
-    const completed = currentList.tasks.filter(task => task.completed).length;
+    const completed = currentList.tasks.filter((task) => task.completed).length;
     const pending = total - completed;
-    const totalTime = currentList.tasks.reduce((sum, task) => sum + (task.timeToFinish || 0), 0);
+    const totalTime = currentList.tasks.reduce(
+      (sum, task) => sum + (task.timeToFinish || 0),
+      0,
+    );
     const completedTime = currentList.tasks
-      .filter(task => task.completed)
+      .filter((task) => task.completed)
       .reduce((sum, task) => sum + (task.timeToFinish || 0), 0);
-    
+
     return { total, completed, pending, totalTime, completedTime };
   };
 
   const stats = getListStats();
-  const completionRate = stats.total > 0 ? (stats.completed / stats.total) * 100 : 0;
+  const completionRate =
+    stats.total > 0 ? (stats.completed / stats.total) * 100 : 0;
 
   const handleAddList = () => {
     if (newListName.trim()) {
@@ -475,12 +496,12 @@ const TodoSection = () => {
     }
   };
 
-  const handleEditTask = (taskId:any, currentText: string) => {
+  const handleEditTask = (taskId: any, currentText: string) => {
     setEditingTask(taskId);
     setEditTaskText(currentText);
   };
 
-  const handleSaveEdit = (taskId:any) => {
+  const handleSaveEdit = (taskId: any) => {
     if (editTaskText.trim() && currentListId) {
       updateTask(currentListId, taskId, { text: editTaskText.trim() });
       setEditingTask(null);
@@ -488,21 +509,21 @@ const TodoSection = () => {
     }
   };
 
-  const formatTime = (minutes:number) => {
+  const formatTime = (minutes: number) => {
     if (minutes < 60) return `${minutes}m`;
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
   };
 
-  const navigateToList = (listId:any) => {
+  const navigateToList = (listId: any) => {
     setCurrentList(listId);
   };
 
   return (
     <TodoSectionContainer>
       <TodoHeader>
-        <h2>Todo Lists</h2>
+        <h2>{t("Todo Lists")}</h2>
         <SettingsButton onClick={() => setShowSettings(!showSettings)}>
           <Settings size={16} />
         </SettingsButton>
@@ -513,7 +534,7 @@ const TodoSection = () => {
           <AddListContainer>
             <input
               type="text"
-              placeholder="New list name..."
+              placeholder={t("New list name...")}
               value={newListName}
               onChange={(e) => setNewListName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleAddList()}
@@ -566,14 +587,14 @@ const TodoSection = () => {
           <AddTaskContainer>
             <input
               type="text"
-              placeholder="Add new task..."
+              placeholder={t("Add new task...")}
               value={newTaskText}
               onChange={(e) => setNewTaskText(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleAddTask()}
             />
             <TimeInput
               type="text"
-              placeholder="Time (min)"
+              placeholder={t("Time")}
               value={newTaskTime || ""}
               onChange={(e) =>
                 setNewTaskTime(
@@ -610,7 +631,7 @@ const TodoSection = () => {
                       autoFocus
                     />
                     <button onClick={() => handleSaveEdit(task.id)}>
-                      Save
+                      {t("Save")}
                     </button>
                   </EditTask>
                 ) : (
@@ -638,7 +659,9 @@ const TodoSection = () => {
 
       {todoLists.length === 0 && (
         <EmptyState>
-          <p>No todo lists yet. Create your first list to get started!</p>
+          <p>
+            {t("No todo lists yet. Create your first list to get started!")}
+          </p>
         </EmptyState>
       )}
 
@@ -647,11 +670,11 @@ const TodoSection = () => {
           <StatusGroup>
             <StatusItem>
               <ListTodo />
-              {stats.total} tasks
+              {stats.total} {t("tasks")}
             </StatusItem>
             <StatusItem>
               <CheckCircle />
-              {stats.completed} done
+              {stats.completed} {t("done")}
             </StatusItem>
             <ProgressBar progress={completionRate} />
           </StatusGroup>
@@ -660,12 +683,12 @@ const TodoSection = () => {
             {stats.totalTime > 0 && (
               <StatusItem>
                 <Clock />
-                {formatTime(stats.totalTime)} total
+                {formatTime(stats.totalTime)} {t("total")}
               </StatusItem>
             )}
             <StatusItem>
               <Calendar />
-              {Math.round(completionRate)}% complete
+              {Math.round(completionRate)}% {t("complete")}
             </StatusItem>
           </StatusGroup>
         </StatusBar>

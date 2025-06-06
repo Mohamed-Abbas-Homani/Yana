@@ -15,12 +15,13 @@ import {
   usePomodoroTaskStore,
 } from "../../services/pomodoroTaskStore";
 import useStore from "../../services/store";
+import { useTranslation } from "react-i18next";
 
 // Styled Components
 const PomodoroContainer = styled.div`
   width: 35vw;
-  height: 100%;
-  padding: 20px;
+  height: 100vh;
+  padding: 1.25rem;
   background: var(--background-color);
   box-shadow:
     inset 7px 7px 13px color-mix(in srgb, var(--background-color) 89%, #000000),
@@ -29,7 +30,7 @@ const PomodoroContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 1.25rem;
   position: relative;
 `;
 
@@ -75,7 +76,7 @@ const PomodoroSettings = styled.div`
     inset -3px -3px 6px color-mix(in srgb, var(--background-color) 97.5%, #fff);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem;
   width: 100%;
 `;
 
@@ -91,8 +92,8 @@ const SettingGroup = styled.div`
   }
 
   input {
-    width: 60px;
-    padding: 6px 8px;
+    width: 3.75rem;
+    padding: 0.375rem 0.5rem;
     border: 1px solid color-mix(in srgb, var(--color) 30%, transparent);
     border-radius: 4px;
     background: transparent;
@@ -104,21 +105,21 @@ const SettingGroup = styled.div`
 
 const SettingsButtonGroup = styled.div`
   display: flex;
-  gap: 8px;
-  margin-top: 5px;
+  gap: 0.5rem;
+  margin-top: 0.32rem;
 `;
 
 const SaveSettings = styled.button`
   background: var(--primary-color);
-  color: white;
+  color: var(--color);
   border: none;
   border-radius: 6px;
-  padding: 8px 16px;
+  padding: 0.5rem 1rem;
   cursor: pointer;
   font-weight: 500;
   flex: 1;
   transition: all 0.2s;
-
+  font-size: 0.85rem;
   &:hover {
     transform: translateY(-1px);
     box-shadow: 0 2px 8px
@@ -127,11 +128,11 @@ const SaveSettings = styled.button`
 `;
 
 const ResetCountButton = styled.button`
-  background: #e74c3c;
-  color: white;
+  background: var(--danger-color);
+  color: var(--color);
   border: none;
   border-radius: 6px;
-  padding: 8px 16px;
+  padding: 0.5rem 1rem;
   cursor: pointer;
   font-weight: 500;
   flex: 1;
@@ -139,7 +140,7 @@ const ResetCountButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 0.375rem;
   font-size: 0.85rem;
 
   &:hover {
@@ -182,16 +183,17 @@ const TimerContent = styled.div`
 `;
 
 const TimeDisplay = styled.div`
-  font-size: 2.5rem;
+  font-size: 40px;
   font-weight: bold;
   color: var(--color);
-  margin-bottom: 5px;
+  margin-bottom: 0.32rem;
   text-shadow: 0 1px 2px
     color-mix(in srgb, var(--background-color) 90%, #000000);
 `;
 
 const SessionType = styled.div`
-  font-size: 1rem;
+  margin-top: 0.5rem;
+  font-size: 16px;
   color: color-mix(in srgb, var(--color) 70%, transparent);
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -200,16 +202,19 @@ const SessionType = styled.div`
 
 const PomodoroControls = styled.div`
   display: flex;
-  gap: 15px;
-  margin-top: 10px;
+  gap: 0.94rem;
+  margin-top: 0.625rem;
 `;
 
 const ControlButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: var(--background-color);
   border: none;
   color: var(--color);
   cursor: pointer;
-  padding: 12px;
+  padding: 0.75rem;
   border-radius: 50%;
   box-shadow:
     5px 5px 10px color-mix(in srgb, var(--background-color) 89%, #000000),
@@ -218,8 +223,8 @@ const ControlButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
+  width: 3.125rem;
+  height: 3.125rem;
 
   &:hover {
     box-shadow:
@@ -231,7 +236,7 @@ const ControlButton = styled.button`
 
   &.primary {
     background: var(--primary-color);
-    color: white;
+    color: var(--color);
     box-shadow:
       2px 2px 5px color-mix(in srgb, var(--primary-color) 50%, #000000),
       -2px -2px 5px color-mix(in srgb, var(--primary-color) 80%, #fff);
@@ -248,11 +253,11 @@ const PomodoroStats = styled.div`
   text-align: center;
   color: var(--color);
   font-size: 0.9rem;
-  margin-top: 10px;
+  margin-top: 0.625rem;
 
   p {
     margin: 0;
-    padding: 8px 16px;
+    padding: 0.5rem 1rem;
     background: var(--background-color);
     border-radius: 20px;
     box-shadow:
@@ -264,10 +269,10 @@ const PomodoroStats = styled.div`
 
 const StatusBar = styled.div`
   position: absolute;
-  bottom: 50px;
+  bottom: 2.5rem;
   left: 0;
   right: 0;
-  height: 28px;
+  height: 1.5rem;
   background: var(--background-color);
   border-radius: 0 0 13px 0;
   box-shadow:
@@ -276,7 +281,7 @@ const StatusBar = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 12px;
+  padding: 0 0.75rem;
   font-size: 0.75rem;
   color: color-mix(in srgb, var(--color) 75%, transparent);
   border-top: 1px solid color-mix(in srgb, var(--color) 15%, transparent);
@@ -285,31 +290,32 @@ const StatusBar = styled.div`
 const StatusItem = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0.25rem;
 
   svg {
-    width: 12px;
-    height: 12px;
+    width: 0.75rem;
+    height: 0.75rem;
   }
 `;
 
 const SessionIndicator = styled.div`
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 0.375rem;
   font-weight: 500;
 `;
 
 const SessionDot = styled.div`
-  width: 6px;
-  height: 6px;
+  width: 0.375rem;
+  height: 0.375rem;
   border-radius: 50%;
   background: ${(props) => props.color || "#e0e0e0"};
   box-shadow: 0 0 4px ${(props) => props.color || "#e0e0e0"}40;
 `;
 
-// Component Implementation
 const PomodoroSection = () => {
+  const { t } = useTranslation();
+
   const {
     pomodoroSettings,
     pomodoroState,
@@ -330,7 +336,6 @@ const PomodoroSection = () => {
     timer.initAudio();
     timer.syncTime();
 
-    // Update current time every second for status bar
     const timeInterval = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
@@ -397,11 +402,7 @@ const PomodoroSection = () => {
   };
 
   const handleResetCount = () => {
-    if (
-      window.confirm(
-        "Are you sure you want to reset the completed pomodoros count?"
-      )
-    ) {
+    if (window.confirm(t("confirmResetCount"))) {
       resetCompletedPomodoros();
     }
   };
@@ -410,10 +411,10 @@ const PomodoroSection = () => {
     if (pomodoroState.currentSession === "work") {
       const nextPomodoroCount = pomodoroState.completedPomodoros + 1;
       return nextPomodoroCount % pomodoroSettings.longBreakInterval === 0
-        ? "Long Break"
-        : "Break";
+        ? t("longBreak")
+        : t("break");
     }
-    return "Work";
+    return t("work");
   };
 
   const getTotalWorkTime = () => {
@@ -427,7 +428,7 @@ const PomodoroSection = () => {
   return (
     <PomodoroContainer>
       <PomodoroHeader>
-        <h2>Pomodoro Timer</h2>
+        <h2>{t("pomodoroTimer")}</h2>
         <SettingsButton onClick={() => setShowSettings(!showSettings)}>
           <Settings size={16} />
         </SettingsButton>
@@ -436,7 +437,7 @@ const PomodoroSection = () => {
       {showSettings && (
         <PomodoroSettings>
           <SettingGroup>
-            <label>Work Time (min):</label>
+            <label>{t("workTime")}:</label>
             <input
               value={tempSettings.workTime}
               onChange={(e) =>
@@ -448,7 +449,7 @@ const PomodoroSection = () => {
             />
           </SettingGroup>
           <SettingGroup>
-            <label>Break Time (min):</label>
+            <label>{t("breakTime")}:</label>
             <input
               value={tempSettings.breakTime}
               onChange={(e) =>
@@ -460,7 +461,7 @@ const PomodoroSection = () => {
             />
           </SettingGroup>
           <SettingGroup>
-            <label>Long Break (min):</label>
+            <label>{t("longBreakTime")}:</label>
             <input
               value={tempSettings.longBreakTime}
               onChange={(e) =>
@@ -472,7 +473,7 @@ const PomodoroSection = () => {
             />
           </SettingGroup>
           <SettingGroup>
-            <label>Long Break Interval:</label>
+            <label>{t("longBreakInterval")}:</label>
             <input
               value={tempSettings.longBreakInterval}
               onChange={(e) =>
@@ -485,11 +486,10 @@ const PomodoroSection = () => {
           </SettingGroup>
           <SettingsButtonGroup>
             <SaveSettings onClick={handleSaveSettings}>
-              Save Settings
+              {t("saveSettings")}
             </SaveSettings>
             <ResetCountButton onClick={handleResetCount}>
-              <RotateCw size={14} />
-              Reset Count
+              {t("resetCount")}
             </ResetCountButton>
           </SettingsButtonGroup>
         </PomodoroSettings>
@@ -523,10 +523,10 @@ const PomodoroSection = () => {
             <TimeDisplay>{formatTime(pomodoroState.timeLeft)}</TimeDisplay>
             <SessionType>
               {pomodoroState.currentSession === "work"
-                ? "Work"
+                ? t("work")
                 : pomodoroState.currentSession === "break"
-                  ? "Break"
-                  : "Long Break"}
+                  ? t("break")
+                  : t("longBreak")}
             </SessionType>
           </TimerContent>
         </CircularTimer>
@@ -545,7 +545,9 @@ const PomodoroSection = () => {
       </PomodoroControls>
 
       <PomodoroStats>
-        <p>Completed Pomodoros: {pomodoroState.completedPomodoros}</p>
+        <p>
+          {t("completedPomodoros")}: {pomodoroState.completedPomodoros}
+        </p>
       </PomodoroStats>
 
       <StatusBar>
@@ -560,17 +562,19 @@ const PomodoroSection = () => {
         <SessionIndicator>
           <StatusItem>
             <Activity />
-            {pomodoroState.isRunning ? "Running" : "Paused"}
+            {pomodoroState.isRunning ? t("running") : t("paused")}
           </StatusItem>
           <SessionDot color={getSessionColor()} />
         </SessionIndicator>
 
         <StatusItem>
           <Target />
-          Next: {getNextSession()}
+          {t("next")}: {getNextSession()}
         </StatusItem>
 
-        <StatusItem>Work Time: {getTotalWorkTime()}m</StatusItem>
+        <StatusItem>
+          {t("workTimeLabel")}: {getTotalWorkTime()}m
+        </StatusItem>
       </StatusBar>
     </PomodoroContainer>
   );
