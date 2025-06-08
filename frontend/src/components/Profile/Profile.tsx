@@ -7,7 +7,8 @@ import { IoLanguage, IoFlashlight } from "react-icons/io5";
 import useStore from "../../services/store";
 import { CONSTANTS } from "../../const";
 import { useTranslation } from "react-i18next";
-
+import { FaCog } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 export interface FormData {
   id?: number;
   name?: string;
@@ -63,6 +64,7 @@ const LanguageSelector = ({ language, handleLanguageChange }: any) => (
         { id: "3", code: "sp", label: "Sp" },
         { id: "4", code: "jp", label: "Jp" },
         { id: "5", code: "ar", label: "Ar" },
+        { id: "6", code: "ru", label: "Ru" },
       ].map(({ id, code, label }) => (
         <React.Fragment key={id}>
           <input
@@ -142,7 +144,7 @@ const Profile = () => {
   const { t, i18n } = useTranslation();
   const { user, userAction, setUserAction } = useStore();
   const { saveUser, loading } = useSaveUser();
-
+  const navigate = useNavigate();
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -162,7 +164,7 @@ const Profile = () => {
   const getUserProfilePicture = async () => {
     try {
       const response = await fetch(
-        `${CONSTANTS.BackURL}/user/${user?.id}/profile-picture`,
+        `${CONSTANTS.BackURL}/user/${user?.id}/profile-picture`
       );
       if (response.ok) {
         const blob = await response.blob();
@@ -192,7 +194,7 @@ const Profile = () => {
   }, [user]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -233,6 +235,12 @@ const Profile = () => {
       className="profile-container"
       padding="0.81rem"
     >
+      <div
+        className="profile-settings-button"
+        onClick={() => navigate("/settings")}
+      >
+        <FaCog size="1.1rem" />
+      </div>
       <ProfilePictureSection
         profilePictureUrl={profilePictureUrl}
         handleDivClick={handleDivClick}

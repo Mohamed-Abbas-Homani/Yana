@@ -149,6 +149,9 @@
   "tasks": "tâches",
   "done": "terminées",
   "total": "total",
-  "complete": "complété"
-
+  "complete": "complété",
+  "filterBy": "Filtrer Par",
+  "all": "Tous",
+  "filter": "Filtrer",
+  "showing": "Affichage"
 }

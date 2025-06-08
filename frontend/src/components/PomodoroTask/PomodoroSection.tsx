@@ -4,7 +4,6 @@ import {
   Pause,
   RotateCcw,
   Settings,
-  RotateCw,
   Activity,
   Clock,
   Target,
@@ -19,7 +18,7 @@ import { useTranslation } from "react-i18next";
 
 // Styled Components
 const PomodoroContainer = styled.div`
-  width: 35vw;
+  width: 40vw;
   height: 100vh;
   padding: 1.25rem;
   background: var(--background-color);
@@ -290,11 +289,11 @@ const StatusBar = styled.div`
 const StatusItem = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.15rem;
 
   svg {
-    width: 0.75rem;
-    height: 0.75rem;
+    width: 0.55rem;
+    height: 0.55rem;
   }
 `;
 

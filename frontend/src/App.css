@@ -75,10 +75,14 @@
   -webkit-text-size-adjust: 100%;
 }
 
-* {
+* , *::after, *::before{
   font-family: var(--font-family);
 }
 
+*::placeholder {
+  color: var(--color);
+  opacity: 0.5;
+}
 body,
 html,
 #root {

@@ -123,7 +123,7 @@
   "emptyFile": "ファイルが空です",
   "previewNotSupported": "このファイル形式ではプレビューできません",
   "errorReadingFile": "ファイルの読み込みエラー",
-    "pomodoroTimer": "ポモドーロタイマー",
+  "pomodoroTimer": "ポモドーロタイマー",
   "workTime": "作業時間（分）",
   "breakTime": "休憩時間（分）",
   "longBreakTime": "長めの休憩（分）",
@@ -139,7 +139,7 @@
   "paused": "一時停止中",
   "next": "次",
   "workTimeLabel": "作業時間",
-    "Todo Lists": "やることリスト",
+  "Todo Lists": "やることリスト",
   "New list name...": "新しいリスト名...",
   "Add new task...": "新しいタスクを追加...",
   "Time": "時間",
@@ -147,5 +147,9 @@
   "tasks": "タスク",
   "done": "完了",
   "total": "合計",
-  "complete": "完了率"
+  "complete": "完了率",
+  "filterBy": "フィルター条件",
+  "all": "すべて",
+  "filter": "フィルター",
+  "showing": "表示中"
 }

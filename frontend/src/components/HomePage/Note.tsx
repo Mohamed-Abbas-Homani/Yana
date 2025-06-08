@@ -1,10 +1,11 @@
-import { FaTag, FaSmile, FaClock } from "react-icons/fa";
+import { FaTag, FaSmile, FaClock, FaLock } from "react-icons/fa";
 import "../HomePage/HomePage.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { summarizeText } from "../../utils/functions";
 import { useTranslation } from "react-i18next";
 import "./Note.css";
+import ReactMarkdown from "react-markdown";
 
 // Function to format timestamp
 const formatDate = (timestamp: string) => {
@@ -60,24 +61,22 @@ const Note = ({
   };
 
   return (
-    <div
-      className="note-display fade-in"
-      onClick={() => !isLocked && navigate(`/note/${id}`)}
-    >
+    <div className="note-display fade-in">
       <div
-        className="note"
+        className="note-card"
+        onClick={() => !isLocked && navigate(`/note/${id}`)}
         style={{
           color: fcolor,
-          backgroundColor: !bpicture ? bcolor : "none",
+          backgroundColor: !bpicture ? bcolor : "transparent",
           backgroundImage: imageURL
             ? `url(${imageURL})`
-            : `linear-gradient(135deg, ${fcolor}, ${bcolor})`,
+            : `linear-gradient(135deg, ${fcolor}20, ${bcolor})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          filter: isImageLoading || isLocked ? "blur(20px)" : "none",
-          transition: "filter 0.5s ease-in-out",
-          pointerEvents: isLocked ? "none" : "auto",
+          filter: isImageLoading ? "blur(10px)" : "none",
+          transition: "all 0.3s ease-in-out",
+          cursor: isLocked ? "default" : "pointer",
         }}
       >
         {imageURL && (
@@ -88,44 +87,65 @@ const Note = ({
             onLoad={handleImageLoad}
           />
         )}
-        {summarizeText(content)}
-      </div>
 
-      {isLocked && (
-        <div className="password-overlay">
-          <input
-            type="text"
-            className="note-pass"
-            placeholder={t("enterPassword", "Enter password to unlock...")}
-            value={inputPassword}
-            onChange={handlePasswordChange}
-            style={{
-              width: "100%",
-              padding: "8px",
-              borderRadius: "4px",
-              border: "1px solid var(--color)",
-              outline: "none",
-              background: "transparent",
-              color: "var(--color)",
-            }}
-          />
+        {/* Note Header */}
+        <div className="note-header">
+          {title && <h3 className="note-title">{title}</h3>}
+          {isLocked && <FaLock className="lock-icon" />}
         </div>
-      )}
 
-      {title && <div className="note-title">{title}</div>}
-      {tag && (
-        <div className="note-tag">
-          <small>{tag}</small> <FaTag />
-        </div>
-      )}
-      {mood && (
-        <div className="note-mood">
-          <small>{mood}</small> <FaSmile />
-        </div>
-      )}
-      <div className="note-date">
-        <FaClock />{" "}
-        <small style={{ opacity: 0.7 }}>{formatDate(createdAt)}</small>
+        {/* Note Content - only show if not locked */}
+        {!isLocked && (
+          <div className="note-content">
+            <ReactMarkdown className="note-text">
+              {summarizeText(content)}
+            </ReactMarkdown>{" "}
+          </div>
+        )}
+
+        {/* Password Input Overlay */}
+        {isLocked && (
+          <div className="password-section">
+            <div className="password-prompt">
+              <FaLock className="password-lock-icon" />
+              <p className="password-text">This note is protected</p>
+            </div>
+            <input
+              type="password"
+              className="password-input"
+              placeholder={t("enterPassword", "Enter password to unlock...")}
+              value={inputPassword}
+              onChange={handlePasswordChange}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        )}
+
+        {/* Note Footer - only show if not locked */}
+        {!isLocked && (
+          <div className="note-footer">
+            <div className="note-meta-left">
+              <div className="note-date">
+                <FaClock className="meta-icon" />
+                <span className="meta-text">{formatDate(createdAt)}</span>
+              </div>
+            </div>
+            <div className="note-meta-right">
+              {tag && (
+                <div className="note-tag">
+                  <FaTag className="meta-icon" />
+                  <span className="meta-text">{tag}</span>
+                </div>
+              )}
+              {mood && (
+                <div className="note-mood">
+                  <FaSmile className="meta-icon" />
+                  <span className="meta-text">{mood}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

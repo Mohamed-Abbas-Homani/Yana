@@ -123,7 +123,7 @@
   "emptyFile": "El archivo está vacío",
   "previewNotSupported": "Vista previa no disponible para este tipo de archivo",
   "errorReadingFile": "Error al leer el archivo",
-    "pomodoroTimer": "Temporizador Pomodoro",
+  "pomodoroTimer": "Temporizador Pomodoro",
   "workTime": "Tiempo de trabajo (min)",
   "breakTime": "Tiempo de descanso (min)",
   "longBreakTime": "Descanso largo (min)",
@@ -139,7 +139,7 @@
   "paused": "Pausado",
   "next": "Siguiente",
   "workTimeLabel": "Tiempo de trabajo",
-    "Todo Lists": "Listas de tareas",
+  "Todo Lists": "Listas de tareas",
   "New list name...": "Nombre de la nueva lista...",
   "Add new task...": "Agregar nueva tarea...",
   "Time": "Tiempo",
@@ -147,5 +147,9 @@
   "tasks": "tareas",
   "done": "hechas",
   "total": "total",
-  "complete": "completado"
+  "complete": "completado",
+  "filterBy": "Filtrar Por",
+  "all": "Todo",
+  "filter": "Filtrar",
+  "showing": "Mostrando"
 }

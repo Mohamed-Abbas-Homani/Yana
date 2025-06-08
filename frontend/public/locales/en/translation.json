@@ -122,7 +122,7 @@
   "tool": "Tool",
   "elements": "Elements",
   "zoom": "Zoom",
-    "pomodoroTimer": "Pomodoro Timer",
+  "pomodoroTimer": "Pomodoro Timer",
   "workTime": "Work Time (min)",
   "breakTime": "Break Time (min)",
   "longBreakTime": "Long Break (min)",
@@ -138,7 +138,7 @@
   "paused": "Paused",
   "next": "Next",
   "workTimeLabel": "Work Time",
-    "Todo Lists": "Todo Lists",
+  "Todo Lists": "Todo Lists",
   "New list name...": "New list name...",
   "Add new task...": "Add new task...",
   "Time": "Time",
@@ -147,5 +147,9 @@
   "tasks": "tasks",
   "done": "done",
   "total": "total",
-  "complete": "complete"
+  "complete": "complete",
+  "filterBy": "Filter By",
+  "All": "All",
+  "filter": "Filter",
+  "showing": "Showing"
 }

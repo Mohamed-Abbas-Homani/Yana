@@ -17,7 +17,7 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 
 const TodoSectionContainer = styled.div`
-  width: 65vw;
+  width: 60vw;
   height: 100vh;
   padding: 1.25rem;
   background: var(--background-color);
@@ -297,8 +297,8 @@ const TaskText = styled.span`
 `;
 
 const TaskTime = styled.span`
-  background: var(--warning-color);
-  color: var(--color);
+  background: var(--color);
+  color: var(--background-color);
   padding: 0.125rem 0.375rem;
   border-radius: 4px;
   font-size: 0.8rem;

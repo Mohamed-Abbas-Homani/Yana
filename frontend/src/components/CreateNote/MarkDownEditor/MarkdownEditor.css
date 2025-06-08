@@ -46,5 +46,39 @@
   padding: 0;
   margin: 0;
   background-color: transparent;
-  font-size: 1rem;
+  font-size: 1rem; /* Default for 987x610 */
+}
+/* Larger screens */
+@media (min-width: 1200px) and (min-height: 700px) {
+  .input-container .textarea,
+  .input-container .textread,
+  .markdown-editor {
+    font-size: 0.8rem;
+  }
+}
+
+@media (min-width: 1500px) and (min-height: 900px) {
+  .input-container .textarea,
+  .input-container .textread,
+  .markdown-editor {
+    font-size: 0.65rem;
+  }
+}
+
+/* Slightly smaller than default */
+@media (max-width: 986px), (max-height: 600px) {
+  .input-container .textarea,
+  .input-container .textread,
+  .markdown-editor {
+    font-size: 1.1rem;
+  }
+}
+
+/* Compact screens */
+@media (max-width: 700px), (max-height: 550px) {
+  .input-container .textarea,
+  .input-container .textread,
+  .markdown-editor {
+    font-size: 1.5rem;
+  }
 }

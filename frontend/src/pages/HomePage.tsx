@@ -1,7 +1,6 @@
 import Page from "../components/UI/Page";
 import "../components/HomePage/HomePage.css";
-import { FaArrowLeft, FaArrowRight, FaSearch } from "react-icons/fa";
-import Flag from "../components/HomePage/Flag";
+import { FaArrowLeft, FaArrowRight, FaSearch, FaFilter, FaClock, FaHashtag } from "react-icons/fa";
 import Note from "../components/HomePage/Note";
 import useFetchNotes from "../hooks/useFetchNotes";
 import { useState } from "react";
@@ -14,11 +13,24 @@ const HomePage = () => {
   const { notes, loading, setPage, error, setKeyword } = useFetchNotes();
   const { keyword, page, total } = useNotesDisplayStore();
   const [inputKeyword, setInputKeyword] = useState(keyword);
+  const [activeFilter, setActiveFilter] = useState("all");
   const navigate = useNavigate();
 
   const handleSearch = () => {
     setKeyword(inputKeyword);
     setPage(1);
+  };
+
+  const handleKeyPress = (e:any) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const handleFilterClick = (filterType:any) => {
+    setActiveFilter(filterType);
+    // You can implement specific filter logic here
+    // For now, it just updates the active state
   };
 
   const handleNextPage = () => {
@@ -34,47 +46,81 @@ const HomePage = () => {
   };
 
   const totalPages = Math.ceil(total / 6);
+  const startNote = (page - 1) * 6 + 1;
+  const endNote = Math.min(page * 6, total);
+
+  const filters = [
+    { key: "all", label: t("all"), icon: FaFilter },
+    { key: "title", label: t("Title"), icon: FaHashtag },
+    { key: "content", label: t("Content"), icon: FaFilter },
+    { key: "tag", label: t("Tag"), icon: FaHashtag },
+    { key: "mood", label: t("Mood"), icon: FaClock }
+  ];
 
   return (
     <Page>
       <div className="home-container">
         <div className="search-container">
-          <div className="flags-container">
-            <Flag label={t("Tag")} handleSearch={handleSearch} />
-            <Flag label={t("Mood")} handleSearch={handleSearch} />
-            <Flag label={t("Content")} handleSearch={handleSearch} />
-            <Flag label={t("Title")} handleSearch={handleSearch} />
-          </div>
-          <div className="search-box">
+          {/* Search Header */}
+          <div className="search-header">
+            <div className="search-box">
+              <button className="search-btn" onClick={handleSearch}>
+                <FaSearch />
+              </button>
+              <input
+                type="text"
+                className="search-text"
+                placeholder={t("searchPlaceholder", "Search for anything...")}
+                onChange={(e) => setInputKeyword(e.target.value)}
+                onKeyPress={handleKeyPress}
+                value={inputKeyword}
+              />
+            </div>
+            
+            {/* Pagination - moved to header */}
             {totalPages > 1 && (
-              <div className="pagination">
-                {page > 1 && (
-                  <FaArrowLeft
+              <div className="pagination-container">
+                <div className="pagination">
+                  <button 
+                    className="pagination-arrow"
                     onClick={handlePrevPage}
+                    disabled={page <= 1}
+                  >
+                    <FaArrowLeft />
+                  </button>
+                  <span>
+                    {t("page")} {page} {t("of")} {totalPages}
+                  </span>
+                  <button 
                     className="pagination-arrow"
-                  />
-                )}
-                <span>
-                  {t("page")} {page} {t("of")} {totalPages}
-                </span>
-                {page < totalPages && (
-                  <FaArrowRight
                     onClick={handleNextPage}
-                    className="pagination-arrow"
-                  />
-                )}
+                    disabled={page >= totalPages}
+                  >
+                    <FaArrowRight />
+                  </button>
+                </div>
               </div>
             )}
-            <div className="search-btn" onClick={handleSearch}>
-              <FaSearch />
+          </div>
+
+          {/* Filters Section */}
+          <div className="filters-section">
+            <span className="filters-label">{t("filterBy", "Filter by")}:</span>
+            <div className="filters-container">
+              {filters.map((filter) => {
+                const IconComponent = filter.icon;
+                return (
+                  <div
+                    key={filter.key}
+                    className={`filter-chip ${activeFilter === filter.key ? 'active' : ''}`}
+                    onClick={() => handleFilterClick(filter.key)}
+                  >
+                    <IconComponent style={{ marginRight: '0.5rem', fontSize: '0.8rem' }} />
+                    {filter.label}
+                  </div>
+                );
+              })}
             </div>
-            <input
-              type="text"
-              className="search-text"
-              placeholder={t("searchPlaceholder", "Search for anything...")}
-              onChange={(e) => setInputKeyword(e.target.value)}
-              value={inputKeyword}
-            />
           </div>
         </div>
 
@@ -106,6 +152,33 @@ const HomePage = () => {
               {t("noNotesFound", "No notes found")}{" "}
               <p>{t("addOne", "Add one!")}</p>
             </div>
+          )}
+        </div>
+
+        {/* Status Bar */}
+        <div className="status-bar">
+          <div className="status-item">
+            <FaFilter />
+            <span>{t("filter", "Filter")}: {filters.find(f => f.key === activeFilter)?.label || t('all')}</span>
+          </div>
+          <div className="status-separator"></div>
+          <div className="status-item">
+            <FaHashtag />
+            <span>{t("total")}: {total}</span>
+          </div>
+          <div className="status-separator"></div>
+          <div className="status-item">
+            <FaClock />
+            <span>{t("showing", "Showing")}: {total > 0 ? `${startNote}-${endNote}` : '0'}</span>
+          </div>
+          {keyword && (
+            <>
+              <div className="status-separator"></div>
+              <div className="status-item">
+                <FaSearch />
+                <span>{t("searchTerm", "Search")}: "{keyword}"</span>
+              </div>
+            </>
           )}
         </div>
       </div>
