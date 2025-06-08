@@ -54,7 +54,7 @@ const useFetchNotes = () => {
           .map((f: string) => f.toLowerCase())
           .join(",");
         const url = `${CONSTANTS.BackURL}/notes?keyword=${keyword}&filter=${filterString}&page=${page}&size=6`;
-
+        console.log(url, filterString)
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Failed to fetch notes.");

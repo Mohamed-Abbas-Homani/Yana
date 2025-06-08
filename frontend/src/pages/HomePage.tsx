@@ -11,9 +11,8 @@ import { useTranslation } from "react-i18next";
 const HomePage = () => {
   const { t } = useTranslation();
   const { notes, loading, setPage, error, setKeyword } = useFetchNotes();
-  const { keyword, page, total } = useNotesDisplayStore();
+  const { keyword, page, total, filters, toggleFilter } = useNotesDisplayStore();
   const [inputKeyword, setInputKeyword] = useState(keyword);
-  const [activeFilter, setActiveFilter] = useState("all");
   const navigate = useNavigate();
 
   const handleSearch = () => {
@@ -21,16 +20,15 @@ const HomePage = () => {
     setPage(1);
   };
 
-  const handleKeyPress = (e:any) => {
-    if (e.key === 'Enter') {
+  const handleKeyPress = (e: any) => {
+    if (e.key === "Enter") {
       handleSearch();
     }
   };
 
-  const handleFilterClick = (filterType:any) => {
-    setActiveFilter(filterType);
-    // You can implement specific filter logic here
-    // For now, it just updates the active state
+  const handleFilterClick = (filterKey: string) => {
+    toggleFilter(filterKey);
+    setPage(1);
   };
 
   const handleNextPage = () => {
@@ -49,12 +47,11 @@ const HomePage = () => {
   const startNote = (page - 1) * 6 + 1;
   const endNote = Math.min(page * 6, total);
 
-  const filters = [
-    { key: "all", label: t("all"), icon: FaFilter },
+  const availableFilters = [
     { key: "title", label: t("Title"), icon: FaHashtag },
     { key: "content", label: t("Content"), icon: FaFilter },
     { key: "tag", label: t("Tag"), icon: FaHashtag },
-    { key: "mood", label: t("Mood"), icon: FaClock }
+    { key: "mood", label: t("Mood"), icon: FaClock },
   ];
 
   return (
@@ -72,16 +69,16 @@ const HomePage = () => {
                 className="search-text"
                 placeholder={t("searchPlaceholder", "Search for anything...")}
                 onChange={(e) => setInputKeyword(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyPress}
                 value={inputKeyword}
               />
             </div>
-            
-            {/* Pagination - moved to header */}
+
+            {/* Pagination */}
             {totalPages > 1 && (
               <div className="pagination-container">
                 <div className="pagination">
-                  <button 
+                  <button
                     className="pagination-arrow"
                     onClick={handlePrevPage}
                     disabled={page <= 1}
@@ -91,7 +88,7 @@ const HomePage = () => {
                   <span>
                     {t("page")} {page} {t("of")} {totalPages}
                   </span>
-                  <button 
+                  <button
                     className="pagination-arrow"
                     onClick={handleNextPage}
                     disabled={page >= totalPages}
@@ -103,19 +100,20 @@ const HomePage = () => {
             )}
           </div>
 
-          {/* Filters Section */}
+          {/* Filters */}
           <div className="filters-section">
             <span className="filters-label">{t("filterBy", "Filter by")}:</span>
             <div className="filters-container">
-              {filters.map((filter) => {
+              {availableFilters.map((filter) => {
                 const IconComponent = filter.icon;
+                const isActive = filters.includes(filter.key);
                 return (
                   <div
                     key={filter.key}
-                    className={`filter-chip ${activeFilter === filter.key ? 'active' : ''}`}
+                    className={`filter-chip ${isActive ? "active" : ""}`}
                     onClick={() => handleFilterClick(filter.key)}
                   >
-                    <IconComponent style={{ marginRight: '0.5rem', fontSize: '0.8rem' }} />
+                    <IconComponent style={{ marginRight: "0.5rem", fontSize: "0.8rem" }} />
                     {filter.label}
                   </div>
                 );
@@ -159,24 +157,40 @@ const HomePage = () => {
         <div className="status-bar">
           <div className="status-item">
             <FaFilter />
-            <span>{t("filter", "Filter")}: {filters.find(f => f.key === activeFilter)?.label || t('all')}</span>
+            <span>
+              {t("filter", "Filter")}:{" "}
+              {filters.length === 0
+                ? t("all", "All")
+                : filters
+                    .map((key) => {
+                      const filter = availableFilters.find((f) => f.key === key);
+                      return filter ? filter.label : key;
+                    })
+                    .join(", ")}
+            </span>
           </div>
           <div className="status-separator"></div>
           <div className="status-item">
             <FaHashtag />
-            <span>{t("total")}: {total}</span>
+            <span>
+              {t("total")}: {total}
+            </span>
           </div>
           <div className="status-separator"></div>
           <div className="status-item">
             <FaClock />
-            <span>{t("showing", "Showing")}: {total > 0 ? `${startNote}-${endNote}` : '0'}</span>
+            <span>
+              {t("showing", "Showing")}: {total > 0 ? `${startNote}-${endNote}` : "0"}
+            </span>
           </div>
           {keyword && (
             <>
               <div className="status-separator"></div>
               <div className="status-item">
                 <FaSearch />
-                <span>{t("searchTerm", "Search")}: "{keyword}"</span>
+                <span>
+                  {t("searchTerm", "Search")}: "{keyword}"
+                </span>
               </div>
             </>
           )}
