@@ -164,7 +164,7 @@ const Profile = () => {
   const getUserProfilePicture = async () => {
     try {
       const response = await fetch(
-        `${CONSTANTS.BackURL}/user/${user?.id}/profile-picture`
+        `${CONSTANTS.BackURL}/user/${user?.id}/profile-picture`,
       );
       if (response.ok) {
         const blob = await response.blob();
@@ -194,7 +194,7 @@ const Profile = () => {
   }, [user]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));

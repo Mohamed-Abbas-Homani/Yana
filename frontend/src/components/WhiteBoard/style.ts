@@ -94,7 +94,65 @@ export const ToolButton = styled.button<{ active?: boolean }>`
     transform: scale(1.05);
   }
 `;
+export const OpacityGroup = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+`;
 
+export const OpacityLabel = styled.span`
+  font-size: 0.75rem;
+  margin-right: 0.5rem;
+  white-space: nowrap;
+`;
+
+export const OpacityControlGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const OpacitySlider = styled.input`
+  width: 5rem;
+  -webkit-appearance: none;
+  height: 0.25rem;
+  border-radius: 2px;
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+
+  &::-moz-range-thumb {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+`;
+
+export const OpacityValue = styled.span`
+  font-size: 0.75rem;
+  min-width: 2rem;
+  text-align: center;
+`;
 export const ColorGroup = styled.div`
   display: flex;
   align-items: center;
@@ -163,7 +221,11 @@ export const FillGroup = styled.div`
   gap: 0.475rem;
 `;
 
-export const FillLabel = styled(ColorLabel)``;
+export const FillLabel = styled.span`
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-color);
+`;
 
 export const FillPickerGroup = styled.div`
   display: flex;
@@ -213,7 +275,11 @@ export const WidthGroup = styled.div`
   gap: 0.75rem;
 `;
 
-export const WidthLabel = styled(ColorLabel)``;
+export const WidthLabel = styled.span`
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-color);
+`;
 
 export const WidthControlGroup = styled.div`
   display: flex;
@@ -243,7 +309,11 @@ export const TextSizeGroup = styled.div`
   gap: 0.75rem;
 `;
 
-export const TextSizeLabel = styled(ColorLabel)``;
+export const TextSizeLabel = styled.span`
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-color);
+`;
 
 export const TextSizeInput = styled.input`
   width: 4rem;

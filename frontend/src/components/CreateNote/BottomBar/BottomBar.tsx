@@ -73,7 +73,8 @@ const FileItem = styled.div`
   }
 `;
 
-const PreviewContainer = styled.div`
+
+const ImagePreview = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -83,14 +84,20 @@ const PreviewContainer = styled.div`
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
-`;
-
-const ImagePreview = styled(PreviewContainer)`
   background-size: cover;
   background-position: center;
 `;
 
-const VideoPreview = styled(PreviewContainer)`
+const VideoPreview = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 4rem;
+  width: 5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
   background-color: #000;
 
   video {
@@ -100,7 +107,16 @@ const VideoPreview = styled(PreviewContainer)`
   }
 `;
 
-const DocumentPreview = styled(PreviewContainer)`
+const DocumentPreview = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 4rem;
+  width: 5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
   background: rgba(0, 0, 0, 0.05);
   justify-content: center;
 `;

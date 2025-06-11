@@ -8,7 +8,7 @@ export interface Point {
 
 export interface DrawingElement {
   id: string;
-  type: "pen" | "rectangle" | "circle" | "text" | "line";
+  type: "pen" | "rectangle" | "circle" | "text" | "line" | "triangle";
   points?: Point[];
   startPoint?: Point;
   endPoint?: Point;
@@ -20,6 +20,7 @@ export interface DrawingElement {
   fontSize?: number;
   textWidth?: number;
   textHeight?: number;
+  opacity?: number;
 }
 
 type WhiteboardStore = {
@@ -46,12 +47,17 @@ type WhiteboardStore = {
 
   zoom: number;
   setZoom: (zoom: number) => void;
+
+  opacity: number;
+  setOpacity: (opacity: number) => void;
 };
 
 const useWhiteboardStore = create<WhiteboardStore>()(
   devtools(
     persist(
       (set) => ({
+        opacity: 1,
+        setOpacity: (opacity: number) => set({ opacity }),
         elements: [],
         setElements: (elements) => set({ elements }),
 

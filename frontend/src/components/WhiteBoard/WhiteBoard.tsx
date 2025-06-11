@@ -14,6 +14,7 @@ import {
   MousePointer,
   Minus,
   Save,
+  FileText,
 } from "lucide-react";
 import useStore from "../../services/store";
 import {
@@ -54,12 +55,20 @@ import {
   StatusBar,
   StatusInfo,
   StatusHighlight,
+  OpacityGroup,
+  OpacityLabel,
+  OpacityControlGroup,
+  OpacitySlider,
+  OpacityValue,
 } from "./style";
 import { useTranslation } from "react-i18next";
 import useWhiteboardStore, {
   DrawingElement,
   Point,
 } from "../../services/whiteBaordStore";
+import { Copy, Triangle } from "lucide-react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const Whiteboard: React.FC = () => {
   const {
@@ -79,20 +88,33 @@ const Whiteboard: React.FC = () => {
     setFontSize,
     zoom,
     setZoom,
+    opacity,
+    setOpacity,
   } = useWhiteboardStore();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const textInputRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation();
   const [tool, setTool] = useState<
-    "select" | "pen" | "rectangle" | "circle" | "text" | "eraser" | "line" | any
+    | "select"
+    | "pen"
+    | "rectangle"
+    | "circle"
+    | "text"
+    | "eraser"
+    | "line"
+    | "triangle"
+    | string
   >("pen");
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentPath, setCurrentPath] = useState<Point[]>([]);
   const [startPoint, setStartPoint] = useState<Point | null>(null);
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
   const [panOffset] = useState({ x: 0, y: 0 });
-
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartPoint, setDragStartPoint] = useState<Point | null>(null);
+  const [originalElementPosition, setOriginalElementPosition] =
+    useState<any>(null);
   // UI states
   const [showTextInput, setShowTextInput] = useState(false);
   const [textPosition, setTextPosition] = useState<Point>({ x: 0, y: 0 });
@@ -101,10 +123,12 @@ const Whiteboard: React.FC = () => {
     y: 0,
   });
   const { setUserAction, setLastPage } = useStore();
+
   useEffect(() => {
     setLastPage(location.pathname);
     setUserAction("whiteboard");
   }, []);
+
   const [colors, setColors] = useState([
     "#000000",
     "#FFFFFF",
@@ -115,25 +139,18 @@ const Whiteboard: React.FC = () => {
     "#FF00FF",
     "#FFA500",
   ]);
+
   const insertColor = (newColor: string) => {
     if (["#000000", "#FFFFFF"].includes(newColor)) {
       return;
     }
     setColors((prevColors) => {
-      // Ensure the first two are black and white
       const fixed = prevColors.slice(0, 2);
       const dynamic = prevColors.slice(2);
-
-      // Remove the color if it already exists (excluding black and white)
       const filtered = dynamic.filter((color) => color !== newColor);
-
-      // Add new color at the beginning of the dynamic section
       const updated = [newColor, ...filtered];
-
-      // Limit the dynamic section to (original length - 2)
       const maxDynamic = prevColors.length - 2;
       const trimmed = updated.slice(0, maxDynamic);
-
       return [...fixed, ...trimmed];
     });
   };
@@ -183,6 +200,7 @@ const Whiteboard: React.FC = () => {
     element: DrawingElement,
   ) => {
     ctx.save();
+    ctx.globalAlpha = element.opacity || 1;
     ctx.strokeStyle = element.color;
     ctx.lineWidth = element.strokeWidth;
     ctx.lineCap = "round";
@@ -259,6 +277,23 @@ const Whiteboard: React.FC = () => {
           ctx.fillText(element.text, element.position.x, element.position.y);
         }
         break;
+
+      case "triangle":
+        if (element.startPoint && element.endPoint) {
+          ctx.beginPath();
+          ctx.moveTo(element.startPoint.x, element.endPoint.y);
+          ctx.lineTo(element.endPoint.x, element.endPoint.y);
+          ctx.lineTo(
+            (element.startPoint.x + element.endPoint.x) / 2,
+            element.startPoint.y,
+          );
+          ctx.closePath();
+          if (element.fillColor && element.fillColor !== "transparent") {
+            ctx.fill();
+          }
+          ctx.stroke();
+        }
+        break;
     }
 
     // Draw selection indicator
@@ -266,6 +301,8 @@ const Whiteboard: React.FC = () => {
       ctx.strokeStyle = "#007bff";
       ctx.lineWidth = 2;
       ctx.setLineDash([5, 5]);
+      ctx.globalAlpha = 1;
+
       if (element.type === "text" && element.position) {
         const width = element.textWidth || 100;
         const height = element.textHeight || 20;
@@ -275,8 +312,7 @@ const Whiteboard: React.FC = () => {
           width + 10,
           height + 10,
         );
-      }
-      if (element.type === "pen" && element.points) {
+      } else if (element.type === "pen" && element.points) {
         const bounds = getBounds(element.points);
         ctx.strokeRect(
           bounds.x - 5,
@@ -328,8 +364,9 @@ const Whiteboard: React.FC = () => {
       drawElement(ctx, element);
     });
 
-    // Draw current path for pen tool
+    // Draw current path for pen tool with opacity
     if (tool === "pen" && currentPath.length > 1) {
+      ctx.globalAlpha = opacity;
       ctx.strokeStyle = color;
       ctx.lineWidth = strokeWidth;
       ctx.lineCap = "round";
@@ -352,6 +389,7 @@ const Whiteboard: React.FC = () => {
     zoom,
     panOffset,
     selectedElement,
+    opacity,
   ]);
 
   const redrawCanvasWithPreview = useCallback(
@@ -361,7 +399,7 @@ const Whiteboard: React.FC = () => {
       if (
         !startPoint ||
         !previewEndPoint ||
-        !["rectangle", "circle", "line"].includes(tool)
+        !["rectangle", "circle", "line", "triangle"].includes(tool)
       )
         return;
 
@@ -375,17 +413,17 @@ const Whiteboard: React.FC = () => {
       ctx.scale(zoom, zoom);
       ctx.translate(panOffset.x / zoom, panOffset.y / zoom);
 
-      // Draw preview with dashed line
+      // Draw preview with dashed line and opacity
       ctx.strokeStyle = color;
       ctx.lineWidth = strokeWidth;
       ctx.setLineDash([8, 4]);
-      ctx.globalAlpha = 0.7;
+      ctx.globalAlpha = opacity * 0.7;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
 
       if (fillColor && fillColor !== "transparent") {
         ctx.fillStyle = fillColor;
-        ctx.globalAlpha = 0.3;
+        ctx.globalAlpha = opacity * 0.3;
       }
 
       switch (tool) {
@@ -396,7 +434,7 @@ const Whiteboard: React.FC = () => {
           if (fillColor && fillColor !== "transparent") {
             ctx.fillRect(startPoint.x, startPoint.y, width, height);
           }
-          ctx.globalAlpha = 0.7;
+          ctx.globalAlpha = opacity * 0.7;
           ctx.strokeRect(startPoint.x, startPoint.y, width, height);
           break;
 
@@ -410,15 +448,28 @@ const Whiteboard: React.FC = () => {
           if (fillColor && fillColor !== "transparent") {
             ctx.fill();
           }
-          ctx.globalAlpha = 0.7;
+          ctx.globalAlpha = opacity * 0.7;
           ctx.stroke();
           break;
 
         case "line":
-          ctx.globalAlpha = 0.7;
+          ctx.globalAlpha = opacity * 0.7;
           ctx.beginPath();
           ctx.moveTo(startPoint.x, startPoint.y);
           ctx.lineTo(previewEndPoint.x, previewEndPoint.y);
+          ctx.stroke();
+          break;
+
+        case "triangle":
+          ctx.beginPath();
+          ctx.moveTo(startPoint.x, previewEndPoint.y);
+          ctx.lineTo(previewEndPoint.x, previewEndPoint.y);
+          ctx.lineTo((startPoint.x + previewEndPoint.x) / 2, startPoint.y);
+          ctx.closePath();
+          if (fillColor && fillColor !== "transparent") {
+            ctx.fill();
+          }
+          ctx.globalAlpha = opacity * 0.7;
           ctx.stroke();
           break;
       }
@@ -434,6 +485,7 @@ const Whiteboard: React.FC = () => {
       fillColor,
       zoom,
       panOffset,
+      opacity,
     ],
   );
 
@@ -446,9 +498,8 @@ const Whiteboard: React.FC = () => {
     for (let i = elements.length - 1; i >= 0; i--) {
       const element = elements[i];
       if (element.type === "text" && element.position) {
-        // Calculate text bounding box
-        const width = element.textWidth || 100; // Default width if not calculated
-        const height = element.textHeight || 20; // Default height
+        const width = element.textWidth || 100;
+        const height = element.textHeight || 20;
 
         if (
           point.x >= element.position.x &&
@@ -494,8 +545,25 @@ const Whiteboard: React.FC = () => {
 
     if (tool === "select") {
       const element = findElementAtPoint(point);
+      if (element && element.id === selectedElement) {
+        // Starting drag on already selected element
+        setIsDragging(true);
+        setDragStartPoint(point);
+
+        // Store the original position for smooth dragging
+        if (element.type === "text") {
+          setOriginalElementPosition({ ...element.position });
+        } else if (element.type === "pen") {
+          setOriginalElementPosition(element?.points?.map((p) => ({ ...p })));
+        } else {
+          setOriginalElementPosition({
+            startPoint: { ...element.startPoint },
+            endPoint: { ...element.endPoint },
+          });
+        }
+        return;
+      }
       setSelectedElement(element?.id || null);
-      return;
     }
 
     if (tool === "text") {
@@ -522,12 +590,76 @@ const Whiteboard: React.FC = () => {
     }
   };
 
+  const handleDragMove = useCallback(
+    (point: Point) => {
+      if (
+        !isDragging ||
+        !dragStartPoint ||
+        !originalElementPosition ||
+        !selectedElement
+      )
+        return;
+
+      const offsetX = point.x - dragStartPoint.x;
+      const offsetY = point.y - dragStartPoint.y;
+
+      const updatedElements = elements.map((el) => {
+        if (el.id !== selectedElement) return el;
+
+        const updated = { ...el };
+
+        // Apply offset based on element type using original position
+        switch (updated.type) {
+          case "text":
+            updated.position = {
+              x: originalElementPosition.x + offsetX,
+              y: originalElementPosition.y + offsetY,
+            };
+            break;
+          case "pen":
+            updated.points = originalElementPosition.map((p: Point) => ({
+              x: p.x + offsetX,
+              y: p.y + offsetY,
+            }));
+            break;
+          default: // Shapes
+            updated.startPoint = {
+              x: originalElementPosition.startPoint.x + offsetX,
+              y: originalElementPosition.startPoint.y + offsetY,
+            };
+            updated.endPoint = {
+              x: originalElementPosition.endPoint.x + offsetX,
+              y: originalElementPosition.endPoint.y + offsetY,
+            };
+        }
+        return updated;
+      });
+
+      setElements(updatedElements);
+    },
+    [
+      isDragging,
+      dragStartPoint,
+      originalElementPosition,
+      selectedElement,
+      elements,
+    ],
+  );
+
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const point = getCanvasCoordinates(e);
 
+    if (isDragging) {
+      handleDragMove(point);
+      return;
+    }
+
     if (!isDrawing) {
       // Show preview for shapes while hovering
-      if (["rectangle", "circle", "line"].includes(tool) && startPoint) {
+      if (
+        ["rectangle", "circle", "line", "triangle"].includes(tool) &&
+        startPoint
+      ) {
         redrawCanvasWithPreview(point);
       }
       return;
@@ -541,13 +673,23 @@ const Whiteboard: React.FC = () => {
         const newElements = elements.filter((el) => el.id !== element.id);
         setElements(newElements);
       }
-    } else if (["rectangle", "circle", "line"].includes(tool) && startPoint) {
-      // Draw preview while dragging
+    } else if (
+      ["rectangle", "circle", "line", "triangle"].includes(tool) &&
+      startPoint
+    ) {
       redrawCanvasWithPreview(point);
     }
   };
 
   const handleMouseUp = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (isDragging) {
+      setIsDragging(false);
+      setDragStartPoint(null);
+      setOriginalElementPosition(null);
+      addToHistory(elements);
+      return;
+    }
+
     if (!isDrawing) return;
 
     const point = getCanvasCoordinates(e);
@@ -560,12 +702,16 @@ const Whiteboard: React.FC = () => {
         points: [...currentPath],
         color,
         strokeWidth,
+        opacity,
       };
       const newElements = [...elements, newElement];
       setElements(newElements);
       addToHistory(newElements);
       setCurrentPath([]);
-    } else if (["rectangle", "circle", "line"].includes(tool) && startPoint) {
+    } else if (
+      ["rectangle", "circle", "line", "triangle"].includes(tool) &&
+      startPoint
+    ) {
       const newElement: DrawingElement = {
         id: Date.now().toString(),
         type: tool as any,
@@ -574,6 +720,7 @@ const Whiteboard: React.FC = () => {
         color,
         fillColor,
         strokeWidth,
+        opacity,
       };
       const newElements = [...elements, newElement];
       setElements(newElements);
@@ -582,10 +729,66 @@ const Whiteboard: React.FC = () => {
     }
   };
 
+  const duplicateElement = () => {
+    if (!selectedElement) return;
+
+    const element = elements.find((el) => el.id === selectedElement);
+    if (!element) return;
+
+    const duplicated = JSON.parse(JSON.stringify(element));
+    duplicated.id = Date.now().toString();
+
+    const offset = 10;
+    switch (duplicated.type) {
+      case "text":
+        duplicated.position.x += offset;
+        duplicated.position.y += offset;
+        break;
+      case "pen":
+        duplicated.points = duplicated.points.map((p: any) => ({
+          x: p.x + offset,
+          y: p.y + offset,
+        }));
+        break;
+      default:
+        duplicated.startPoint.x += offset;
+        duplicated.startPoint.y += offset;
+        duplicated.endPoint.x += offset;
+        duplicated.endPoint.y += offset;
+    }
+
+    const newElements = [...elements, duplicated];
+    setElements(newElements);
+    setSelectedElement(duplicated.id);
+    addToHistory(newElements);
+  };
+
+  const exportPDF = async () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    try {
+      const pdf = new jsPDF("landscape", "px", [canvas.width, canvas.height]);
+      const imgData = await html2canvas(canvas, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      }).then((canvas) => canvas.toDataURL("image/png"));
+
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("whiteboard.pdf");
+    } catch (error) {
+      console.error("PDF export failed:", error);
+    }
+  };
+
   const handleTextSubmit = () => {
     const text = textInputRef.current?.value.trim();
     if (text) {
-      // Calculate text dimensions
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       let textWidth = 100;
@@ -607,6 +810,7 @@ const Whiteboard: React.FC = () => {
         strokeWidth: 1,
         textWidth,
         textHeight,
+        opacity,
       };
 
       const newElements = [...elements, newElement];
@@ -618,8 +822,9 @@ const Whiteboard: React.FC = () => {
       textInputRef.current.value = "";
     }
   };
+
   const handleTextKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    e.stopPropagation(); // Prevent global keyboard shortcuts
+    e.stopPropagation();
     if (e.key === "Enter") {
       handleTextSubmit();
     } else if (e.key === "Escape") {
@@ -677,13 +882,13 @@ const Whiteboard: React.FC = () => {
     }
   };
 
-  // Keyboard shortcuts
+  // Enhanced keyboard shortcuts
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (showTextInput) return; // Don't process shortcuts when text input is active
+      if (showTextInput) return;
 
       if (e.ctrlKey || e.metaKey) {
-        switch (e.key) {
+        switch (e.key.toLowerCase()) {
           case "z":
             e.preventDefault();
             if (e.shiftKey) {
@@ -691,6 +896,10 @@ const Whiteboard: React.FC = () => {
             } else {
               undo();
             }
+            break;
+          case "d":
+            e.preventDefault();
+            duplicateElement();
             break;
         }
       } else {
@@ -724,7 +933,6 @@ const Whiteboard: React.FC = () => {
     window.addEventListener("resize", resizeCanvas);
     return () => window.removeEventListener("resize", resizeCanvas);
   }, [redrawCanvas]);
-
   return (
     <MainContainer>
       {/* Main Toolbar */}
@@ -736,6 +944,7 @@ const Whiteboard: React.FC = () => {
             { type: "pen", icon: Pen, label: t("pen") },
             { type: "rectangle", icon: Square, label: t("rectangle") },
             { type: "circle", icon: Circle, label: t("circle") },
+            { type: "triangle", icon: Triangle, label: t("triangle") },
             { type: "line", icon: Minus, label: t("line") },
             { type: "text", icon: Type, label: t("text") },
             { type: "eraser", icon: Eraser, label: t("eraser") },
@@ -750,7 +959,20 @@ const Whiteboard: React.FC = () => {
             </ToolButton>
           ))}
         </ToolGroup>
-
+        <OpacityGroup>
+          <OpacityLabel>{t("opacity")}:</OpacityLabel>
+          <OpacityControlGroup>
+            <OpacitySlider
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              value={opacity}
+              onChange={(e) => setOpacity(parseFloat(e.target.value))}
+            />
+            <OpacityValue>{Math.round(opacity * 100)}%</OpacityValue>
+          </OpacityControlGroup>
+        </OpacityGroup>
         {/* Colors */}
         <ColorGroup>
           <ColorLabel>{t("color")}:</ColorLabel>
@@ -775,7 +997,7 @@ const Whiteboard: React.FC = () => {
         </ColorGroup>
 
         {/* Fill Color for shapes */}
-        {["rectangle", "circle"].includes(tool) && (
+        {["rectangle", "circle", "triangle"].includes(tool) && (
           <FillGroup>
             <FillLabel>{t("fill")}:</FillLabel>
             <FillPickerGroup>
@@ -851,6 +1073,13 @@ const Whiteboard: React.FC = () => {
             <Redo size={18} />
           </ActionButton>
           <ActionButton
+            onClick={duplicateElement}
+            disabled={!selectedElement}
+            title={t("duplicate")}
+          >
+            <Copy size={18} />
+          </ActionButton>
+          <ActionButton
             onClick={deleteSelected}
             disabled={!selectedElement}
             title={t("delete_selected")}
@@ -867,6 +1096,14 @@ const Whiteboard: React.FC = () => {
             exportBtn
           >
             <Download size={18} />
+          </ActionButton>
+
+          <ActionButton
+            onClick={exportPDF}
+            title={t("export_as_pdf")}
+            exportBtn
+          >
+            <FileText size={18} />
           </ActionButton>
           <ActionButton
             title={t("save")}

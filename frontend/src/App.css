@@ -75,7 +75,9 @@
   -webkit-text-size-adjust: 100%;
 }
 
-* , *::after, *::before{
+*,
+*::after,
+*::before {
   font-family: var(--font-family);
 }
 

@@ -2,10 +2,12 @@
   position: relative;
   width: 30%;
   height: 43%;
-  margin: .375rem;
+  margin: 0.375rem;
   border-radius: 12px;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .note-display:hover {
@@ -40,7 +42,6 @@
     to bottom,
     color-mix(in srgb, var(--background-color) 90%, transparent),
     color-mix(in srgb, var(--background-color) 30%, transparent)
-
   );
   backdrop-filter: blur(20px);
 }
@@ -149,7 +150,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: .2rem .6rem .3rem .6rem;
+  padding: 0.2rem 0.6rem 0.3rem 0.6rem;
   background: linear-gradient(
     to top,
     color-mix(in srgb, var(--background-color) 90%, transparent),

@@ -332,7 +332,7 @@ const PomodoroSection = () => {
   useEffect(() => {
     const timer = PomodoroTimer.getInstance();
     timer.setStore(usePomodoroTaskStore, useStore);
-    timer.initAudio();
+    timer.initAudio2();
     timer.syncTime();
 
     const timeInterval = setInterval(() => {
