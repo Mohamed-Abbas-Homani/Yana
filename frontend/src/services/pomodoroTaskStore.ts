@@ -3,6 +3,8 @@ import { devtools, persist } from "zustand/middleware";
 import notificationSound from "../assets/notification.mp3";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import { CONSTANTS } from "../const";
+import { platform } from "@tauri-apps/plugin-os";
+const currentPlatform = platform();
 // Types
 interface Task {
   id: string;
@@ -121,9 +123,21 @@ export class PomodoroTimer {
 
   private async playNotification() {
     try {
-      await fetch(`${CONSTANTS.BackURL}/music`, {
-        method: "POST",
-      });
+      if (currentPlatform == "linux") {
+        await fetch(`${CONSTANTS.BackURL}/music`, {
+          method: "POST",
+        });
+      } else {
+        if (this.audio) {
+          this.audio.currentTime = 0;
+
+          this.audio
+
+            .play()
+
+            .catch((e) => console.error("Failed to play notification:", e));
+        }
+      }
       const state = this.store?.getState();
       const session = state?.pomodoroState.currentSession;
       let message = "Time to take a break!";

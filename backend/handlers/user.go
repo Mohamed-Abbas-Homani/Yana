@@ -3,11 +3,12 @@ package handlers
 import (
 	"mash-notes-back/models"
 	"net/http"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 
-	"github.com/hajimehoshi/go-mp3"
-	"github.com/hajimehoshi/oto/v2"
+	// "github.com/hajimehoshi/go-mp3"
+	// "github.com/hajimehoshi/oto/v2"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -16,7 +17,7 @@ import (
 	"io"
 	"log"
 	"os"
-	"time"
+	// "time"
 )
 
 func SaveUserHandler(c echo.Context) error {
@@ -169,55 +170,84 @@ func GetUserProfilePictureHandler(c echo.Context) error {
 }
 
 func PlayMP3Async(filePath string) {
-    go func() {
-        f, err := os.Open(filePath)
-        if err != nil {
-            log.Println("Failed to open file:", err)
-            return
-        }
-        defer f.Close()
+	go func() {
+		players := []string{"mpv", "vlc", "ffplay", "play", "aplay"}
 
-        decoder, err := mp3.NewDecoder(f)
-        if err != nil {
-            log.Println("Failed to decode mp3:", err)
-            return
-        }
+		var cmd *exec.Cmd
+		for _, player := range players {
+			path, err := exec.LookPath(player)
+			if err == nil {
+				switch player {
+				case "mpv":
+					fmt.Println("mpv is used")
+					cmd = exec.Command(path, "--no-terminal", "--quiet", filePath)
+				case "vlc", "cvlc":
+					fmt.Printf("%s is used\n", player)
+					cmd = exec.Command(path, "--intf", "dummy", "--play-and-exit", filePath)
+				case "ffplay":
+					fmt.Println("ffplay is used")
+					cmd = exec.Command(path, "-nodisp", "-autoexit", filePath)
+				case "play":
+					fmt.Println("play is used")
+					cmd = exec.Command(path, filePath)
+				case "aplay":
+					fmt.Println("aplay is used")
+					cmd = exec.Command(path, filePath)
+				case "mplayer":
+					fmt.Println("mplayer is used")
+					cmd = exec.Command(path, "-really-quiet", filePath)
+				case "totem":
+					fmt.Println("totem is used")
+					cmd = exec.Command(path, "--play", filePath)
+				case "rhythmbox":
+					fmt.Println("rhythmbox is used")
+					cmd = exec.Command(path, "--play-uri", "file://"+filePath)
+				case "gnome-mplayer", "audacious", "qmmp":
+					fmt.Printf("%s is used\n", player)
+					cmd = exec.Command(path, filePath)
+				case "xdg-open":
+					fmt.Println("xdg-open is used (default media handler)")
+					cmd = exec.Command(path, filePath)
+				default:
+					continue
+				}
+				break
+			}
+		}
 
-        ctx, readyChan, err := oto.NewContext(decoder.SampleRate(), 2, 2)
-        if err != nil {
-            log.Println("Failed to create audio context:", err)
-            return
-        }
-        <-readyChan // wait until context is ready
+		if cmd == nil {
+			log.Println("No suitable media player found (tried mpv, vlc, ffplay, play, aplay)")
+			return
+		}
 
-        player := ctx.NewPlayer(decoder)
-        defer player.Close()
+		err := cmd.Start()
+		if err != nil {
+			log.Println("Failed to start media player:", err)
+			return
+		}
 
-        player.Play()
-
-        // Wait until playback is finished
-        for player.IsPlaying() {
-            time.Sleep(time.Millisecond)
-        }
-    }()
+		err = cmd.Wait() // Wait for playback to finish
+		if err != nil {
+			log.Println("Media player exited with error:", err)
+		}
+	}()
 }
 
 func getExecutableDir() (string, error) {
-    exePath, err := os.Executable()
-    if err != nil {
-        return "", err
-    }
-    exeDir := filepath.Dir(exePath)
-    return exeDir, nil
+	exePath, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Dir(exePath), nil
 }
 
 func PlayPomodoroHandler(c echo.Context) error {
-    exeDir, err := getExecutableDir()
-    if err != nil {
-        return c.String(http.StatusInternalServerError, "Failed to determine executable directory")
-    }
+	exeDir, err := getExecutableDir()
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to determine executable directory")
+	}
 
-    mp3Path := filepath.Join(exeDir, "music", "notification.mp3")
-    PlayMP3Async(mp3Path)
-    return c.String(http.StatusOK, "Playback started")
+	mp3Path := filepath.Join(exeDir, "music", "notification.mp3")
+	PlayMP3Async(mp3Path)
+	return c.String(http.StatusOK, "Playback started")
 }

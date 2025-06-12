@@ -10,7 +10,6 @@
     "frontendDist": "../dist"
   },
   "app": {
-    
     "windows": [
       {
         "title": "y a n a",
@@ -19,20 +18,18 @@
         "minWidth": 610,
         "minHeight": 367,
         "resizable": true,
-        "transparent": true
+        "additionalBrowserArgs": "--autoplay-policy=no-user-gesture-required"
       }
     ],
     "security": {
       "csp": "asset: http://asset.localhost",
-      "assetProtocol":{
-        "enable" : true
+      "assetProtocol": {
+        "enable": true
       }
     }
   },
   "bundle": {
-        "resources": [
-      "music/*"
-    ],
+    "resources": ["music/*"],
     "externalBin": ["binaries/yana-back"],
     "active": true,
     "targets": "all",

@@ -85,6 +85,9 @@
   color: var(--color);
   opacity: 0.5;
 }
+*::-webkit-scrollbar {
+  display: none;
+}
 body,
 html,
 #root {
