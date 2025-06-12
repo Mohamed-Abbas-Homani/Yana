@@ -151,5 +151,8 @@
   "filterBy": "フィルター条件",
   "all": "すべて",
   "filter": "フィルター",
-  "showing": "表示中"
+  "showing": "表示中",
+  "export_as_pdf": "PDFとしてエクスポート",
+  "triangle": "三角形",
+  "duplicate": "複製"
 }

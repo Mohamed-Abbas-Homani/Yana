@@ -1,6 +1,13 @@
 import Page from "../components/UI/Page";
 import "../components/HomePage/HomePage.css";
-import { FaArrowLeft, FaArrowRight, FaSearch, FaFilter, FaClock, FaHashtag } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaArrowRight,
+  FaSearch,
+  FaFilter,
+  FaClock,
+  FaHashtag,
+} from "react-icons/fa";
 import Note from "../components/HomePage/Note";
 import useFetchNotes from "../hooks/useFetchNotes";
 import { useState } from "react";
@@ -11,7 +18,8 @@ import { useTranslation } from "react-i18next";
 const HomePage = () => {
   const { t } = useTranslation();
   const { notes, loading, setPage, error, setKeyword } = useFetchNotes();
-  const { keyword, page, total, filters, toggleFilter } = useNotesDisplayStore();
+  const { keyword, page, total, filters, toggleFilter } =
+    useNotesDisplayStore();
   const [inputKeyword, setInputKeyword] = useState(keyword);
   const navigate = useNavigate();
 
@@ -113,7 +121,9 @@ const HomePage = () => {
                     className={`filter-chip ${isActive ? "active" : ""}`}
                     onClick={() => handleFilterClick(filter.key)}
                   >
-                    <IconComponent style={{ marginRight: "0.5rem", fontSize: "0.8rem" }} />
+                    <IconComponent
+                      style={{ marginRight: "0.5rem", fontSize: "0.8rem" }}
+                    />
                     {filter.label}
                   </div>
                 );
@@ -163,7 +173,9 @@ const HomePage = () => {
                 ? t("all", "All")
                 : filters
                     .map((key) => {
-                      const filter = availableFilters.find((f) => f.key === key);
+                      const filter = availableFilters.find(
+                        (f) => f.key === key,
+                      );
                       return filter ? filter.label : key;
                     })
                     .join(", ")}
@@ -180,7 +192,8 @@ const HomePage = () => {
           <div className="status-item">
             <FaClock />
             <span>
-              {t("showing", "Showing")}: {total > 0 ? `${startNote}-${endNote}` : "0"}
+              {t("showing", "Showing")}:{" "}
+              {total > 0 ? `${startNote}-${endNote}` : "0"}
             </span>
           </div>
           {keyword && (

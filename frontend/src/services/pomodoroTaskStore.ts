@@ -149,7 +149,7 @@ export class PomodoroTimer {
         .getState()
         .addNotification(
           `${this.systemStore.getState().user?.name}, ${message}`,
-          "info"
+          "info",
         );
     } catch (error) {
       console.error("Error playing notification:", error);
@@ -260,7 +260,7 @@ export const usePomodoroTaskStore = create<Store>()(
         deleteTodoList: (id: string) => {
           set((state) => {
             const filteredLists = state.todoLists.filter(
-              (list) => list.id !== id
+              (list) => list.id !== id,
             );
             return {
               todoLists: filteredLists,
@@ -290,7 +290,7 @@ export const usePomodoroTaskStore = create<Store>()(
             todoLists: state.todoLists.map((list) =>
               list.id === listId
                 ? { ...list, tasks: [...list.tasks, newTask] }
-                : list
+                : list,
             ),
           }));
         },
@@ -298,7 +298,7 @@ export const usePomodoroTaskStore = create<Store>()(
         updateTask: (
           listId: string,
           taskId: string,
-          updates: Partial<Task>
+          updates: Partial<Task>,
         ) => {
           set((state) => ({
             todoLists: state.todoLists.map((list) =>
@@ -306,10 +306,10 @@ export const usePomodoroTaskStore = create<Store>()(
                 ? {
                     ...list,
                     tasks: list.tasks.map((task) =>
-                      task.id === taskId ? { ...task, ...updates } : task
+                      task.id === taskId ? { ...task, ...updates } : task,
                     ),
                   }
-                : list
+                : list,
             ),
           }));
         },
@@ -322,7 +322,7 @@ export const usePomodoroTaskStore = create<Store>()(
                     ...list,
                     tasks: list.tasks.filter((task) => task.id !== taskId),
                   }
-                : list
+                : list,
             ),
           }));
         },
@@ -336,10 +336,10 @@ export const usePomodoroTaskStore = create<Store>()(
                     tasks: list.tasks.map((task) =>
                       task.id === taskId
                         ? { ...task, completed: !task.completed }
-                        : task
+                        : task,
                     ),
                   }
-                : list
+                : list,
             ),
           }));
         },
@@ -432,7 +432,7 @@ export const usePomodoroTaskStore = create<Store>()(
           }
         },
       }),
-      { name: "todo-pomodoro-store" }
-    )
-  )
+      { name: "todo-pomodoro-store" },
+    ),
+  ),
 );

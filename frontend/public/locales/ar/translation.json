@@ -151,5 +151,8 @@
   "filterBy": "التصفية حسب",
   "all": "الكل",
   "filter": "تصفية",
-  "showing": "عرض"
+  "showing": "عرض",
+      "export_as_pdf": "تصدير كملف PDF",
+    "triangle": "مثلث",
+    "duplicate": "تكرار"
 }

@@ -151,5 +151,8 @@
   "filterBy": "Filter By",
   "all": "All",
   "filter": "Filter",
-  "showing": "Showing"
+  "showing": "Showing",
+  "export_as_pdf": "Export as pdf",
+  "triangle": "Triangle",
+  "duplicate": "Duplicate"
 }

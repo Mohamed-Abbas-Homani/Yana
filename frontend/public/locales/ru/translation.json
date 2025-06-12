@@ -132,11 +132,11 @@
   "confirmResetCount": "Вы уверены, что хотите сбросить счёт завершённых помодоро?",
   "work": "Работа",
   "break": "Перерыв",
-  "longBreak": "Перерыв+" ,
+  "longBreak": "Перерыв+",
   "completedPomodoros": "Завершённые помодоро",
-  "running": "Идёт",          
-  "paused": "Стоп",         
-  "next": "Далее",          
+  "running": "Идёт",
+  "paused": "Стоп",
+  "next": "Далее",
   "workTimeLabel": "Работа",
   "Todo Lists": "Списки дел",
   "New list name...": "Название списка...",
@@ -151,5 +151,8 @@
   "filterBy": "Фильтровать по",
   "All": "Все",
   "filter": "Фильтр",
-  "showing": "Показано"
+  "showing": "Показано",
+  "export_as_pdf": "Экспорт в PDF",
+  "triangle": "треугольник",
+  "duplicate": "дублировать"
 }

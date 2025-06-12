@@ -153,5 +153,8 @@
   "filterBy": "Filtrer Par",
   "all": "Tous",
   "filter": "Filtrer",
-  "showing": "Affichage"
+  "showing": "Affichage",
+  "export_as_pdf": "Exporter en PDF",
+  "triangle": "Triangle",
+  "duplicate": "Dupliquer"
 }

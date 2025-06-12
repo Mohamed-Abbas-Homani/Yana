@@ -73,7 +73,6 @@ const FileItem = styled.div`
   }
 `;
 
-
 const ImagePreview = styled.div`
   display: flex;
   flex-direction: column;
