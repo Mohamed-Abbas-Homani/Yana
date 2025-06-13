@@ -1,4 +1,4 @@
-module mash-notes-back
+module yana-back
 
 go 1.23.0
 

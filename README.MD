@@ -86,7 +86,7 @@ yana/
 │   ├── handlers
 │   ├── main.go
 │   ├── makefile
-│   ├── mash-notes-back
+│   ├── yana-back
 │   ├── models
 │   └── routes
 └── frontend

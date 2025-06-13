@@ -1,253 +1,275 @@
 package handlers
 
 import (
-	"mash-notes-back/models"
-	"net/http"
-	"os/exec"
-	"path/filepath"
-	"strconv"
-
-	// "github.com/hajimehoshi/go-mp3"
-	// "github.com/hajimehoshi/oto/v2"
-	"github.com/labstack/echo/v4"
-	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
-
 	"fmt"
 	"io"
 	"log"
+	"mime/multipart"
+	"net/http"
 	"os"
-	// "time"
+	"os/exec"
+	"path/filepath"
+	"strconv"
+	"yana-back/models"
+
+	"github.com/labstack/echo/v4"
+	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
+const (
+	NotificationMusicPath = "music/notification.mp3"
+)
+
+// mediaPlayers defines available media players with their configurations
+var mediaPlayers = []MediaPlayer{
+	{"mpv", []string{"--no-terminal", "--quiet"}},
+	{"vlc", []string{"--intf", "dummy", "--play-and-exit"}},
+	{"cvlc", []string{"--intf", "dummy", "--play-and-exit"}},
+	{"ffplay", []string{"-nodisp", "-autoexit"}},
+	{"play", []string{}},
+	{"aplay", []string{}},
+	{"mplayer", []string{"-really-quiet"}},
+	{"totem", []string{"--play"}},
+	{"rhythmbox", []string{"--play-uri"}},
+	{"gnome-mplayer", []string{}},
+	{"audacious", []string{}},
+	{"qmmp", []string{}},
+	{"xdg-open", []string{}},
+}
+
+type MediaPlayer struct {
+	Name string
+	Args []string
+}
+
+// SaveUserHandler handles creation or update of a User, including profile picture
 func SaveUserHandler(c echo.Context) error {
-	// Parse form values for user details
-	name := c.FormValue("name")
-	nickName := c.FormValue("nick_name")
-	language := c.FormValue("language")
-	password := c.FormValue("password")
-	hint := c.FormValue("hint")
-
-	// Parse profile picture from form file
-	profilePicFile, err := c.FormFile("profile_picture")
-	var profilePicData []byte
-	if err == nil && profilePicFile != nil {
-		file, err := profilePicFile.Open()
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, map[string]string{
-				"error": "Failed to open profile picture file",
-			})
-		}
-		defer file.Close()
-
-		// Read the file data into a byte slice
-		profilePicData, err = io.ReadAll(file)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, map[string]string{
-				"error": "Failed to read profile picture data",
-			})
-		}
+	user, err := findOrCreateUser(c)
+	if err != nil {
+		return err
 	}
 
-	// Check if we are updating an existing user
-	userIDStr := c.FormValue("id")
-	var user models.User
-	if userIDStr != "" {
-		userID, err := strconv.Atoi(userIDStr)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]string{
-				"error": "Invalid user ID",
-			})
-		}
-
-		// Find the user by ID
-		err = DB.First(&user, userID).Error
-		if err != nil {
-			if err == gorm.ErrRecordNotFound {
-				return c.JSON(http.StatusNotFound, map[string]string{
-					"error": "User not found",
-				})
-			}
-			return c.JSON(http.StatusInternalServerError, map[string]string{
-				"error": "Failed to fetch user",
-			})
-		}
-	} else {
-		// Create a new user if no ID is provided
-		user = models.User{}
+	if err := updateUserFields(&user, c); err != nil {
+		return err
 	}
 
-	// Update the user details
-	user.Name = name
-	user.NickName = nickName
-	user.Language = language
-	user.Hint = hint
-
-	// Hash the password if it's provided
-	if password != "" {
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, map[string]string{
-				"error": "Failed to hash password",
-			})
-		}
-		user.Password = string(hashedPassword)
+	if err := handleProfilePicture(&user, c); err != nil {
+		return err
 	}
 
-	if len(profilePicData) > 0 {
-		user.ProfilePicture = profilePicData // Set profile picture if provided
+	if err := saveUser(&user); err != nil {
+		return err
 	}
 
-	// Save the user (insert or update)
-	if err := DB.Save(&user).Error; err != nil {
-		log.Printf("Failed to save user: %v", err)
-		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"error": "Failed to save user",
-		})
-	}
-
-	// Return the created or updated user
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": fmt.Sprintf("User %s saved successfully", user.Name),
-		"user":    user, // Return the user object
+		"user":    user,
 	})
 }
 
-// GetUserByIDHandler retrieves a user by their ID.
+// GetUserByIDHandler retrieves a user by their ID
 func GetUserByIDHandler(c echo.Context) error {
-	// Get the user ID from the request parameters
 	userID := c.Param("id")
 
-	// Variable to hold the user
 	var user models.User
-
-	// Find the user by ID, include profile picture as part of the query
 	if err := DB.First(&user, "id = ?", userID).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return c.JSON(http.StatusNotFound, map[string]string{
-				"error": "User not found",
-			})
-		}
-		log.Printf("Error retrieving user: %v", err)
-		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"error": "Failed to retrieve user",
-		})
+		return handleDBError(c, err, "User not found", "Failed to retrieve user")
 	}
 
-	// Return the user details as a response
 	return c.JSON(http.StatusOK, user)
 }
 
+// GetUserProfilePictureHandler retrieves and serves a user's profile picture
 func GetUserProfilePictureHandler(c echo.Context) error {
-	// Get the user ID from the request parameters
 	userID := c.Param("id")
 
-	// Variable to hold the user
 	var user models.User
-
-	// Find the user by ID, we only need the profile picture (document)
 	if err := DB.Select("profile_picture").First(&user, "id = ?", userID).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return c.JSON(http.StatusNotFound, map[string]string{
-				"error": "User not found",
-			})
-		}
-		log.Printf("Error retrieving user profile picture: %v", err)
-		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"error": "Failed to retrieve profile document",
-		})
+		return handleDBError(c, err, "User not found", "Failed to retrieve profile document")
 	}
 
-	// Check if the user has uploaded a document
 	if len(user.ProfilePicture) == 0 {
 		return c.JSON(http.StatusNotFound, map[string]string{
 			"error": "No profile document found for the user",
 		})
 	}
 
-	// Send the document as a binary response without specifying MIME type
 	return c.Blob(http.StatusOK, "", user.ProfilePicture)
 }
 
-func PlayMP3Async(filePath string) {
-	go func() {
-		players := []string{"mpv", "vlc", "ffplay", "play", "aplay"}
+// PlayPomodoroHandler plays the pomodoro notification sound
+func PlayPomodoroHandler(c echo.Context) error {
+	exeDir, err := getExecutableDir()
+	if err != nil {
+		log.Printf("Failed to determine executable directory: %v", err)
+		return c.String(http.StatusInternalServerError, "Failed to determine executable directory")
+	}
 
-		var cmd *exec.Cmd
-		for _, player := range players {
-			path, err := exec.LookPath(player)
-			if err == nil {
-				switch player {
-				case "mpv":
-					fmt.Println("mpv is used")
-					cmd = exec.Command(path, "--no-terminal", "--quiet", filePath)
-				case "vlc", "cvlc":
-					fmt.Printf("%s is used\n", player)
-					cmd = exec.Command(path, "--intf", "dummy", "--play-and-exit", filePath)
-				case "ffplay":
-					fmt.Println("ffplay is used")
-					cmd = exec.Command(path, "-nodisp", "-autoexit", filePath)
-				case "play":
-					fmt.Println("play is used")
-					cmd = exec.Command(path, filePath)
-				case "aplay":
-					fmt.Println("aplay is used")
-					cmd = exec.Command(path, filePath)
-				case "mplayer":
-					fmt.Println("mplayer is used")
-					cmd = exec.Command(path, "-really-quiet", filePath)
-				case "totem":
-					fmt.Println("totem is used")
-					cmd = exec.Command(path, "--play", filePath)
-				case "rhythmbox":
-					fmt.Println("rhythmbox is used")
-					cmd = exec.Command(path, "--play-uri", "file://"+filePath)
-				case "gnome-mplayer", "audacious", "qmmp":
-					fmt.Printf("%s is used\n", player)
-					cmd = exec.Command(path, filePath)
-				case "xdg-open":
-					fmt.Println("xdg-open is used (default media handler)")
-					cmd = exec.Command(path, filePath)
-				default:
-					continue
-				}
-				break
-			}
+	mp3Path := filepath.Join(exeDir, NotificationMusicPath)
+	if err := validateMusicFile(mp3Path); err != nil {
+		log.Printf("Music file validation failed: %v", err)
+		return c.String(http.StatusNotFound, "Music file not found")
+	}
+
+	playMP3Async(mp3Path)
+	return c.String(http.StatusOK, "Playback started")
+}
+
+// Helper functions
+
+func findOrCreateUser(c echo.Context) (models.User, error) {
+	userIDStr := c.FormValue("id")
+	if userIDStr == "" {
+		return models.User{}, nil
+	}
+
+	userID, err := strconv.Atoi(userIDStr)
+	if err != nil {
+		return models.User{}, c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "Invalid user ID",
+		})
+	}
+
+	var user models.User
+	if err := DB.First(&user, userID).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return models.User{}, c.JSON(http.StatusNotFound, map[string]string{
+				"error": "User not found",
+			})
 		}
+		return models.User{}, c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to fetch user",
+		})
+	}
 
-		if cmd == nil {
-			log.Println("No suitable media player found (tried mpv, vlc, ffplay, play, aplay)")
-			return
-		}
+	return user, nil
+}
 
-		err := cmd.Start()
+func updateUserFields(user *models.User, c echo.Context) error {
+	user.Name = c.FormValue("name")
+	user.NickName = c.FormValue("nick_name")
+	user.Language = c.FormValue("language")
+	user.Hint = c.FormValue("hint")
+
+	password := c.FormValue("password")
+	if password != "" {
+		hashedPassword, err := hashPassword(password)
 		if err != nil {
-			log.Println("Failed to start media player:", err)
-			return
+			return c.JSON(http.StatusInternalServerError, map[string]string{
+				"error": "Failed to hash password",
+			})
 		}
+		user.Password = hashedPassword
+	}
 
-		err = cmd.Wait() // Wait for playback to finish
-		if err != nil {
-			log.Println("Media player exited with error:", err)
-		}
-	}()
+	return nil
+}
+
+func handleProfilePicture(user *models.User, c echo.Context) error {
+	profilePicFile, err := c.FormFile("profile_picture")
+	if err != nil || profilePicFile == nil {
+		return nil // No profile picture provided
+	}
+
+	profilePicData, err := readFileData(profilePicFile)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to process profile picture",
+		})
+	}
+
+	user.ProfilePicture = profilePicData
+	return nil
+}
+
+func readFileData(fileHeader *multipart.FileHeader) ([]byte, error) {
+	file, err := fileHeader.Open()
+	if err != nil {
+		return nil, fmt.Errorf("failed to open file: %w", err)
+	}
+	defer file.Close()
+
+	data, err := io.ReadAll(file)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read file data: %w", err)
+	}
+
+	return data, nil
+}
+
+func hashPassword(password string) (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", fmt.Errorf("failed to hash password: %w", err)
+	}
+	return string(hashedPassword), nil
+}
+
+func saveUser(user *models.User) error {
+	if err := DB.Save(user).Error; err != nil {
+		log.Printf("Failed to save user: %v", err)
+		return fmt.Errorf("failed to save user: %w", err)
+	}
+	return nil
 }
 
 func getExecutableDir() (string, error) {
 	exePath, err := os.Executable()
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to get executable path: %w", err)
 	}
 	return filepath.Dir(exePath), nil
 }
 
-func PlayPomodoroHandler(c echo.Context) error {
-	exeDir, err := getExecutableDir()
-	if err != nil {
-		return c.String(http.StatusInternalServerError, "Failed to determine executable directory")
+func validateMusicFile(filePath string) error {
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		return fmt.Errorf("music file does not exist: %s", filePath)
+	}
+	return nil
+}
+
+func playMP3Async(filePath string) {
+	go func() {
+		player, args := findAvailableMediaPlayer()
+		if player == "" {
+			log.Println("No suitable media player found")
+			return
+		}
+
+		if err := executeMediaPlayer(player, args, filePath); err != nil {
+			log.Printf("Failed to play audio: %v", err)
+		}
+	}()
+}
+
+func findAvailableMediaPlayer() (string, []string) {
+	for _, mp := range mediaPlayers {
+		if path, err := exec.LookPath(mp.Name); err == nil {
+			log.Printf("Using media player: %s", mp.Name)
+			return path, mp.Args
+		}
+	}
+	return "", nil
+}
+
+func executeMediaPlayer(playerPath string, args []string, filePath string) error {
+	// Special handling for rhythmbox which needs file:// prefix
+	if filepath.Base(playerPath) == "rhythmbox" {
+		args = append(args, "file://"+filePath)
+	} else {
+		args = append(args, filePath)
 	}
 
-	mp3Path := filepath.Join(exeDir, "music", "notification.mp3")
-	PlayMP3Async(mp3Path)
-	return c.String(http.StatusOK, "Playback started")
+	cmd := exec.Command(playerPath, args...)
+
+	if err := cmd.Start(); err != nil {
+		return fmt.Errorf("failed to start media player: %w", err)
+	}
+
+	if err := cmd.Wait(); err != nil {
+		return fmt.Errorf("media player exited with error: %w", err)
+	}
+
+	return nil
 }

@@ -1,6 +1,6 @@
 [package]
 name = "yana"
-version = "1.0.0"
+version = "1.7.6"
 description = "Yet Another Notes App"
 authors = ["Mash"]
 edition = "2021"
@@ -11,7 +11,7 @@ edition = "2021"
 # The `_lib` suffix may seem redundant but it is necessary
 # to make the lib name unique and wouldn't conflict with the bin name.
 # This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
-name = "notes_by_mash_lib"
+name = "yana_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

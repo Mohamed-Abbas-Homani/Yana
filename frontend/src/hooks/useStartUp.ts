@@ -63,7 +63,7 @@ const useStartUp = () => {
   useEffect(() => {
     const exitServer = async () => {
       try {
-        const response = await fetch(`${CONSTANTS.BackURL}/mash-down`, {
+        const response = await fetch(`${CONSTANTS.BackURL}/yana-back-down`, {
           method: "POST",
         });
 

@@ -12,9 +12,8 @@ import (
 // Global variable for the GORM DB connection
 var DB *gorm.DB
 
-
 // ExitServerHandler gracefully shuts down the server
-func MashDownHandler(c echo.Context) error {
+func YanaBackDownHandler(c echo.Context) error {
 	go func() {
 		log.Println("Shutting down the server...")
 		os.Exit(0)

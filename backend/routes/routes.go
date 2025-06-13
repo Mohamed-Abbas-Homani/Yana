@@ -2,7 +2,7 @@ package routes
 
 import (
 	"net/http"
-	"mash-notes-back/handlers"
+	"yana-back/handlers"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -13,9 +13,9 @@ func InitEcho() {
 
 	// Enable CORS for specific origins
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"*"},
-		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete},
-		AllowHeaders: []string{"Content-Disposition", "Content-Type", "Authorization"},
+		AllowOrigins:  []string{"*"},
+		AllowMethods:  []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete},
+		AllowHeaders:  []string{"Content-Disposition", "Content-Type", "Authorization"},
 		ExposeHeaders: []string{"Content-Disposition"},
 	}))
 	e.Use(middleware.Logger())
@@ -31,7 +31,7 @@ func InitEcho() {
 	e.POST("/save-user", handlers.SaveUserHandler)
 	e.GET("/user/:id", handlers.GetUserByIDHandler)
 	e.GET("/user/:id/profile-picture", handlers.GetUserProfilePictureHandler)
-	e.POST("/mash-down", handlers.MashDownHandler)
+	e.POST("/yana-back-down", handlers.YanaBackDownHandler)
 	e.PUT("/note", handlers.SaveNoteHandler)
 	e.GET("/note/:id", handlers.GetNoteHandler)
 	e.GET("/documents/:id", handlers.GetDocument)
@@ -40,7 +40,7 @@ func InitEcho() {
 	e.GET("/notes/mood-stat", handlers.GetNotesCountByMoodHandler)
 	e.DELETE("/notes/:id", handlers.DeleteNoteHandler)
 	e.GET("/notes/:id/documents/:documentName", handlers.GetNoteDocumentByName)
-	e.POST("/music",  handlers.PlayPomodoroHandler)
+	e.POST("/music", handlers.PlayPomodoroHandler)
 	// Start server
 	e.Logger.Fatal(e.Start(":8090"))
 }

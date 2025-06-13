@@ -2,14 +2,15 @@ package main
 
 import (
 	"log"
-	"mash-notes-back/handlers"
-	"mash-notes-back/models"
-	"mash-notes-back/routes"
 	"path/filepath"
+	"yana-back/handlers"
+	"yana-back/models"
+	"yana-back/routes"
+
+	"os"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-    "os"
 )
 
 func main() {
