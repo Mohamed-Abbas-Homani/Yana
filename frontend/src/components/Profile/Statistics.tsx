@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import FlexBetween from "../UI/FlexBetween";
-import { Line } from "react-chartjs-2"; // Importing the Line chart from react-chartjs-2
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,10 +10,10 @@ import {
   Title,
   Tooltip,
   Legend,
-} from "chart.js"; // Importing required chart.js components
+} from "chart.js";
 import "./Statistics.css";
 import { getCSSVariable } from "../../utils/style";
-import { useNoteStats } from "../../hooks/useNoteStats"; // Import the custom hook
+import { useNoteStats } from "../../hooks/useNoteStats";
 import { useTranslation } from "react-i18next";
 
 // Register Chart.js components
@@ -33,10 +33,9 @@ const Statistics = () => {
   const [profileColor, setProfileColor] = useState<string>("");
   const [backgroundColor, setBackgroundColor] = useState<string>("");
 
-  const { createdNotes, moodNotes, loading, error } = useNoteStats(); // Call the custom hook
+  const { createdNotes, moodNotes, loading, error } = useNoteStats();
 
   useEffect(() => {
-    // Get CSS variables on component mount
     setProfileColor(getCSSVariable("--profile-color"));
     setBackgroundColor(getCSSVariable("--background-profile-color"));
   }, []);
@@ -49,35 +48,48 @@ const Statistics = () => {
     return <p>{error}</p>;
   }
 
-  // Data for the creation chart (Created notes per day of the week)
+  // Fixed weekday order
+  const orderedWeekdays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  // Map createdNotes into fixed weekday order, fill missing with 0
+  const orderedCreatedNotes = orderedWeekdays.map(
+    (day) => createdNotes[day] ?? 0,
+  );
+
   const creationData = {
-    labels: Object.keys(createdNotes), // X-axis labels (days of the week)
+    labels: orderedWeekdays,
     datasets: [
       {
-        label: t("Created Notes"), // Dataset label
-        data: Object.values(createdNotes),
-        fill: false, // Don't fill the area under the line
+        label: t("Created Notes"),
+        data: orderedCreatedNotes,
+        fill: false,
         borderColor: profileColor,
-        tension: 0.1, // Line smoothness
+        tension: 0.1,
       },
     ],
   };
 
-  // Data for the mood chart (Notes per mood)
   const moodData = {
-    labels: Object.keys(moodNotes), // X-axis labels (moods)
+    labels: Object.keys(moodNotes),
     datasets: [
       {
-        label: t("Notes by Mood"), // Dataset label
+        label: t("Notes by Mood"),
         data: Object.values(moodNotes),
-        fill: false, // Don't fill the area under the line
+        fill: false,
         borderColor: profileColor,
-        tension: 0.1, // Line smoothness
+        tension: 0.1,
       },
     ],
   };
 
-  // Chart options
   const chartOptions = {
     responsive: true,
     plugins: {
@@ -90,30 +102,30 @@ const Statistics = () => {
         },
       },
       tooltip: {
-        backgroundColor: "#333", // Dark background for tooltips
-        titleColor: profileColor, // Light title color for tooltips
-        bodyColor: profileColor, // Light body text color for tooltips
+        backgroundColor: "#333",
+        titleColor: profileColor,
+        bodyColor: profileColor,
       },
     },
     scales: {
       x: {
         ticks: {
-          color: profileColor, // Light color for x-axis labels
+          color: profileColor,
         },
         grid: {
-          display: false, // Remove grid lines for the x-axis
+          display: false,
         },
       },
       y: {
         ticks: {
-          color: profileColor, // Light color for y-axis labels
+          color: profileColor,
         },
         grid: {
-          display: false, // Remove grid lines for the y-axis
+          display: false,
         },
       },
     },
-    backgroundColor: backgroundColor, // Background color of the chart area (using dynamic background color)
+    backgroundColor: backgroundColor,
   };
 
   return (
@@ -136,10 +148,8 @@ const Statistics = () => {
           borderRadius: "8px",
         }}
       >
-        <Line data={creationData} options={chartOptions} />{" "}
-        {/* Chart for created notes per weekday */}
-        <Line data={moodData} options={chartOptions} />{" "}
-        {/* Chart for notes by mood */}
+        <Line data={creationData} options={chartOptions} />
+        <Line data={moodData} options={chartOptions} />
       </div>
     </FlexBetween>
   );

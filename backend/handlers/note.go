@@ -122,7 +122,18 @@ func GetNotesCountByWeekdayHandler(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to fetch notes count by weekday"})
 	}
 
-	response := make(map[string]int)
+	// Initialize all days with 0
+	response := map[string]int{
+		"Sunday":    0,
+		"Monday":    0,
+		"Tuesday":   0,
+		"Wednesday": 0,
+		"Thursday":  0,
+		"Friday":    0,
+		"Saturday":  0,
+	}
+
+	// Update with actual counts
 	for _, result := range results {
 		if weekdayName, exists := weekdayNames[result.Weekday]; exists {
 			response[weekdayName] = result.Count
