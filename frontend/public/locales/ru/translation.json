@@ -154,5 +154,7 @@
   "showing": "Показано",
   "export_as_pdf": "Экспорт в PDF",
   "triangle": "треугольник",
-  "duplicate": "дублировать"
+  "duplicate": "дублировать",
+  "chooseFont":"Выбрать шрифт",
+  "opacity":"непрозрачность"
 }

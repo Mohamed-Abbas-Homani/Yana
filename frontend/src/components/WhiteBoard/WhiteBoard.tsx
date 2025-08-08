@@ -780,7 +780,7 @@ const Whiteboard: React.FC = () => {
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("whiteboard.pdf");
+      pdf.save(`whiteboard_at_${new Date().toISOString()}.pdf`);
     } catch (error) {
       console.error("PDF export failed:", error);
     }

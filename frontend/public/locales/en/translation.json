@@ -154,5 +154,7 @@
   "showing": "Showing",
   "export_as_pdf": "Export as pdf",
   "triangle": "Triangle",
-  "duplicate": "Duplicate"
+  "duplicate": "Duplicate",
+  "chooseFont":"choose font",
+  "opacity":"opacity"
 }

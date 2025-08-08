@@ -19,6 +19,7 @@ const useStartUp = () => {
     profileFontColor,
     menuItemBackground,
     menuToggleBackground,
+    font,
   } = useConfig();
   const { currentBack, currentFont } = useNoteStore();
 
@@ -40,6 +41,7 @@ const useStartUp = () => {
     updateCSSVariable("--profile-color", profileFontColor);
     updateCSSVariable("--menu-toggle-background", menuToggleBackground);
     updateCSSVariable("--menu-item-background", menuItemBackground);
+    updateCSSVariable("--font-family", font);
   }, [
     fontColor,
     backgroundColor,

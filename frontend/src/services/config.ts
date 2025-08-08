@@ -15,6 +15,8 @@ type Store = {
   setMenuItemBackground: (color: string) => void;
   menuToggleBackground: string;
   setMenuToggleBackground: (color: string) => void;
+  font: string;
+  setFont: (font: string) => void;
 };
 
 const useConfig = create<Store>()(
@@ -30,7 +32,11 @@ const useConfig = create<Store>()(
         menuItemBackground: getCSSVariable("--menu-item-background") || "#444", // Default menu item background color
         menuToggleBackground:
           getCSSVariable("--menu-toggle-background") || "#555", // Default menu toggle background color
-
+        font: getCSSVariable("--font-family") || "var(--font-patrick)",
+        setFont: (font: string) => {
+          set({ font });
+          updateCSSVariable("--font-family", font);
+        },
         // Functions to update CSS variables and store state
         setFontColor: (color: string) => {
           set({ fontColor: color });

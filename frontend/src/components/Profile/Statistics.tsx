@@ -99,30 +99,47 @@ const Statistics = () => {
         color: profileColor,
         font: {
           size: 18,
+          family: getCSSVariable("--font-family"), // use CSS variable here
         },
       },
       tooltip: {
         backgroundColor: "#333",
         titleColor: profileColor,
         bodyColor: profileColor,
+        titleFont: {
+          family: getCSSVariable("--font-family"),
+        },
+        bodyFont: {
+          family: getCSSVariable("--font-family"),
+        },
+      },
+      legend: {
+        labels: {
+          color: profileColor,
+          font: {
+            family: getCSSVariable("--font-family"),
+          },
+        },
       },
     },
     scales: {
       x: {
         ticks: {
           color: profileColor,
+          font: {
+            family: getCSSVariable("--font-family"),
+          },
         },
-        grid: {
-          display: false,
-        },
+        grid: { display: false },
       },
       y: {
         ticks: {
           color: profileColor,
+          font: {
+            family: getCSSVariable("--font-family"),
+          },
         },
-        grid: {
-          display: false,
-        },
+        grid: { display: false },
       },
     },
     backgroundColor: backgroundColor,

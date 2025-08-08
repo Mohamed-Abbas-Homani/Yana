@@ -52,17 +52,26 @@ type WhiteboardStore = {
   setOpacity: (opacity: number) => void;
 };
 
+const HISTORY_LIMIT = 100;
+
 const useWhiteboardStore = create<WhiteboardStore>()(
   devtools(
     persist(
       (set) => ({
         opacity: 1,
         setOpacity: (opacity: number) => set({ opacity }),
+
         elements: [],
         setElements: (elements) => set({ elements }),
 
         history: [[]],
-        setHistory: (history) => set({ history }),
+        setHistory: (history) =>
+          set(() => {
+            if (history.length > HISTORY_LIMIT) {
+              history = history.slice(history.length - HISTORY_LIMIT);
+            }
+            return { history };
+          }),
 
         historyIndex: 0,
         setHistoryIndex: (index) => set({ historyIndex: index }),

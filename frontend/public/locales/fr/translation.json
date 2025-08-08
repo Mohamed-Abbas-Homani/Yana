@@ -156,5 +156,7 @@
   "showing": "Affichage",
   "export_as_pdf": "Exporter en PDF",
   "triangle": "Triangle",
-  "duplicate": "Dupliquer"
+  "duplicate": "Dupliquer",
+  "chooseFont":"Choisir la police",
+  "opacity":"opacité"
 }

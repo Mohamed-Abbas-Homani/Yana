@@ -1,19 +1,82 @@
-.set-color {
+.settings-grid {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--color);
-  color: var(--background-color);
-  font-weight: bold;
-  width: 34%;
-  padding: 13px 21px;
-  border-radius: 13px;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
 }
 
 .set-container {
   display: flex;
-  width: 89%;
-  height: 89%;
-  justify-content: space-around;
   flex-direction: column;
+  gap: 0.8rem;
+  flex: 1;
+  padding: 1rem;
+}
+
+.set-color {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color);
+  color: var(--background-color);
+  font-weight: bold;
+  padding: 0.5rem 0.7rem;
+  border-radius: 13px;
+  width: 89%;
+}
+
+/* Circular color pickers */
+.color-picker {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.color-picker::-webkit-color-swatch {
+  border-radius: 50%;
+  border: none;
+}
+.color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+/* Font column */
+.font-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 0.5;
+  padding: 1rem;
+}
+
+.font-display {
+  padding: 0.3rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--background-color);
+  background-color: transparent;
+  color: var(--color);
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.font-list {
+  margin-top: 0.3rem;
+  border: 1px solid var(--background-color);
+  background-color: var(--background-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.font-item {
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--color);
+}
+.font-item:hover {
+  background-color: var(--color);
+  color: var(--background-color);
 }
