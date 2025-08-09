@@ -156,5 +156,17 @@
   "triangle": "مثلث",
   "duplicate": "تكرار",
   "chooseFont": "اختر الخط",
-  "opacity":"شفافية"
+  "opacity":"شفافية",
+      "exportDB": "تصدير قاعدة البيانات",
+    "exporting": "جارٍ التصدير...",
+    "Export failed": "فشل التصدير",
+    "Exported sucessfuly to downloads": "تم التصدير بنجاح إلى التنزيلات",
+
+    "importDB": "استيراد قاعدة البيانات",
+    "importing": "جارٍ الاستيراد...",
+    "Import failed": "فشل الاستيراد",
+    "Database imported successfully": "تم استيراد قاعدة البيانات بنجاح",
+
+    "Add a file": "أضف ملفًا",
+    "database": "قاعدة البيانات"
 }

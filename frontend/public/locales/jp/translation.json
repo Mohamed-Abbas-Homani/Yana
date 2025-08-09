@@ -156,5 +156,17 @@
   "triangle": "三角形",
   "duplicate": "複製",
   "chooseFont":"フォントを選択",
-  "opacity":"不透明度 (ふとうめいど)"
+  "opacity":"不透明度 (ふとうめいど)",
+      "exportDB": "データベースをエクスポート",
+    "exporting": "エクスポート中...",
+    "Export failed": "エクスポートに失敗しました",
+    "Exported sucessfuly to downloads": "ダウンロードに正常にエクスポートされました",
+
+    "importDB": "データベースをインポート",
+    "importing": "インポート中...",
+    "Import failed": "インポートに失敗しました",
+    "Database imported successfully": "データベースが正常にインポートされました",
+
+    "Add a file": "ファイルを追加",
+    "database": "データベース"
 }

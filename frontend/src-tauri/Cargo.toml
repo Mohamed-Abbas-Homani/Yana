@@ -1,6 +1,6 @@
 [package]
 name = "yana"
-version = "1.7.6"
+version = "2.0.0"
 description = "Yet Another Notes App"
 authors = ["Mash"]
 edition = "2021"

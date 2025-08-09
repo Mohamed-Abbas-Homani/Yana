@@ -1,10 +1,3 @@
-@font-face {
-  font-family: "NovaMono";
-  src: url("./assets/fonts/NovaMono-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-
 /* Patrick Hand */
 @font-face {
   font-family: "PatrickHand";
@@ -30,19 +23,19 @@
   font-style: normal;
 }
 
-/* Tangerine Regular */
+/* Barriecito */
 @font-face {
-  font-family: "Tangerine";
-  src: url("./assets/fonts/Tangerine-Regular.ttf") format("truetype");
+  font-family: "Barriecito";
+  src: url("./assets/fonts/Barriecito-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
-/* Tangerine Bold */
+/* Zain */
 @font-face {
-  font-family: "Tangerine";
-  src: url("./assets/fonts/Tangerine-Bold.ttf") format("truetype");
-  font-weight: bold;
+  font-family: "Zain";
+  src: url("./assets/fonts/Zain-Regular.ttf") format("truetype");
+  font-weight: normal;
   font-style: normal;
 }
 
@@ -51,10 +44,16 @@
   --font-patrick: "PatrickHand", cursive;
   --font-pixelify: "PixelifySans", sans-serif;
   --font-syne: "SyneMono", monospace;
-  --font-tangerine: "Tangerine", cursive;
-  /* font-family: Inter, Avenir, Helvetica, Arial, sans-serif; */
+  --font-barriecito: "Barriecito", cursive;
+  --font-zain: "Zain", sans-serif;
+
+  /* Default font family */
   --font-family: var(--font-patrick);
-  font-size: clamp(0.4rem, 1.2vw + 1vh, 2rem);
+
+  /* Adjustable font size variable */
+  --font-size: clamp(0.4rem, 1.2vw + 1vh, 2rem);
+
+  font-size: var(--font-size);
   line-height: 24px;
   font-weight: 400;
 
@@ -85,9 +84,11 @@
   color: var(--color);
   opacity: 0.5;
 }
+
 *::-webkit-scrollbar {
   display: none;
 }
+
 body,
 html,
 #root {

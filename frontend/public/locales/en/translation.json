@@ -156,5 +156,17 @@
   "triangle": "Triangle",
   "duplicate": "Duplicate",
   "chooseFont":"choose font",
-  "opacity":"opacity"
+  "opacity":"opacity",
+  "exportDB": "Export DB",
+  "exporting": "Exporting...",
+  "Export failed": "Export failed",
+  "Exported sucessfuly to downloads": "Exported successfully to downloads",
+
+  "importDB": "Import DB",
+  "importing": "Importing...",
+  "Import failed": "Import failed",
+  "Database imported successfully": "Database imported successfully",
+
+  "Add a file": "Add a file",
+  "database": "Database"
 }

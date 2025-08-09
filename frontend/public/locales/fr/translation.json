@@ -158,5 +158,17 @@
   "triangle": "Triangle",
   "duplicate": "Dupliquer",
   "chooseFont":"Choisir la police",
-  "opacity":"opacité"
+  "opacity":"opacité",
+      "exportDB": "Exporter la base de données",
+    "exporting": "Export en cours...",
+    "Export failed": "Échec de l'exportation",
+    "Exported sucessfuly to downloads": "Exportation réussie dans les téléchargements",
+
+    "importDB": "Importer la base de données",
+    "importing": "Import en cours...",
+    "Import failed": "Échec de l'importation",
+    "Database imported successfully": "Base de données importée avec succès",
+
+    "Add a file": "Ajouter un fichier",
+    "database": "Base de données"
 }

@@ -156,5 +156,17 @@
   "triangle": "треугольник",
   "duplicate": "дублировать",
   "chooseFont":"Выбрать шрифт",
-  "opacity":"непрозрачность"
+  "opacity":"непрозрачность",
+      "exportDB": "Izvezi bazu podataka",
+    "exporting": "Izvoz u toku...",
+    "Export failed": "Izvoz nije uspeo",
+    "Exported sucessfuly to downloads": "Uspešno izvezeno u preuzimanja",
+
+    "importDB": "Uvezi bazu podataka",
+    "importing": "Uvoz u toku...",
+    "Import failed": "Uvoz nije uspeo",
+    "Database imported successfully": "Baza podataka uspešno uvezena",
+
+    "Add a file": "Dodaj fajl",
+    "database": "Baza podataka"
 }

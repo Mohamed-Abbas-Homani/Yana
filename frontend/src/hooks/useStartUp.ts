@@ -3,27 +3,19 @@ import { useTranslation } from "react-i18next";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { listen } from "@tauri-apps/api/event";
-import { CONSTANTS } from "../const";
-import useConfig from "../services/config";
-import useNoteStore from "../services/note.ts";
-import useStore from "../services/store.ts";
 import { updateCSSVariable } from "../utils/style";
+import useStore from "../services/store";
+import useConfig from "../services/config";
+import useNoteStore from "../services/note";
+import useDataPersist from "./useDataPersist";
 
 const useStartUp = () => {
   const { i18n, t } = useTranslation();
   const { user, addNotification } = useStore();
-  const {
-    fontColor,
-    backgroundColor,
-    profileBackgroundColor,
-    profileFontColor,
-    menuItemBackground,
-    menuToggleBackground,
-    font,
-  } = useConfig();
+  const { fontColor, backgroundColor, profileBackgroundColor, profileFontColor, menuItemBackground, menuToggleBackground, font } = useConfig();
   const { currentBack, currentFont } = useNoteStore();
+  const { reloadData, saveData } = useDataPersist();
 
-  // Welcome message and language setup
   useEffect(() => {
     if (user && user.name) {
       i18n.changeLanguage(user.language);
@@ -31,7 +23,6 @@ const useStartUp = () => {
     }
   }, []);
 
-  // CSS variable setup
   useEffect(() => {
     updateCSSVariable("--color", fontColor);
     updateCSSVariable("--background-color", backgroundColor);
@@ -53,27 +44,19 @@ const useStartUp = () => {
     menuItemBackground,
   ]);
 
-  // Run backend sidecar
   useLayoutEffect(() => {
     const runBack = async () => {
       await invoke("run_yana_back_sidecar");
+      await reloadData();
     };
     runBack();
   }, []);
 
-  // Graceful shutdown
   useEffect(() => {
     const exitServer = async () => {
       try {
-        const response = await fetch(`${CONSTANTS.BackURL}/yana-back-down`, {
-          method: "POST",
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
-
-        await response.json();
+        await saveData();
+        await fetch("/yana-back-down", { method: "POST" });
       } catch (err: any) {
         console.error("Error exiting the server:", err.message);
       }

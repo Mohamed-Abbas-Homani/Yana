@@ -37,7 +37,7 @@ func main() {
 	}
 
 	// Run migrations
-	err = handlers.DB.AutoMigrate(&models.User{}, &models.Note{}, &models.Document{})
+	err = handlers.DB.AutoMigrate(&models.User{}, &models.Note{}, &models.Document{}, &models.Config{})
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
@@ -45,5 +45,5 @@ func main() {
 	log.Printf("Database initialized at %s", dbPath)
 
 	// Start Echo server
-	routes.InitEcho()
+	routes.InitEcho(dataDir)
 }

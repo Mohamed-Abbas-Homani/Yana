@@ -1,0 +1,51 @@
+# Node modules inside frontend
+/frontend/node_modules/
+
+# Build output inside frontend
+/frontend/build/
+/frontend/dist/
+
+# Logs inside frontend
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+
+# Environment variables inside frontend
+/frontend/.env
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+
+# Debugger files inside frontend
+/frontend/.vscode/
+/frontend/.idea/
+/frontend/.DS_Store
+
+# Mac system files inside frontend
+/frontend/*.DS_Store
+
+# Coverage reports inside frontend
+/frontend/coverage/
+
+# Optional npm cache folder inside frontend
+/frontend/.npm/
+
+/frontend/.eslintcache
+/frontend/.stylelintcache
+
+# Misc logs inside frontend
+/frontend/*.log
+
+# Local env config files inside frontend
+/frontend/.local/
+
+/frontend/package-lock.json
+/frontend/yarn.lock
+/frontend/pnpm-lock.yaml
+
+# Test reports inside frontend
+/frontend/*.lcov
+
+# React Native (if applicable)
+/frontend/.expo/

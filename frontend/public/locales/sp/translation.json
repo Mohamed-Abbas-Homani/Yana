@@ -156,5 +156,17 @@
   "triangle": "Triángulo",
   "duplicate": "Duplicar",
   "chooseFont":"Elegir fuente",
-  "opacity":"opacidad"
+  "opacity":"opacidad",
+      "exportDB": "Exportar BD",
+    "exporting": "Exportando...",
+    "Export failed": "Error en la exportación",
+    "Exported sucessfuly to downloads": "Exportado con éxito a descargas",
+
+    "importDB": "Importar BD",
+    "importing": "Importando...",
+    "Import failed": "Error en la importación",
+    "Database imported successfully": "Base de datos importada con éxito",
+
+    "Add a file": "Agregar un archivo",
+    "database": "Base de datos"
 }
