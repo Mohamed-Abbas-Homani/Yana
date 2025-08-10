@@ -15,6 +15,7 @@ import {
   Minus,
   Save,
   FileText,
+  Hand,
 } from "lucide-react";
 import useStore from "../../services/store";
 import {
@@ -110,8 +111,10 @@ const Whiteboard: React.FC = () => {
   const [currentPath, setCurrentPath] = useState<Point[]>([]);
   const [startPoint, setStartPoint] = useState<Point | null>(null);
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
-  const [panOffset] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+  const panStartRef = useRef({ x: 0, y: 0 });
+  const [isSpacePressed, setIsSpacePressed] = useState(false);  const [isDragging, setIsDragging] = useState(false);
   const [dragStartPoint, setDragStartPoint] = useState<Point | null>(null);
   const [originalElementPosition, setOriginalElementPosition] =
     useState<any>(null);
@@ -128,7 +131,27 @@ const Whiteboard: React.FC = () => {
     setLastPage(location.pathname);
     setUserAction("whiteboard");
   }, []);
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === ' ') {
+        setIsSpacePressed(true);
+      }
+    };
+    
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === ' ') {
+        setIsSpacePressed(false);
+      }
+    };
 
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
   const [colors, setColors] = useState([
     "#000000",
     "#FFFFFF",
@@ -542,7 +565,10 @@ const Whiteboard: React.FC = () => {
 
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const point = getCanvasCoordinates(e);
-
+    if (e.button === 1 || (isSpacePressed && e.button === 0)) {
+      startPanning(e);
+      return;
+    }
     if (tool === "select") {
       const element = findElementAtPoint(point);
       if (element && element.id === selectedElement) {
@@ -648,7 +674,10 @@ const Whiteboard: React.FC = () => {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const point = getCanvasCoordinates(e);
-
+    if (isPanning) {
+      doPan(e);
+      return;
+    }
     if (isDragging) {
       handleDragMove(point);
       return;
@@ -680,8 +709,24 @@ const Whiteboard: React.FC = () => {
       redrawCanvasWithPreview(point);
     }
   };
+  const getCursorType = () => {
+    if (isPanning) return 'grabbing';
+    if (tool === 'pan' || isSpacePressed) return 'grab';
+    
+    switch (tool) {
+      case 'pen': return 'crosshair';
+      case 'eraser': return 'cell';
+      case 'text': return 'text';
+      case 'select': return 'default';
+      default: return 'crosshair';
+    }
+  };
 
   const handleMouseUp = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        if (isPanning) {
+      stopPanning();
+      return;
+    }
     if (isDragging) {
       setIsDragging(false);
       setDragStartPoint(null);
@@ -835,11 +880,47 @@ const Whiteboard: React.FC = () => {
     }
   };
 
-  const handleZoom = (delta: number) => {
+  const handleZoom = useCallback((delta: number, centerPoint?: Point) => {
     const newZoom = Math.max(0.1, Math.min(5, zoom + delta));
+    
+    if (centerPoint) {
+      setPanOffset(prev => ({
+        x: prev.x + centerPoint.x * (zoom - newZoom),
+        y: prev.y + centerPoint.y * (zoom - newZoom),
+      }));
+    }
+    
     setZoom(newZoom);
+  }, [zoom]);
+
+  const handleWheel = useCallback((e: React.WheelEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    const point = getCanvasCoordinates(e);
+    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+    handleZoom(delta, point);
+  }, [handleZoom, getCanvasCoordinates]);
+ const startPanning = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    setIsPanning(true);
+    panStartRef.current = { x: e.clientX, y: e.clientY };
   };
 
+  const doPan = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isPanning) return;
+    
+    const dx = e.clientX - panStartRef.current.x;
+    const dy = e.clientY - panStartRef.current.y;
+    
+    setPanOffset(prev => ({
+      x: prev.x + dx / zoom,
+      y: prev.y + dy / zoom,
+    }));
+    
+    panStartRef.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const stopPanning = () => {
+    setIsPanning(false);
+  };
   const clearCanvas = () => {
     setElements([]);
     setSelectedElement(null);
@@ -948,6 +1029,7 @@ const Whiteboard: React.FC = () => {
             { type: "line", icon: Minus, label: t("line") },
             { type: "text", icon: Type, label: t("text") },
             { type: "eraser", icon: Eraser, label: t("eraser") },
+             { type: "pan", icon: Hand, label: t("pan") },
           ].map(({ type, icon: Icon, label }) => (
             <ToolButton
               key={type}
@@ -1123,7 +1205,9 @@ const Whiteboard: React.FC = () => {
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
-          cursorType={tool}
+          onMouseLeave={stopPanning}
+          onWheel={handleWheel}
+          cursorType={getCursorType()}
         />
 
         {showTextInput && (

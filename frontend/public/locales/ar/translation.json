@@ -168,5 +168,6 @@
     "Database imported successfully": "تم استيراد قاعدة البيانات بنجاح",
 
     "Add a file": "أضف ملفًا",
-    "database": "قاعدة البيانات"
+    "database": "قاعدة البيانات",
+    "pan":"تحريك العرض"
 }

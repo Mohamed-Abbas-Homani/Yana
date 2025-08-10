@@ -32,9 +32,9 @@ const useConfig = create<Store>()(
         menuItemBackground: getCSSVariable("--menu-item-background") || "#444", // Default menu item background color
         menuToggleBackground:
           getCSSVariable("--menu-toggle-background") || "#555", // Default menu toggle background color
-        font: getCSSVariable("--font-family") || "var(--font-patrick)",
+        font: getCSSVariable("--font-family"),
         setFont: (font: string) => {
-          set({ font });
+          set({ font:font });
           updateCSSVariable("--font-family", font);
         },
         // Functions to update CSS variables and store state

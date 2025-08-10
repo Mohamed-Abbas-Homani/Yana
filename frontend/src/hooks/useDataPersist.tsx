@@ -13,7 +13,6 @@ export default function useDataPersist() {
     const userStore = await getConfigByKey("yana-store");
     const pomodoroStore = await getConfigByKey("todo-pomodoro-store");
     const whiteboardStore = await getConfigByKey("whiteboard-store");
-
     if (noteStore?.value) useNoteStore.setState(noteStore.value);
     if (userStore?.value) useStore.setState(userStore.value);
     if (pomodoroStore?.value) usePomodoroTaskStore.setState(pomodoroStore.value);

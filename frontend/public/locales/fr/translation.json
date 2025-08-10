@@ -170,5 +170,6 @@
     "Database imported successfully": "Base de données importée avec succès",
 
     "Add a file": "Ajouter un fichier",
-    "database": "Base de données"
+    "database": "Base de données",
+    "pan":"déplacer la vue"
 }
