@@ -9,8 +9,13 @@
 ## ✨ Features
 
 - 📝 **Markdown Support**: Write rich notes with syntax highlighting, code blocks, math, and more.
+- 🖼️ **Custom Markdown Components**: Extended Markdown components including an `image` tag that supports specifying width and height (e.g. `![alt|width=300,height=200](path)`) and a **Gallery** component for showing multiple images cleanly.
+- 🧠 **Whiteboard**: A flexible free-draw canvas for sketching ideas and export them as png or pdf.
+- ⏱️ **Pomodoro + Todo List**: Built-in Pomodoro timer tightly integrated with your todo list so you can focus on tasks with sessions and short/long breaks.
 - 📎 **File Attachments**: Attach images, videos, PDFs, and other files directly to your notes.
-- 📊 **Statistics Dashboard**: Get insights into your note-taking habits and trends.
+- 📤 **Export / Import Data**: Export all your notes and app data (JSON / Markdown / zip with assets) and import them back — great for backups and migrations.
+- 🎨 **Multiple Fonts & Typography Options**: Choose from several curated fonts to change the look of your editor and notes (system fonts + bundled web fonts).
+- 📊 **Statistics Dashboard**: Get insights into your note-taking habits, Pomodoro productivity, and session trends.
 - 🎨 **Custom Themes**: Choose your favorite colors to personalize your writing environment.
 - 🌍 **Multilingual Support**: Available in:
   - English (`en`)
@@ -18,6 +23,7 @@
   - Japanese (`jp`)
   - Spanish (`sp`)
   - Arabic (`ar`)
+  - Russian (`rs`)
 - ⚡ **Lightweight & Fast**: Built with Tauri for a small footprint and fast performance.
 
 ---
@@ -32,19 +38,13 @@
 
 ---
 
-## 🎥 Demo Video
-
-> Click the image below to watch a full walkthrough:
-
-[![Watch the demo](./screenshots/yana_profile.png)](./demo/yana.mp4)
-
 ## 📸 Screenshots
 
 | Editor View | Profile | Home | Settings |
-| ----------- | ---------------- | ---------- | -------- |
-| ![Editor](./screenshots/yana_edit.png) | ![Profile](./screenshots/yana_profile.png) | ![home](./screenshots/yana_home.png) | ![Settings](./screenshots/yana_settings.png) |
+| ----------- | ------- | ---- | -------- |
+| ![Editor](./screenshots/editor.png) | ![Profile](./screenshots/profile.png) | ![home](./screenshots/home.png) | ![Settings](./screenshots/settings.png) |
+| ![Whiteboard](./screenshots/whiteboard.png) | ![Pomodoro](./screenshots/pomodoro.png) |  |
 
----
 
 ---
 
@@ -66,60 +66,4 @@ npm install
 # Run the dev server
 npm run tauri dev
 ```
-
----
-
-## 🛠 Customize
-
-Want to tweak the theme? Go to **Settings → Theme** and pick your favorite color palette.
-
----
-
-## 📂 File Structure (Simplified)
-
-```
-yana/
-├── README.MD
-├── backend
-│   ├── go.mod
-│   ├── go.sum
-│   ├── handlers
-│   ├── main.go
-│   ├── makefile
-│   ├── yana-back
-│   ├── models
-│   └── routes
-└── frontend
-    ├── README.md
-    ├── dist
-    ├── index.html
-    ├── node_modules
-    ├── package-lock.json
-    ├── package.json
-    ├── public
-    ├── src
-    ├── src-tauri
-    ├── tsconfig.json
-    ├── tsconfig.node.json
-    └── vite.config.ts
-```
-
----
-
-## 📃 License
-
-MIT License — feel free to fork, modify, and share.
-
----
-
-## ❤️ Acknowledgments
-
-- [Tauri](https://tauri.app/)
-- [Echo](https://echo.labstack.com/)
-- [GORM](https://gorm.io/)
-- [React](https://reactjs.org/)
-- [Zustand](https://github.com/pmndrs/zustand)
-
----
-
 > “Take notes, in your language, in your style. With Yana.” 🌙
