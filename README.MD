@@ -40,10 +40,10 @@
 
 ## 📸 Screenshots
 
-| Editor View | Profile | Home | Settings |
-| ----------- | ------- | ---- | -------- |
-| ![Editor](./screenshots/editor.png) | ![Profile](./screenshots/profile.png) | ![home](./screenshots/home.png) | ![Settings](./screenshots/settings.png) |
-| ![Whiteboard](./screenshots/whiteboard.png) | ![Pomodoro](./screenshots/pomodoro.png) |  |
+| Editor View              | Profile                 | Home                   | Settings                |
+| ------------------------ | ----------------------- | ---------------------- | ----------------------- |
+| ![Editor](./screenshots/editor.png)   | ![Profile](./screenshots/profile.png) | ![Home](./screenshots/home.png)     | ![Settings](./screenshots/settings.png) |
+| ![Whiteboard](./screenshots/whiteboard.png) | ![Pomodoro](./screenshots/pomodoro.png) |                        |                         |
 
 
 ---
