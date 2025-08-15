@@ -49,3 +49,5 @@
 
 # React Native (if applicable)
 /frontend/.expo/
+
+/frontend/src-tauri/binaries/
